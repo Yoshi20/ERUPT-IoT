@@ -1,0 +1,96 @@
+de:
+  login: "Login"
+  username: "Benutzername"
+  password: "Passwort"
+  log_in: "Einloggen"
+  sign_up: "Registrieren"
+  show: "Zeige"
+  create: "Erstelle"
+  update: "Aktualisiere"
+  edit: "Bearbeite"
+  delete: "Lösche"
+  back: "Zurück"
+  confirm: "Bist du sicher?"
+
+  flash:
+    notice:
+      updating_user: "Benutzer wurde erfolgreich aktualisiert"
+      deleting_user: "Benutzer wurde erfolgreich gelöscht"
+    alert:
+      creating_player: "Spieler konnte nicht erstellt werden! Möglicherweise hast du einen bereits verwendeten Gamer-Tag ausgewählt. Bitte versuche es erneut"
+      unauthorized: "Nicht autorisiert! Sie müssen ein Administrator sein, um diese Aktion auszuführen"
+
+  navigation:
+    account:
+      account: "Account"
+      admin: "(Administrator)"
+      show_profile: "Zeige Profil"
+      edit_profile: "Bearbeite Profil"
+      log_out: "Ausloggen"
+      log_out_confirm: "Möchten Sie sich wirklich abmelden?"
+
+  devise:
+    confirmations:
+      title: "Bestätigungsanweisungen erneut senden"
+      resend: "Bestätigungsanweisungen erneut senden"
+    mailer:
+      welcome: "Willkommen"
+      confirm: "Du kannst die E-Mail-Adresse deines Kontos über den folgenden Link bestätigen:"
+      confirm_account: "Account bestätigen"
+      hello: "Hallo"
+      change_pw_request: "Jemand hat einen Link angefordert, um dein Passwort zu ändern. Du kannst dies über den unten stehenden Link tun"
+      change_my_pw: "Passwort ändern"
+      change_pw_ignore: "Wenn du das nicht angefordert hast, kannst du dieses Email ignorieren."
+      pw_wont_change: "Dein Passwort wird sich erst ändern, wenn du auf den obigen Link klickst und ein neues erstellst."
+      account_locked: "Dein Konto wurde gesperrt, weil zu viele Anmeldeversuche fehlgeschlagen sind."
+      unlock_account: "Klicke auf den folgenden Link, um dein Konto zu entsperren:"
+      unlock_my_account: "Konto entsperren"
+    passwords:
+      title: "Ändere dein Passwort"
+      new_pw: "Neues Passwort"
+      chars_min: "Zeichen mindestens"
+      confirm: "Bestätige neues Passwort"
+      change_my_pw: "Ändere mein Passwort"
+      title_forgot: "Dein Passwort vergessen?"
+      reset_pw: "Bitte sende mir Anweisungen zum Zurücksetzen des Passworts"
+    sessions:
+      forgot_pw: "Dein Passwort vergessen?"
+    share:
+      log_in: "Einloggen"
+      sign_up: "Registrieren"
+      forgot_pw: "Dein Passwort vergessen?"
+      no_conf_inst: "Keine Bestätigungsanweisungen erhalten?"
+      no_unlock_inst: "Keine Anweisungen zum Entsperren erhalten?"
+      log_in_with: "Einloggen mit"
+    unlocks:
+      title: "Anweisungen zum Entsperren erneut senden"
+      resend_unlock_inst: "Anweisungen zum Entsperren erneut senden"
+
+  users:
+    mailer:
+      welcome: "Willkommen beim SwissSmash Turniermanager"
+      signed_up: "Du hast dich erfolgreich Angemeldet. Dein Benutzername ist:"
+    my_account: "Mein Account"
+    login_username: "Login Benutzername"
+    email: "Email"
+    mobile_number: "Handynummer"
+    new_password: "Neues Passwort"
+    leave_blank: "(leerlassen wenn du es nicht ändern möchtest)"
+    new_password_conf: "Neues Passwort bestätigen"
+    full_name: "Vollständiger Name"
+    first_and_last_name: "(Vor- und Nachname)"
+    current_password: "Aktuelles Passwort"
+    enter_current_password: "(gib dein aktuelles Passwort ein um die Änderungen zu bestätigen)"
+    delete_my_account: "Mein Account löschen"
+    unhappy: "Unglücklich?"
+    delete_account: "Account löschen"
+    signing_up: "Registrieren"
+    chars_min: "(%{pw_length} Zeichen mindestens)"
+    password_confirmation: "Passwort bestätigen"
+    register: "Registrieren"
+
+  time:
+    formats:
+      custom_datetime_date_and_no_time: "%d %B"
+      custom_datetime_weekday_date_and_year: "%A, %d %B %Y"
+      custom_datetime_with_weekday: "%A, %d %B um %H:%M"

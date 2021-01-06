@@ -1,33 +1,96 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at https://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  login: "Login"
+  username: "Username"
+  password: "Password"
+  log_in: "Log in"
+  sign_up: "Sign up"
+  show: "Show"
+  create: "Create"
+  update: "Update"
+  edit: "Edit"
+  delete: "Delete"
+  back: "Back"
+  confirm: "Are you sure?"
+
+  flash:
+    notice:
+      updating_user: "User was successfully updated"
+      deleting_user: "User was successfully deleted"
+    alert:
+      updating_user: "User couldn't be updated"
+      unauthorized: "Unauthorized! You must be an administrator to make this action"
+
+  navigation:
+    account:
+      account: "Account"
+      admin: "(Administrator)"
+      show_profile: "Show Profile"
+      edit_profile: "Edit Profile"
+      log_out: "Log out"
+      log_out_confirm: "Are you sure you want to log out?"
+
+  devise:
+    confirmations:
+      title: "Resend confirmation instructions"
+      resend: "Resend confirmation instructions"
+    mailer:
+      welcome: "Welcome"
+      confirm: "You can confirm your account email through the link below:"
+      confirm_account: "Confirm my account"
+      hello: "Hello"
+      change_pw_request: "Someone has requested a link to change your password. You can do this through the link below"
+      change_my_pw: "Change my password"
+      change_pw_ignore: "If you didn't request this, please ignore this email."
+      pw_wont_change: "Your password won't change until you access the link above and create a new one."
+      account_locked: "Your account has been locked due to an excessive number of unsuccessful sign in attempts."
+      unlock_account: "Click the link below to unlock your account:"
+      unlock_my_account: "Unlock my account"
+    passwords:
+      title: "Change your password"
+      new_pw: "New password"
+      chars_min: "characters minimum"
+      confirm: "Confirm new password"
+      change_my_pw: "Change my password"
+      title_forgot: "Forgot your password?"
+      reset_pw: "Please send me reset password instructions"
+    sessions:
+      forgot_pw: "Forgot your password?"
+    share:
+      log_in: "Log in"
+      sign_up: "Sign up"
+      forgot_pw: "Forgot your password?"
+      no_conf_inst: "Didn't receive confirmation instructions?"
+      no_unlock_inst: "Didn't receive unlock instructions?"
+      log_in_with: "Log in with"
+    unlocks:
+      title: "Resend unlock instructions"
+      resend_unlock_inst: "Resend unlock instructions"
+
+  users:
+    mailer:
+      welcome: "Welcome to the SwissSmash Tournament Manager"
+      signed_up: "You have successfully signed up. Your username is:"
+    my_account: "My Account"
+    login_username: "Login username"
+    email: "Email"
+    mobile_number: "Mobile number"
+    new_password: "New password"
+    leave_blank: "(leave blank if you don't want to change it)"
+    new_password_conf: "New password confirmation"
+    full_name: "Full name"
+    first_and_last_name: "(first and last name)"
+    current_password: "Current password"
+    enter_current_password: "(enter your current password to confirm the changes)"
+    delete_my_account: "Delete my account"
+    unhappy: "Unhappy?"
+    delete_account: "Delete account"
+    signing_up: "Signing up"
+    chars_min: "(%{pw_length} characters minimum)"
+    password_confirmation: "Password confirmation"
+    register: "Register"
+
+  time:
+    formats:
+      custom_datetime_date_and_no_time: "%d %B"
+      custom_datetime_weekday_date_and_year: "%A, %d %B %Y"
+      custom_datetime_with_weekday: "%A, %d %B at %H:%M"

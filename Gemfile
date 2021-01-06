@@ -5,14 +5,16 @@ ruby '2.7.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.1.0'
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3', '~> 1.4'
+# Use postgresql as the database for Active Record
+gem 'pg', '~> 1.1.3'
 # Use Puma as the app server
 gem 'puma', '~> 5.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '>= 6'
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 5.0'
+# Use CoffeeScript for .coffee assets and views
+gem 'coffee-rails', '~> 4.2.2'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -42,6 +44,9 @@ group :development do
   gem 'listen', '~> 3.3'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  #See https://github.com/presidentbeef/brakeman
+  gem 'brakeman'
 end
 
 group :test do
@@ -54,3 +59,37 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+
+# Added gems:
+#See https://github.com/twbs/bootstrap-rubygem
+gem 'bootstrap', '~> 4.3.1'
+
+#See https://github.com/Angelmmiguel/material_icons
+gem 'material_icons'
+
+# See https://github.com/plataformatec/devise
+gem 'devise'
+
+# See https://github.com/laserlemon/figaro
+gem 'figaro'
+
+# See http://haml.info
+gem 'haml-rails'
+
+# See https://devcenter.heroku.com/articles/getting-started-with-rails4#visit-your-application
+group :staging, :production do
+  gem 'rails_12factor'
+end
+
+# See https://nokogiri.org/
+gem "nokogiri", ">= 1.11.0.rc4"
+
+# See https://github.com/smartinez87/exception_notification
+gem 'exception_notification'
+
+# See https://github.com/svenfuchs/rails-i18n
+gem 'rails-i18n', '~> 6.0.0' # For 6.0.0 or higher
+
+# See https://github.com/tigrish/devise-i18n
+gem 'devise-i18n'
