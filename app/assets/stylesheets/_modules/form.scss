@@ -1,0 +1,67 @@
+.form-control {
+  background: $color-grey-light;
+  border: none;
+  border-radius: $border-radius-input;
+  width: 100%;
+  padding: 0 .625rem;
+  position: relative;
+  line-height: 1.875rem;
+  display: block;
+  height: 1.875rem;
+  font-size: $fontsize-input;
+
+  &:focus, .focus {
+    border-color: $color-red;
+    box-shadow: $shadow-input;
+  }
+}
+
+.form-group {
+  em {
+    font-size: small;
+  }
+  .form-group-inline {
+    display: flex;
+    justify-content: space-between;
+    .form-control {
+      max-width: 6rem;
+    }
+  }
+
+  .form-group-inline .field_with_errors {
+    display: flex;
+    justify-content: space-between;
+    .form-control {
+      max-width: 6rem;
+    }
+  }
+
+}
+
+.form-check {
+  display: flex;
+  align-items: baseline;
+  .form-check-input {
+    position: relative;
+    margin-top: 0;
+  }
+}
+
+.field_with_errors label {
+  color: $color-red;
+}
+
+.search-form {
+  .form-control {
+    width: 90%;
+    text-align: center;
+  }
+  .btn {
+    width: 10%;
+    border: none;
+    .material-icons {
+      font-size: 20px;
+      line-height: 1.4;
+    }
+  }
+}

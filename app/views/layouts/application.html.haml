@@ -1,0 +1,38 @@
+!!!
+%html
+  %head
+    - if @section.present?
+      %title= "ERUPT-IoT | #{@section.capitalize}"
+    - else
+      %title= "ERUPT-IoT"
+    %meta{:charset => "utf-8"}
+    %meta{:content => "width=device-width, initial-scale=1, shrink-to-fit=no", :name => "viewport"}
+    = favicon_link_tag 'logo.jpg'
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload'
+    -# = javascript_pack_tag 'application', 'data-turbolinks-track' => 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track' => 'reload'
+    = csrf_meta_tags
+    = csp_meta_tag
+
+  %body
+    = render '/layouts/flashes'
+    = render '/partials/login'
+    %main
+      .header.navbar.navbar-expand-lg.navbar-sstm
+        = render '/layouts/navigation'
+      .content-wraper
+        .container
+          .content
+            = yield
+    .footer
+      .container
+        .row.footer-nav
+          .col-5
+            .row
+              .col
+          .col-2
+            = button_tag '', title: 'Go to top', style: 'background-color: #fff; border: none;', class: 'scroll-top' do
+              = image_tag('logo.jpg', class: 'erupt_logo', eight: '50px', width: '50px')
+          .col-5
+            .row
+              .col

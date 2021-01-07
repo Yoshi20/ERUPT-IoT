@@ -1,0 +1,31 @@
+.row
+  .col
+    %h1.page__title= t('users.signing_up')
+.row
+  .col
+    = form_for(resource, as: resource_name, url: user_registration_path) do |f|
+      = render "devise/shared/error_messages", resource: resource
+      .form-group
+        = f.label :username, "#{t('users.login_username')} *"
+        = f.text_field :username, autofocus: true, class: 'form-control'
+      .form-group
+        = f.label :email, "#{t('users.email')} *"
+        = f.email_field :email, class: 'form-control'
+      .form-group
+        = f.label :full_name, t('users.full_name')
+        %i= t('users.first_and_last_name')
+        = f.text_field :full_name, class: 'form-control'
+      .form-group
+        = f.label :mobile_number, t('users.mobile_number')
+        %em= "(079 / 123 45 67)"
+        = f.text_field :mobile_number, class: 'form-control'
+      .form-group
+        = f.label :password, "#{t('password')} *"
+        - if @minimum_password_length
+          %em= t('users.chars_min', pw_length: @minimum_password_length)
+        = f.password_field :password, autocomplete: "off", class: 'form-control'
+      .form-group
+        = f.label :password_confirmation, "#{t('users.password_confirmation')} *"
+        = f.password_field :password_confirmation, autocomplete: "off", class: 'form-control'
+      .form-group
+        = f.submit t('users.register'), class:'btn btn-ghost'

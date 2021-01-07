@@ -1,0 +1,80 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ */
+
+@import "./_includes/variables";
+
+@import "bootstrap";
+@import "material_icons";
+
+@import "./_includes/typography";
+
+@import "./_modules/administrator";
+@import "./_modules/button";
+@import "./_modules/content";
+@import "./_modules/form";
+@import "./_modules/modal";
+@import "./_modules/navigation";
+@import "./_modules/tab";
+@import "./_modules/table";
+@import "./_modules/toast";
+
+html, body {
+  height: 100%;
+  background-color: $color-grey-light;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  margin-bottom: 2rem;
+  flex: 1 0 auto;
+
+  .content-wraper {
+    margin-top: 6rem;
+  }
+}
+
+.footer {
+  flex-shrink: 0;
+  background-color: $color-white;
+  color: $color-white;
+  text-align: center;
+
+  p {
+    padding-top: 1.7rem;
+  }
+
+  .erupt_logo {
+    margin-top: 0.25rem;
+  }
+
+}
+
+.hidden {
+  display: none;
+}
+
+a.disabled {
+  color: #b7b7b7 !important;
+  pointer-events: none;
+  cursor: default;
+}
+
+.without_col {
+  padding-right: 0.3125rem;
+  padding-left: 0.3125rem;
+}
