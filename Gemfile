@@ -63,6 +63,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Added gems:
 #See https://github.com/twbs/bootstrap-rubygem
+gem 'jquery-rails'
 gem 'bootstrap', '~> 4.3.1'
 
 #See https://github.com/Angelmmiguel/material_icons

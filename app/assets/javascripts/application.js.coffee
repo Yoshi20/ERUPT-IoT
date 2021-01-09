@@ -12,12 +12,11 @@
 #
 #= require popper
 #= require turbolinks
-#= require bootstrap
+#= require jquery3
 #= require bootstrap-sprockets
 #= require_tree .
 
 document.addEventListener 'turbolinks:load', ->
-
   # a click on a nav-link adds an anchor to the url and sets the page parameter to 1 if present
   $('.nav-link').on 'click', (e) ->
     window.history.replaceState(null, null, "#{$(this).attr('href')}")

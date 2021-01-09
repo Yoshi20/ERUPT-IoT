@@ -1,0 +1,38 @@
+.row
+  .col
+    %h1.page__title= t('sign_up')
+
+.row.sign_up
+  .col
+    = form_for(resource, as: resource_name, url: registration_path(resource_name), class: "form") do |f|
+      = render "devise/shared/error_messages", resource: resource
+      .form-group
+        = f.label :username, t('username')
+        %br
+        = f.text_field :username, class: "form-control form-control-sm", autofocus: 'true'
+      .form-group
+        = f.label :email
+        %br
+        = f.email_field :email, autocomplete: "email", class: "form-control form-control-sm"
+      .form-group
+        = f.label :password
+        - if @minimum_password_length
+          %em
+            (#{@minimum_password_length} characters minimum)
+        %br
+        = f.password_field :password, autocomplete: "new-password", class: "form-control form-control-sm"
+      .form-group
+        = f.label :password_confirmation
+        %br
+        = f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control form-control-sm"
+      .form-group
+        = f.label :full_name, t('full_name')
+        %br
+        = f.text_field :full_name, class: "form-control form-control-sm"
+      .form-group
+        = f.label :mobile_number, t('mobile_number')
+        %br
+        = f.text_field :mobile_number, class: "form-control form-control-sm"
+      .form-group
+        = f.submit t('sign_up'), class: "btn btn-sstm"
+        = link_to t('log_in'), session_path(:user),  class: "btn btn-ghost", style: "position: absolute; right: 20px;"

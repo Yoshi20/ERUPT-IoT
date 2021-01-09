@@ -22,7 +22,7 @@ de:
 
   navigation:
     account:
-      account: "Account"
+      account: "Mein Account"
       admin: "(Administrator)"
       show_profile: "Zeige Profil"
       edit_profile: "Bearbeite Profil"
@@ -66,9 +66,13 @@ de:
       title: "Anweisungen zum Entsperren erneut senden"
       resend_unlock_inst: "Anweisungen zum Entsperren erneut senden"
 
+  home:
+    title: ERUPT-IoT
+    must_log_in: Logge dich ein um neue LoRa-Geräte zu erfassen oder Menüs zuzuweisen.
+
   users:
     mailer:
-      welcome: "Willkommen beim SwissSmash Turniermanager"
+      welcome: "Willkommen bei ERUPT-IoT"
       signed_up: "Du hast dich erfolgreich Angemeldet. Dein Benutzername ist:"
     my_account: "Mein Account"
     login_username: "Login Benutzername"

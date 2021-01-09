@@ -1,6 +1,3 @@
-include Recaptcha::Adapters::ViewMethods
-include Recaptcha::Adapters::ControllerMethods
-
 # frozen_string_literal: true
 
 class Users::SessionsController < Devise::SessionsController

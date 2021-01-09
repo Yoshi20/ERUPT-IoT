@@ -11,17 +11,12 @@
       %span.line.line--3
   .collapse.navbar-collapse#navbarSupportedContent
     %ul.navbar-nav.navbar-main.ml-auto
-      -# %li.nav-item.dropdown{role: "presentation", class: ((@section == 'calendar' or @section == 'tournaments') ? 'active' : 'inactive')}
-      -#   %a.nav-link.dropdown-toggle#navbarDropdown{href:"#", role:"button", 'data-toggle'=>'dropdown', 'aria-haspopup'=>'true', 'aria-expanded'=>'false'}
-      -#     = t('tournaments.title')
-      -#     .d-lg-none.d-block{style: "height: 24px;"}
-      -#       %span.material-icons{style: "margin-left: 5px;"}= 'keyboard_arrow_down'
-      -#   .dropdown-menu{'aria-labelledby': 'navbarDropdown'}
-      -#     -# = link_to t('calendar.title'), calendar_path, class: 'dropdown-item'
-      -#     -# = link_to t('navigation.list'), tournaments_path, class: 'dropdown-item'
+      - if user_signed_in?
+        %li.nav-item{role: "presentation", class: (@section == 'devices' ? 'active' : 'inactive')}
+          -# = link_to t('devices.title'), devices_path, class: 'nav-link'
 
-      %li.nav-item{role: "presentation", class: (@section == 'home' ? 'active' : 'inactive')}
-        = link_to t('home.title'), home_path, class: 'nav-link'
+        %li.nav-item{role: "presentation", class: (@section == 'menus' ? 'active' : 'inactive')}
+          -# = link_to t('menus.title'), menus_path, class: 'nav-link'
 
       %li.nav-item.locales-list
         = link_to 'en', url_for(locale: 'en'), class: 'locales', style: "text-decoration: #{cookies[:locale] == 'en' ? 'underline' : ''}"
@@ -52,7 +47,8 @@
               .dropdown-divider
               = link_to t('navigation.account.show_all_users'), users_path, class: 'dropdown-item'
             .divider
-            = link_to t('navigation.account.log_out'), destroy_user_session_path, method: :delete, confirm: t('navigation.account.log_out_confirm'), class: 'dropdown-item'
+            = form_with url: destroy_user_session_path, id: "log_out_form", method: :delete do |f|
+              = link_to t('navigation.account.log_out'), destroy_user_session_path, class: 'dropdown-item'
       - else
         %li.nav-item.dropdown
           %a.nav-link{href:"#", role:"button", 'data-toggle'=>'modal', 'data-target'=>'#loginModal', 'aria-haspopup'=>'true', 'aria-expanded'=>'false'}
@@ -63,3 +59,9 @@
                 = t('navigation.account.account')
               - else
                 = t('login')
+
+:javascript
+  $(document).on('click', '#log_out_form', function(e) {
+    e.preventDefault();
+    $(this).closest('form').submit()
+  });

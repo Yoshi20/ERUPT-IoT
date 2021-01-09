@@ -10,7 +10,7 @@
       - mail_string = ''
       - User.where(is_admin: true).each do |u|
         - mail_string = mail_string + u.email + '; '
-      = mail_to "", "Write all admins an email", bcc: mail_string, subject: "SwissSmash", body: "Hi SwissSmash admins\n\n", class: 'btn btn-ghost'
+      = mail_to "", "Write all admins an email", bcc: mail_string, subject: "ERUPT-IoT", body: "Hi ERUPT-IoT admins\n\n", class: 'btn btn-ghost'
 
 .user-list
   %table.table.table-hover.table-borderless
@@ -18,14 +18,16 @@
       %tr
         %th Username
         %th Last Log in at
+        %th Created at
         %th.text-center.d-none.d-md-table-cell.d-lg-none.d-xl-table-cell Log in counter
         %th.text-center Admin
 
     %tbody.user-list-body.with-show
       - @users.each do |user|
-        %tr{'data-id': (user.player.present? ? user.player.id : nil), 'data-component'=>'player'}
+        %tr
           %td= user.username
           %td= user.current_sign_in_at.to_s(:custom_datetime)
+          %td= user.created_at.to_s(:custom_datetime)
           %td.text-center.d-none.d-md-table-cell.d-lg-none.d-xl-table-cell= user.sign_in_count
           %td.text-center
             - if user.admin?
