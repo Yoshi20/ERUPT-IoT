@@ -1,0 +1,23 @@
+de:
+  activerecord:
+    models:
+      device:
+        one: "Gerät"
+        other: "Geräte"
+    attributes:
+      device:
+        name: "Name/Tisch"
+        device_type: "Typ"
+        device_type_id: "Typ"
+        dev_eui: "DevEUI"
+        app_eui: "AppEUI"
+        app_key: "AppKey"
+        fw_version: "Firmware Version"
+        hw_version: "Hardware Version"
+        last_time_seen: "Letzte Sichtung"
+        battery: "Batterie"
+  devices:
+    title: "Geräte"
+    new: "Neues Gerät"
+    edit: "Gerät bearbeiten"
+    prohibited: "prohibited this device from being saved:"

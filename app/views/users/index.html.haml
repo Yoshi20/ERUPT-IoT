@@ -5,7 +5,7 @@
 .row
   .col
     %p= "Total users count = #{User.all.count}"
-  - if current_user.present? and current_user.admin?
+  - if current_user.admin?
     .col{style: 'text-align: right;'}
       - mail_string = ''
       - User.where(is_admin: true).each do |u|
@@ -33,7 +33,7 @@
             - if user.admin?
               .material-icons= 'done'
 
-          - if current_user.present? and current_user.admin?
+          - if current_user.admin?
             %td.admin-list-actions
               .admin-list-actions__link
                 = form_for user, role: 'form', method: :patch do |f|

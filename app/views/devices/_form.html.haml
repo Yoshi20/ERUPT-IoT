@@ -1,0 +1,34 @@
+= form_for @device, role: 'form', class:'form' do |f|
+
+  - if @device.errors.any?
+    #error_explanation
+      %h2= pluralize(@device.errors.count, "error") + ' ' + t('devices.prohibited')
+      %ul
+        - @device.errors.full_messages.each do |message|
+          %li= message
+
+  .field.form-group
+    = f.label :device_type, "#{t('activerecord.attributes.device.device_type')} *"
+    = f.select :device_type_id, options_for_select(DeviceType.all.map{ |dt| [dt.name, dt.id]}, @device.device_type_id), {include_blank: true}, class: 'form-control'
+  .field.form-group
+    = f.label :name, "#{t('activerecord.attributes.device.name')} *"
+    = f.text_field :name, class: 'form-control'
+  .field.form-group
+    = f.label :dev_eui, "#{t('activerecord.attributes.device.dev_eui')} *"
+    = f.text_field :dev_eui, class: 'form-control'
+  .field.form-group
+    = f.label :app_eui
+    = f.text_field :app_eui, class: 'form-control'
+  .field.form-group
+    = f.label :app_key
+    = f.text_field :app_key, class: 'form-control'
+  .field.form-group
+    = f.label :hw_version
+    = f.text_field :hw_version, class: 'form-control'
+  .field.form-group
+    = f.label :fw_version
+    = f.text_field :fw_version, class: 'form-control'
+
+  .actions.form-group
+    = hidden_field_tag(:user_id, current_user.id)
+    = f.submit class:'btn btn-ghost'

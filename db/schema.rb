@@ -10,10 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_06_221950) do
+ActiveRecord::Schema.define(version: 2021_01_09_161500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "device_types", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "number_of_buttons"
+  end
+
+  create_table "devices", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "dev_eui", null: false
+    t.string "app_eui"
+    t.string "app_key"
+    t.string "hw_version"
+    t.string "fw_version"
+    t.integer "battery"
+    t.datetime "last_time_seen"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "device_type_id"
+    t.bigint "user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -37,4 +57,6 @@ ActiveRecord::Schema.define(version: 2021_01_06_221950) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "devices", "device_types"
+  add_foreign_key "devices", "users"
 end

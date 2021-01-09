@@ -1,0 +1,55 @@
+.row
+  .col
+    %h1.page__title= t('devices.title')
+
+.row
+  .col
+    %p= "Total devices count = #{Device.all.count}"
+
+.device-list
+  %table.table.table-hover.table-borderless
+    %thead
+      %tr
+        %th= t('activerecord.attributes.device.name')
+        %th= t('activerecord.attributes.device.dev_eui')
+        %th= t('activerecord.attributes.device.app_eui')
+        %th= t('activerecord.attributes.device.app_key')
+        %th= t('activerecord.attributes.device.hw_version')
+        %th= t('activerecord.attributes.device.fw_version')
+        %th= t('activerecord.attributes.device.battery')
+        %th= t('activerecord.attributes.device.last_time_seen')
+        %th Created at
+
+    %tbody.device-list-body.with-show
+      - @devices.each do |device|
+        %tr{'data-id': device.id, 'data-component'=>'device'}
+          %td= device.name
+          %td= device.dev_eui
+          %td= device.app_eui
+          %td= device.app_key
+          %td= device.hw_version
+          %td= device.fw_version
+          %td= device.battery
+          %td= device.last_time_seen
+          %td= device.created_at.to_s(:custom_datetime)
+
+          - if current_user.admin?
+            %td.admin-list-actions
+              .admin-list-actions__link
+                = link_to edit_device_path(device), class: 'btn btn-sstm btn-square' do
+                  %span.material-icons.admin-actions__link__icon= 'edit'
+              .admin-list-actions__link
+                -# = link_to device, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sstm btn-square' do
+                -#   %span.material-icons.admin-actions__link__icon= 'delete'
+                = form_for device, method: :delete, data: { confirm: 'Are you sure?' }, role: 'form', class:'form' do |f|
+                  = button_tag(type: "submit", class:'btn btn-sstm btn-square') do
+                    %span.material-icons.admin-actions__link__icon= 'delete'
+                  -# = link_to device, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sstm btn-square' do
+                  -#   %span.material-icons.admin-actions__link__icon= 'delete'
+
+
+
+  .admin-actions
+    .admin-actions__link
+      = link_to new_device_path, class:'btn btn-ghost btn-square' do
+        %span.material-icons.admin-actions__link__icon= 'add'

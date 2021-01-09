@@ -16,8 +16,15 @@ de:
     notice:
       updating_user: "Benutzer wurde erfolgreich aktualisiert"
       deleting_user: "Benutzer wurde erfolgreich gelöscht"
+      creating_device: "Gerät wurde erfolgreich erstellt"
+      updating_device: "Gerät wurde erfolgreich aktualisiert"
+      deleting_device: "Gerät wurde erfolgreich gelöscht"
     alert:
-      creating_player: "Spieler konnte nicht erstellt werden! Möglicherweise hast du einen bereits verwendeten Gamer-Tag ausgewählt. Bitte versuche es erneut"
+      updating_user: "Benutzer konnte nicht aktualisiert werden!"
+      deleting_user: "Benutzer konnte nicht gelöscht werden!"
+      creating_device: "Gerät konnte nicht erstellt werden!"
+      updating_device: "Gerät konnte nicht aktualisiert werden!"
+      deleting_device: "Gerät konnte nicht gelöscht werden!"
       unauthorized: "Nicht autorisiert! Sie müssen ein Administrator sein, um diese Aktion auszuführen"
 
   navigation:
@@ -67,8 +74,8 @@ de:
       resend_unlock_inst: "Anweisungen zum Entsperren erneut senden"
 
   home:
-    title: ERUPT-IoT
-    must_log_in: Logge dich ein um neue LoRa-Geräte zu erfassen oder Menüs zuzuweisen.
+    title: "ERUPT-IoT"
+    must_log_in: "Logge dich ein um neue LoRa-Geräte zu erfassen oder Menüs zuzuweisen."
 
   users:
     mailer:

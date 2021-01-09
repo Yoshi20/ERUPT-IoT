@@ -50,4 +50,18 @@ private
     }
   end
 
+  def authenticate_admin!
+    unless current_user.is_admin?
+      render_forbidden
+      return
+    end
+  end
+
+  def render_forbidden
+    respond_to do |format|
+      format.html { redirect_to root_path, alert: t('flash.alert.unauthorized') }
+      format.json { render json: { status: 'error', message: t('flash.alert.unauthorized') }, status: :forbidden }
+    end
+  end
+
 end

@@ -34,6 +34,22 @@ document.addEventListener 'turbolinks:load', ->
     $("##{anchor}").addClass('active').addClass('show')
     $(window).scrollTop(0)  # workaround to prevent scroll from anchor tag
 
+  # a click on a component-column links to its show
+  $('tbody.with-show').on 'click', 'tr', (e) ->
+    $et = $(e.target)
+    unless $et.hasClass('admin-actions__link__icon') || $et.hasClass('btn-square')
+      external_url = $(this).attr('data-external_url')
+      internal_url = $(this).attr('data-internal_url')
+      if external_url
+        window.open(external_url, '_blank')
+      else if internal_url
+        window.location.href = internal_url
+      else
+        id = $(this).attr('data-id')
+        if id != undefined
+          component = $(this).attr('data-component')
+          window.location.href = "/#{component}s/#{id}"
+
   $('.scroll-top').on 'click', (e) ->
     $('html, body').animate({
       scrollTop: 0

@@ -16,8 +16,15 @@ en:
     notice:
       updating_user: "User was successfully updated"
       deleting_user: "User was successfully deleted"
+      creating_device: "Device was successfully created"
+      updating_device: "Device was successfully updated"
+      deleting_device: "Device was successfully deleted"
     alert:
-      updating_user: "User couldn't be updated"
+      updating_user: "User couldn't be updated!"
+      deleting_user: "User couldn't be deleted!"
+      creating_device: "Device couldn't be created!"
+      updating_device: "Device couldn't be updated!"
+      deleting_device: "Device couldn't be deleted!"
       unauthorized: "Unauthorized! You must be an administrator to make this action"
 
   navigation:
@@ -67,8 +74,8 @@ en:
       resend_unlock_inst: "Resend unlock instructions"
 
   home:
-    title: ERUPT-IoT
-    must_log_in: Log in to register new LoRa devices or assign menus.
+    title: "ERUPT-IoT"
+    must_log_in: "Log in to register new LoRa devices or assign menus."
 
   users:
     mailer:

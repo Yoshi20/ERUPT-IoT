@@ -1,7 +1,5 @@
 class User < ApplicationRecord
-  # Virtual attribute for authenticating by either username or email
-  # This is in addition to a real persisted field like 'username'
-  attr_accessor :login
+  has_many :devices
 
   before_validation :strip_whitespace
 
@@ -10,8 +8,11 @@ class User < ApplicationRecord
     :uniqueness => {
       :case_sensitive => false
     }
-
   validate :validate_username
+
+  # Virtual attribute for authenticating by either username or email
+  # This is in addition to a real persisted field like 'username'
+  attr_accessor :login
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

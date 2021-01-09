@@ -1,0 +1,101 @@
+.device
+  .row
+    .col
+      -# .tooltip
+      -#   = image_tag "device_types/#{@device.device_type}.svg", height: '25px', width: '25px', style: 'position: absolute; top: 10px;'
+      -#   %span.tooltiptext
+      -#     = @device.device_type.name
+      .page__title
+        %h1
+          = @device.name
+
+    -# admin actions -----------------------------------------------------------
+    .admin-actions
+      -if current_user.admin? or @device.user == current_user
+        .admin-actions__link
+          = link_to edit_device_path(@device), class:'btn btn-ghost btn-square' do
+            %span.material-icons.admin-actions__link__icon= 'edit'
+
+      - if @device.user != current_user
+        .admin-actions__link
+          - if @device.user.admin? or current_user.admin?
+            = mail_to @device.user.email, body: "#{t('hi')} #{@device.user.username}\n\n...", class:'btn btn-ghost btn-square' do
+              %span.material-icons.admin-actions__link__icon= 'email'
+        - if current_user.admin? and @device.user.mobile_number.present?
+          .mobile_number= " (#{@device.user.mobile_number})"
+
+    -# device ------------------------------------------------------------------
+    .device__stats
+      .row
+        -# - if @device.device_type.present?
+        -#   .col
+        -#     .device__stats__single{class: (@device.gender.nil? && @device.birth_year.nil?) ? 'device__stats__single--last' : ''}
+        -#       %strong
+        -#         = t("defines.device_types.#{@device.device_type}")
+        -#       %span
+        -#         = t('devices.device_type')
+        -# - if @device.birth_year.present?
+        -#   .col
+        -#     .device__stats__single{class: (@device.gender.nil?) ? 'device__stats__single--last' : ''}
+        -#       %strong
+        -#         = @device.birth_year
+        -#       %span
+        -#         = t('devices.birth_year')
+        -# - if @device.gender.present?
+        -#   .col
+        -#     .device__stats__single.device__stats__single--last
+        -#       %strong
+        -#         = t("defines.genders.#{@device.gender}")
+        -#       %span
+        -#         = t('devices.gender')
+
+    .device__stats
+      .row
+        -# .col
+        -#   .device__stats__single
+        -#     %strong
+        -#       = @device.best_rank
+        -#     %span
+        -#       = t('devices.best_rank')
+        -# .col
+        -#   .device__stats__single
+        -#     %strong
+        -#       = @device.wins
+        -#     %span
+        -#       = t('devices.wins')
+        -# .col
+        -#   .device__stats__single
+        -#     %strong
+        -#       = @device.losses
+        -#     %span
+        -#       = t('devices.losses')
+        -# .col
+        -#   .device__stats__single.device__stats__single--last
+        -#     %strong
+        -#       = @device.points
+        -#     %span
+        -#       = t('devices.points')
+
+    .device__stats
+      .row
+        -# .col
+        -#   .device__stats__single
+        -#     %strong
+        -#       = self_assessment_defines[@device.self_assessment]
+        -#     %span
+        -#       = t('devices.self_assessment')
+        -# .col
+        -#   .device__stats__single
+        -#     %strong
+        -#       - if @device.losses == 0 and @device.wins == 0
+        -#         = '-'
+        -#       - else
+        -#         = "#{@device.win_loss_ratio} %"
+        -#     %span
+        -#       = t('devices.win_loss')
+        -# .col
+        -#   .device__stats__single.device__stats__single--last
+        -#     %strong
+        -#       = tournament_experience_defines[@device.tournament_experience]
+        -#     %span
+        -#       = t('devices.experience')
