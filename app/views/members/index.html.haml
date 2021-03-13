@@ -1,0 +1,47 @@
+%h1 Listing members
+
+%table
+  %thead
+    %tr
+      %th First name
+      %th Last name
+      %th Email
+      %th Birthdate
+      %th Mobile number
+      %th Gender
+      %th Canton
+      %th Comment
+      %th Wants newsletter emails
+      %th Wants event emails
+      %th Card
+      %th Magma coins
+      %th Expiration date
+      %th Number of scans
+      %th
+      %th
+      %th
+
+  %tbody
+    - @members.each do |member|
+      %tr
+        %td= member.first_name
+        %td= member.last_name
+        %td= member.email
+        %td= member.birthdate
+        %td= member.mobile_number
+        %td= member.gender
+        %td= member.canton
+        %td= member.comment
+        %td= member.wants_newsletter_emails
+        %td= member.wants_event_emails
+        %td= member.card_id
+        %td= member.magma_coins
+        %td= member.expiration_date
+        %td= member.number_of_scans
+        %td= link_to 'Show', member
+        %td= link_to 'Edit', edit_member_path(member)
+        %td= link_to 'Destroy', member, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Member', new_member_path

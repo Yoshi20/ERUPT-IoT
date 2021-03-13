@@ -1,0 +1,27 @@
+en:
+  activerecord:
+    models:
+      member:
+        one: "Member"
+        other: "Members"
+    attributes:
+      member:
+        first_name: "First name"
+        last_name: "Last name"
+        email: "Email"
+        birthdate: "Birthdate"
+        mobile_number: "Mobile number"
+        gender: "Gender"
+        canton: "Canton"
+        comment: "Comment"
+        wants_newsletter_emails: "Wants newsletter emails"
+        wants_event_emails: "Wants event emails"
+        card_id: "Card ID"
+        magma_coins: "Magma coins"
+        expiration_date: "Expiration date"
+        number_of_scans: "Number of scans"
+  members:
+    title: "Members"
+    new: "New member"
+    edit: "Edit member"
+    prohibited: "prohibited this member from being saved:"

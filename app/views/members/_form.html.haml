@@ -1,0 +1,52 @@
+= form_for @member do |f|
+  - if @member.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@member.errors.count, "error")} prohibited this member from being saved:"
+      %ul
+        - @member.errors.full_messages.each do |message|
+          %li= message
+
+  .field
+    = f.label :first_name
+    = f.text_field :first_name
+  .field
+    = f.label :last_name
+    = f.text_field :last_name
+  .field
+    = f.label :email
+    = f.text_field :email
+  .field
+    = f.label :birthdate
+    = f.datetime_select :birthdate
+  .field
+    = f.label :mobile_number
+    = f.text_field :mobile_number
+  .field
+    = f.label :gender
+    = f.text_field :gender
+  .field
+    = f.label :canton
+    = f.text_field :canton
+  .field
+    = f.label :comment
+    = f.text_area :comment
+  .field
+    = f.label :wants_newsletter_emails
+    = f.check_box :wants_newsletter_emails
+  .field
+    = f.label :wants_event_emails
+    = f.check_box :wants_event_emails
+  .field
+    = f.label :card_id
+    = f.text_field :card_id
+  .field
+    = f.label :magma_coins
+    = f.text_field :magma_coins
+  .field
+    = f.label :expiration_date
+    = f.datetime_select :expiration_date
+  .field
+    = f.label :number_of_scans
+    = f.number_field :number_of_scans
+  .actions
+    = f.submit 'Save'

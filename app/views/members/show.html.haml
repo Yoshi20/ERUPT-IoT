@@ -1,0 +1,48 @@
+%p#notice= notice
+
+%p
+  %b First name:
+  = @member.first_name
+%p
+  %b Last name:
+  = @member.last_name
+%p
+  %b Email:
+  = @member.email
+%p
+  %b Birthdate:
+  = @member.birthdate
+%p
+  %b Mobile number:
+  = @member.mobile_number
+%p
+  %b Gender:
+  = @member.gender
+%p
+  %b Canton:
+  = @member.canton
+%p
+  %b Comment:
+  = @member.comment
+%p
+  %b Wants newsletter emails:
+  = @member.wants_newsletter_emails
+%p
+  %b Wants event emails:
+  = @member.wants_event_emails
+%p
+  %b Card:
+  = @member.card_id
+%p
+  %b Magma coins:
+  = @member.magma_coins
+%p
+  %b Expiration date:
+  = @member.expiration_date
+%p
+  %b Number of scans:
+  = @member.number_of_scans
+
+= link_to 'Edit', edit_member_path(@member)
+\|
+= link_to 'Back', members_path

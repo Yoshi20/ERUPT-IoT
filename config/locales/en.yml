@@ -19,12 +19,18 @@ en:
       creating_device: "Device was successfully created"
       updating_device: "Device was successfully updated"
       deleting_device: "Device was successfully deleted"
+      creating_member: "Member was successfully created"
+      updating_member: "Member was successfully updated"
+      deleting_member: "Member was successfully deleted"
     alert:
       updating_user: "User couldn't be updated!"
       deleting_user: "User couldn't be deleted!"
       creating_device: "Device couldn't be created!"
       updating_device: "Device couldn't be updated!"
       deleting_device: "Device couldn't be deleted!"
+      creating_member: "Member couldn't be created!"
+      updating_member: "Member couldn't be updated!"
+      deleting_member: "Member couldn't be deleted!"
       unauthorized: "Unauthorized! You must be an administrator to make this action"
 
   navigation:
