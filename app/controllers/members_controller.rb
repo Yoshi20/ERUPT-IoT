@@ -2,6 +2,7 @@ class MembersController < ApplicationController
   before_action :authenticate_user!, except: [:new, :create]
   #before_action :authenticate_admin!, only: [:create, :destroy]
   before_action :set_member, only: [:show, :edit, :update, :destroy]
+  before_action :add_abo_types_to_member, only: [:create, :update]
   before_action { @section = 'members' }
 
   # GET /members
@@ -61,6 +62,7 @@ class MembersController < ApplicationController
   # DELETE /members/1
   # DELETE /members/1.json
   def destroy
+    @member.abo_types.delete_all
     respond_to do |format|
       if @member.destroy
         format.html { redirect_to members_url, notice: t('flash.notice.deleting_member') }
@@ -85,4 +87,19 @@ class MembersController < ApplicationController
         :wants_event_emails, :card_id, :magma_coins, :expiration_date,
         :number_of_scans, :active)
     end
+
+    def add_abo_types_to_member
+      all_abo_types = AboType.all
+      if params[:member].present? and params[:member][:abo_types].present?
+        params[:member][:abo_types].each do |at_key_value|
+          at = all_abo_types.find_by(name: at_key_value[0])
+          if at_key_value[1] == "0"
+            @member.abo_types.delete(at)
+          elsif at_key_value[1] == "1" and !@member.abo_types.include?(at)
+            @member.abo_types << at
+          end
+        end
+      end
+    end
+
 end

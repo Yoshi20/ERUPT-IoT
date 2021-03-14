@@ -16,6 +16,7 @@
         -# %th= t('activerecord.attributes.member.birthdate')
         -# %th= t('activerecord.attributes.member.gender')
         -# %th= t('activerecord.attributes.member.canton')
+        %th= t('activerecord.attributes.member.abo_types')
         -# %th= t('activerecord.attributes.member.wants_newsletter_emails')
         -# %th= t('activerecord.attributes.member.wants_event_emails')
         -# %th= t('activerecord.attributes.member.card_id')
@@ -36,6 +37,7 @@
           -# %td= member.mobile_number
           -# %td= member.gender
           -# %td= member.canton
+          %td= member.abo_types.map(&:name).join(', ')
           -# %td= member.wants_newsletter_emails
           -# %td= member.wants_event_emails
           -# %td= member.card_id

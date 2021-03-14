@@ -46,6 +46,9 @@
       %p
         %b= t('activerecord.attributes.member.canton') + ':'
         = @member.canton
+        %p
+          %b= t('activerecord.attributes.member.abo_types') + ':'
+          = @member.abo_types.map(&:name).join(', ')
       %p
         %b= t('activerecord.attributes.member.comment') + ':'
         = @member.comment

@@ -6,6 +6,15 @@ DeviceType.create([
   { name: 'LoRa-Wristband', number_of_buttons: 1 }
 ])
 
+AboType.create([
+  { name: 'Basic'},
+  { name: 'Gaming'},
+  { name: 'Events'},
+  { name: 'TableTop'},
+  { name: 'Pen&Paper'},
+  { name: 'GoodGames'},
+])
+
 # Admins:
 yomi = User.find_by_email('jascha_haldemann@hotmail.com')
 if yomi.present?
