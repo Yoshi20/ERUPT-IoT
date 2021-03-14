@@ -35,7 +35,6 @@
         - AboType.all.each do |at|
           .col
             .form-check
-              -# - abo_types_name_array = @member.abo_types.map{|at| at.name}
               - abo_types_name_array = @member.abo_types.map(&:name)
               = ff.check_box at.name, checked: abo_types_name_array.include?(at.name), class:'form-check-input mr-2'
               = ff.label at.name, at.name, class:'form-check-label'
@@ -71,5 +70,5 @@
         = f.check_box :active, checked: (params[:member].present? ? (params[:member][:active] == "1") : true), class:'form-check-input mr-2'
         = f.label :active, class:'form-check-label'
 
-  .actions.form-group
+  .actions.form-group.text-center
     = f.submit class:'btn btn-ghost'
