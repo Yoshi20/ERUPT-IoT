@@ -20,6 +20,7 @@ en:
         magma_coins: "Magma coins"
         expiration_date: "Expiration date"
         number_of_scans: "Number of scans"
+        active: "Activated"
   members:
     title: "Members"
     new: "New member"

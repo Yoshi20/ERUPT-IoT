@@ -13,3 +13,9 @@ if yomi.present?
 else
   User.create(username: 'Yomi', email: 'jascha_haldemann@hotmail.com', password: '123456', is_admin: true)
 end
+
+# Users:
+erupt = User.find_by_email('admin@erupt.ch')
+unless erupt.present?
+  User.create(username: 'Erupt', email: 'admin@erupt.ch', password: '123456')
+end

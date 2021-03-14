@@ -52,6 +52,10 @@
     .field.form-group
       = f.label :comment
       = f.text_area :comment, class: 'form-control'
+    .form-group
+      .form-check
+        = f.check_box :active, checked: (params[:member].present? ? (params[:member][:active] == "1") : true), class:'form-check-input mr-2'
+        = f.label :active, class:'form-check-label'
 
   .actions.form-group
     = f.submit class:'btn btn-ghost'

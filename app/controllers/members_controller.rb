@@ -83,6 +83,6 @@ class MembersController < ApplicationController
       params.require(:member).permit(:first_name, :last_name, :email, :birthdate,
         :mobile_number, :gender, :canton, :comment, :wants_newsletter_emails,
         :wants_event_emails, :card_id, :magma_coins, :expiration_date,
-        :number_of_scans)
+        :number_of_scans, :active)
     end
 end

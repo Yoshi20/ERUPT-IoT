@@ -13,8 +13,8 @@
           - User.all.each do |u|
             - mail_string = mail_string + u.email + '; '
           = mail_to "", "Write all users an email", bcc: mail_string, subject: "ERUPT", body: "Hi ERUPT users\n\n", class: 'btn btn-ghost'
-        .col
-          = link_to t('sign_up'), new_user_registration_path,  class: "btn btn-ghost", style: "position: absolute; right: 20px;"
+        -# .col
+        -#   = link_to t('users.new'), new_user_registration_path,  class: "btn btn-ghost", style: "position: absolute; right: 20px;"
 
 .user-list
   %table.table.table-hover.table-borderless
