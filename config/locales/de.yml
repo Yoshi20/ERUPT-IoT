@@ -3,7 +3,7 @@ de:
   username: "Benutzername"
   password: "Passwort"
   log_in: "Einloggen"
-  sign_up: "Registrieren"
+  sign_up: "Neuer Benutzer Registrieren"
   show: "Zeige"
   create: "Erstelle"
   update: "Aktualisiere"
@@ -19,12 +19,18 @@ de:
       creating_device: "Gerät wurde erfolgreich erstellt"
       updating_device: "Gerät wurde erfolgreich aktualisiert"
       deleting_device: "Gerät wurde erfolgreich gelöscht"
+      creating_member: "Mitglied wurde erfolgreich erstellt"
+      updating_member: "Mitglied wurde erfolgreich aktualisiert"
+      deleting_member: "Mitglied wurde erfolgreich gelöscht"
     alert:
       updating_user: "Benutzer konnte nicht aktualisiert werden!"
       deleting_user: "Benutzer konnte nicht gelöscht werden!"
       creating_device: "Gerät konnte nicht erstellt werden!"
       updating_device: "Gerät konnte nicht aktualisiert werden!"
       deleting_device: "Gerät konnte nicht gelöscht werden!"
+      creating_member: "Mitglied konnte nicht erstellt werden!"
+      updating_member: "Mitglied konnte nicht aktualisiert werden!"
+      deleting_member: "Mitglied konnte nicht gelöscht werden!"
       unauthorized: "Nicht autorisiert! Sie müssen ein Administrator sein, um diese Aktion auszuführen"
 
   navigation:
@@ -74,12 +80,12 @@ de:
       resend_unlock_inst: "Anweisungen zum Entsperren erneut senden"
 
   home:
-    title: "ERUPT-IoT"
-    must_log_in: "Logge dich ein um neue LoRa-Geräte zu erfassen oder Menüs zuzuweisen."
+    title: "ERUPT"
+    must_log_in: "Logge dich ein um Mitglieder oder Geräte zu erfassen und um Menüs zuzuweisen."
 
   users:
     mailer:
-      welcome: "Willkommen bei ERUPT-IoT"
+      welcome: "Willkommen bei ERUPT"
       signed_up: "Du hast dich erfolgreich Angemeldet. Dein Benutzername ist:"
     my_account: "Mein Account"
     login_username: "Login Benutzername"
@@ -105,3 +111,36 @@ de:
       custom_datetime_date_and_no_time: "%d %B"
       custom_datetime_weekday_date_and_year: "%A, %d %B %Y"
       custom_datetime_with_weekday: "%A, %d %B um %H:%M"
+
+  defines:
+    cantons:
+      aargau: "Aargau"
+      appenzell_ausserrhoden: "Appenzell Ausserrhoden"
+      appenzell_innerrhoden: "Appenzell Innerrhoden"
+      basel-land: "Basel-Land"
+      basel-stadt: "Basel-Stadt"
+      bern: "Bern"
+      freiburg: "Freiburg"
+      genf: "Genf"
+      glarus: "Glarus"
+      graubünden: "Graubünden"
+      jura: "Jura"
+      luzern: "Luzern"
+      neuenburg: "Neuenburg"
+      nidwalden: "Nidwalden"
+      obwalden: "Obwalden"
+      schaffhausen: "Schaffhausen"
+      schwyz: "Schwyz"
+      solothurn: "Solothurn"
+      st_gallen: "St. Gallen"
+      tessin: "Tessin"
+      thurgau: "Thurgau"
+      uri: "Uri"
+      waadt: "Waadt"
+      wallis: "Wallis"
+      zug: "Zug"
+      zürich: "Zürich"
+    genders:
+      male: "Männlich"
+      female: "Weiblich"
+      other: "Sonstiges"

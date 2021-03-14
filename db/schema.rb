@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 2021_03_13_201925) do
     t.float "magma_coins"
     t.datetime "expiration_date"
     t.integer "number_of_scans"
+    t.boolean "active", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

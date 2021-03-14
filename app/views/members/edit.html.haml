@@ -1,7 +1,6 @@
-%h1 Editing member
+.row
+  .col
+    %h1.page__title= t('members.edit')
 
-= render 'form'
-
-= link_to 'Show', @member
-\|
-= link_to 'Back', members_path
+.new-member
+  = render 'form'

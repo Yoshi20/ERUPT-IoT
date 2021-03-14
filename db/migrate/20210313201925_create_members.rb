@@ -15,6 +15,7 @@ class CreateMembers < ActiveRecord::Migration[6.1]
       t.float :magma_coins
       t.datetime :expiration_date
       t.integer :number_of_scans
+      t.boolean :active, default: false
 
       t.timestamps
     end

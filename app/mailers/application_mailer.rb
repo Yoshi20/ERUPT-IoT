@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'ERUPT-IoT <admin@erupt-iot.ch>'
+  default from: 'ERUPT <admin@erupt-iot.ch>'
   layout 'mailer'
 end

@@ -80,12 +80,12 @@ en:
       resend_unlock_inst: "Resend unlock instructions"
 
   home:
-    title: "ERUPT-IoT"
-    must_log_in: "Log in to register new LoRa devices or assign menus."
+    title: "ERUPT"
+    must_log_in: "Log in to register members or devices and to assign menus."
 
   users:
     mailer:
-      welcome: "Welcome to ERUPT-IoT"
+      welcome: "Welcome to ERUPT"
       signed_up: "You have successfully signed up. Your username is:"
     my_account: "My Account"
     login_username: "Login username"
@@ -111,3 +111,36 @@ en:
       custom_datetime_date_and_no_time: "%d %B"
       custom_datetime_weekday_date_and_year: "%A, %d %B %Y"
       custom_datetime_with_weekday: "%A, %d %B at %H:%M"
+
+  defines:
+    cantons:
+      aargau: "Aargau"
+      appenzell_ausserrhoden: "Appenzell Outer Rhodes"
+      appenzell_innerrhoden: "Appenzell Inner Rhodes"
+      basel-land: "Basel-Land"
+      basel-stadt: "Basel-City"
+      bern: "Bern"
+      freiburg: "Friborg"
+      genf: "Geneva"
+      glarus: "Glarus"
+      graubünden: "Graubünden"
+      jura: "Jura"
+      luzern: "Lucerne"
+      neuenburg: "Neuchâtel"
+      nidwalden: "Nidwalden"
+      obwalden: "Obwalden"
+      schaffhausen: "Schaffhausen"
+      schwyz: "Schwyz"
+      solothurn: "Solothurn"
+      st_gallen: "St. Gallen"
+      tessin: "Ticino"
+      thurgau: "Thurgau"
+      uri: "Uri"
+      waadt: "Vaud"
+      wallis: "Valais"
+      zug: "Zug"
+      zürich: "Zurich"
+    genders:
+      male: "Male"
+      female: "Female"
+      other: "Other"

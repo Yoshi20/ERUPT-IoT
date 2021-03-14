@@ -2,13 +2,14 @@
 
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action { @section = 'account' }
+  before_action :authenticate_admin!
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  def new
+    super
+  end
 
   # POST /resource
   # def create
@@ -65,4 +66,19 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
+
+  def authenticate_admin!
+    unless current_user.present? and current_user.is_admin?
+      render_forbidden
+      return
+    end
+  end
+
+  def render_forbidden
+    respond_to do |format|
+      format.html { redirect_to root_path, alert: t('flash.alert.unauthorized') }
+      format.json { render json: { status: 'error', message: t('flash.alert.unauthorized') }, status: :forbidden }
+    end
+  end
+
 end

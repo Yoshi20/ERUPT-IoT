@@ -10,4 +10,6 @@ DeviceType.create([
 yomi = User.find_by_email('jascha_haldemann@hotmail.com')
 if yomi.present?
   yomi.update(is_admin: true)
+else
+  User.create(username: 'Yomi', email: 'jascha_haldemann@hotmail.com', password: '123456', is_admin: true)
 end

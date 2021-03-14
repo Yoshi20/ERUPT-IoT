@@ -1,48 +1,69 @@
-%p#notice= notice
+.member
+  .row
+    .col
+      -# .tooltip
+      -#   = image_tag "member_types/#{@member.member_type}.svg", height: '25px', width: '25px', style: 'position: absolute; top: 10px;'
+      -#   %span.tooltiptext
+      -#     = @member.member_type.name
+      .page__title
+        %h1
+          = "#{@member.first_name} #{@member.last_name}"
 
-%p
-  %b First name:
-  = @member.first_name
-%p
-  %b Last name:
-  = @member.last_name
-%p
-  %b Email:
-  = @member.email
-%p
-  %b Birthdate:
-  = @member.birthdate
-%p
-  %b Mobile number:
-  = @member.mobile_number
-%p
-  %b Gender:
-  = @member.gender
-%p
-  %b Canton:
-  = @member.canton
-%p
-  %b Comment:
-  = @member.comment
-%p
-  %b Wants newsletter emails:
-  = @member.wants_newsletter_emails
-%p
-  %b Wants event emails:
-  = @member.wants_event_emails
-%p
-  %b Card:
-  = @member.card_id
-%p
-  %b Magma coins:
-  = @member.magma_coins
-%p
-  %b Expiration date:
-  = @member.expiration_date
-%p
-  %b Number of scans:
-  = @member.number_of_scans
+    -# admin actions -----------------------------------------------------------
+    .admin-actions
+      .admin-actions__link
+        = link_to edit_member_path(@member), class:'btn btn-ghost btn-square' do
+          %span.material-icons.admin-actions__link__icon= 'edit'
 
-= link_to 'Edit', edit_member_path(@member)
-\|
-= link_to 'Back', members_path
+      - if true #@member.user != current_user
+        .admin-actions__link
+          = mail_to @member.email, body: "#{t('hi')} #{@member.first_name}\n\n...", class:'btn btn-ghost btn-square' do
+            %span.material-icons.admin-actions__link__icon= 'email'
+        - if @member.mobile_number.present?
+          .mobile_number= " (#{@member.mobile_number})"
+
+    -# member ------------------------------------------------------------------
+  .row
+    .col
+      %p
+        %b= t('activerecord.attributes.member.first_name') + ':'
+        = @member.first_name
+      %p
+        %b= t('activerecord.attributes.member.last_name') + ':'
+        = @member.last_name
+      %p
+        %b= t('activerecord.attributes.member.email') + ':'
+        = @member.email
+      %p
+        %b= t('activerecord.attributes.member.birthdate') + ':'
+        = @member.birthdate
+      %p
+        %b= t('activerecord.attributes.member.mobile_number') + ':'
+        = @member.mobile_number
+      %p
+        %b= t('activerecord.attributes.member.gender') + ':'
+        = @member.gender
+      %p
+        %b= t('activerecord.attributes.member.canton') + ':'
+        = @member.canton
+      %p
+        %b= t('activerecord.attributes.member.comment') + ':'
+        = @member.comment
+      %p
+        %b= t('activerecord.attributes.member.wants_newsletter_emails') + ':'
+        = @member.wants_newsletter_emails
+      %p
+        %b= t('activerecord.attributes.member.wants_event_emails') + ':'
+        = @member.wants_event_emails
+      %p
+        %b= t('activerecord.attributes.member.card_id') + ':'
+        = @member.card_id
+      %p
+        %b= t('activerecord.attributes.member.magma_coins') + ':'
+        = @member.magma_coins
+      %p
+        %b= t('activerecord.attributes.member.expiration_date') + ':'
+        = @member.expiration_date
+      %p
+        %b= t('activerecord.attributes.member.number_of_scans') + ':'
+        = @member.number_of_scans

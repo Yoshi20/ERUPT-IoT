@@ -1,5 +1,5 @@
 class MembersController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:new, :create]
   #before_action :authenticate_admin!, only: [:create, :destroy]
   before_action :set_member, only: [:show, :edit, :update, :destroy]
   before_action { @section = 'members' }
@@ -28,10 +28,14 @@ class MembersController < ApplicationController
   # POST /members.json
   def create
     @member = Member.new(member_params)
-
+    @member.card_id = SecureRandom.uuid
+    @member.magma_coins = 0
+    @member.expiration_date = 1.year.from_now
+    @member.number_of_scans = 0
     respond_to do |format|
       if @member.save
-        format.html { redirect_to @member, notice: t('flash.notice.creating_member') }
+        #blup: make one pager for a successful registration from a new member
+        format.html { redirect_to current_user.present? ? @member : '/', notice: t('flash.notice.creating_member') }
         format.json { render :show, status: :created, location: @member }
       else
         format.html { render :new, alert: t('flash.alert.creating_member') }
@@ -76,6 +80,9 @@ class MembersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def member_params
-      params.require(:member).permit(:first_name, :last_name, :email, :birthdate, :mobile_number, :gender, :canton, :comment, :wants_newsletter_emails, :wants_event_emails, :card_id, :magma_coins, :expiration_date, :number_of_scans)
+      params.require(:member).permit(:first_name, :last_name, :email, :birthdate,
+        :mobile_number, :gender, :canton, :comment, :wants_newsletter_emails,
+        :wants_event_emails, :card_id, :magma_coins, :expiration_date,
+        :number_of_scans)
     end
 end

@@ -7,10 +7,14 @@
     %p= "Total users count = #{User.all.count}"
   - if current_user.admin?
     .col{style: 'text-align: right;'}
-      - mail_string = ''
-      - User.where(is_admin: true).each do |u|
-        - mail_string = mail_string + u.email + '; '
-      = mail_to "", "Write all admins an email", bcc: mail_string, subject: "ERUPT-IoT", body: "Hi ERUPT-IoT admins\n\n", class: 'btn btn-ghost'
+      .row
+        .col
+          - mail_string = ''
+          - User.all.each do |u|
+            - mail_string = mail_string + u.email + '; '
+          = mail_to "", "Write all users an email", bcc: mail_string, subject: "ERUPT", body: "Hi ERUPT users\n\n", class: 'btn btn-ghost'
+        .col
+          = link_to t('sign_up'), new_user_registration_path,  class: "btn btn-ghost", style: "position: absolute; right: 20px;"
 
 .user-list
   %table.table.table-hover.table-borderless
@@ -41,5 +45,6 @@
                   = f.button type: 'submit', data: { confirm: 'Are you sure?' }, class:'btn btn-ghost btn-square' do
                     %span.material-icons.admin-actions__link__icon= 'verified_user'
               .admin-list-actions__link
-                = link_to user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sstm btn-square' do
-                  %span.material-icons.admin-actions__link__icon= 'delete'
+                = form_for user, method: :delete, data: { confirm: 'Are you sure?' }, role: 'form', class:'form' do |f|
+                  = button_tag(type: "submit", class:'btn btn-sstm btn-square') do
+                    %span.material-icons.admin-actions__link__icon= 'delete'
