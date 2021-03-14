@@ -94,3 +94,6 @@ gem 'rails-i18n', '~> 6.0.0' # For 6.0.0 or higher
 
 # See https://github.com/tigrish/devise-i18n
 gem 'devise-i18n'
+
+# See https://github.com/iain/http_accept_language
+gem 'http_accept_language'
