@@ -2,7 +2,6 @@ class MembersController < ApplicationController
   before_action :authenticate_user!, except: [:new, :create]
   #before_action :authenticate_admin!, only: [:create, :destroy]
   before_action :set_member, only: [:show, :edit, :update, :destroy]
-  before_action :add_abo_types_to_member, only: [:create, :update]
   before_action { @section = 'members' }
 
   # GET /members
@@ -33,6 +32,7 @@ class MembersController < ApplicationController
     @member.magma_coins = 0
     @member.expiration_date = 1.year.from_now
     @member.number_of_scans = 0
+    add_abo_types_to_member(@member)
     respond_to do |format|
       if @member.save
         #blup: make one pager for a successful registration from a new member
@@ -48,6 +48,7 @@ class MembersController < ApplicationController
   # PATCH/PUT /members/1
   # PATCH/PUT /members/1.json
   def update
+    add_abo_types_to_member(@member)
     respond_to do |format|
       if @member.update(member_params)
         format.html { redirect_to @member, notice: t('flash.notice.updating_member') }
@@ -88,15 +89,17 @@ class MembersController < ApplicationController
         :number_of_scans, :active)
     end
 
-    def add_abo_types_to_member
+    def add_abo_types_to_member(member)
       all_abo_types = AboType.all
       if params[:member].present? and params[:member][:abo_types].present?
         params[:member][:abo_types].each do |at_key_value|
           at = all_abo_types.find_by(name: at_key_value[0])
-          if at_key_value[1] == "0"
-            @member.abo_types.delete(at)
-          elsif at_key_value[1] == "1" and !@member.abo_types.include?(at)
-            @member.abo_types << at
+          if at.present?
+            if at_key_value[1] == "0"
+              member.abo_types.delete(at)
+            elsif at_key_value[1] == "1" and !member.abo_types.include?(at)
+              member.abo_types << at
+            end
           end
         end
       end
