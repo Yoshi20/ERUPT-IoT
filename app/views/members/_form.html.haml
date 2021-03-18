@@ -1,5 +1,5 @@
-= form_for @member, role: 'form', class:'form' do |f|
-
+= form_for @member, as: :member, url: (extern ? members_extern_path : (@member.new_record? ? members_path : member_path)), method: (@member.new_record? ? :post : :put), role: 'form', class:'form' do |f|
+  -# as: :post, url: post_path(@post), method: :patch, html: { class: "edit_post", id: "edit_post_45" } do |f| %>
   - if @member.errors.any?
     #error_explanation
       %h2= pluralize(@member.errors.count, "error") + ' ' + t('members.prohibited')
@@ -7,6 +7,16 @@
         - @member.errors.full_messages.each do |message|
           %li= message
 
+  .field.form-group
+    = f.label :abo_types, "Abo types *"
+    = f.fields_for :abo_types do |ff|
+      .row
+        - AboType.all.each_with_index do |at, i|
+          .col
+            .form-check
+              - abo_types_name_array = @member.abo_types.map(&:name)
+              = ff.check_box at.name, checked: (abo_types_name_array.include?(at.name) || (@member.new_record? && i == 0)), class:'form-check-input mr-2'
+              = ff.label at.name, at.name, class:'form-check-label'
   .field.form-group
     = f.label :first_name, "#{t('activerecord.attributes.member.first_name')} *"
     = f.text_field :first_name, class: 'form-control'
@@ -28,23 +38,13 @@
   .field.form-group
     = f.label :canton
     = f.select :canton, options_for_select(cantons_for_select, @member.canton), {include_blank: true}, class: 'form-control'
-  .field.form-group
-    = f.label :abo_types
-    = f.fields_for :abo_types do |ff|
-      .row
-        - AboType.all.each do |at|
-          .col
-            .form-check
-              - abo_types_name_array = @member.abo_types.map(&:name)
-              = ff.check_box at.name, checked: abo_types_name_array.include?(at.name), class:'form-check-input mr-2'
-              = ff.label at.name, at.name, class:'form-check-label'
   .form-group.mb-0
     .form-check
-      = f.check_box :wants_newsletter_emails, checked: (params[:member].present? ? (params[:member][:wants_newsletter_emails] == "1") : true), class:'form-check-input mr-2'
+      = f.check_box :wants_newsletter_emails, checked: (params[:member].present? ? (params[:member][:wants_newsletter_emails] == "1") : (@member.new_record? ? true : @member.wants_newsletter_emails)), class:'form-check-input mr-2'
       = f.label :wants_newsletter_emails, class:'form-check-label'
   .form-group
     .form-check
-      = f.check_box :wants_event_emails, checked: (params[:member].present? ? (params[:member][:wants_event_emails] == "1") : true), class:'form-check-input mr-2'
+      = f.check_box :wants_event_emails, checked: (params[:member].present? ? (params[:member][:wants_event_emails] == "1") : (@member.new_record? ? true : @member.wants_event_emails)), class:'form-check-input mr-2'
       = f.label :wants_event_emails, class:'form-check-label'
   - if current_user.present? and !@member.new_record?
     %hr
@@ -67,8 +67,11 @@
       = f.text_area :comment, class: 'form-control'
     .form-group
       .form-check
-        = f.check_box :active, checked: (params[:member].present? ? (params[:member][:active] == "1") : true), class:'form-check-input mr-2'
+        = f.check_box :active, checked: (params[:member].present? ? (params[:member][:active] == "1") : @member.active), class:'form-check-input mr-2'
         = f.label :active, class:'form-check-label'
 
   .actions.form-group.text-center
-    = f.submit class:'btn btn-ghost'
+    - if extern
+      = f.submit t('members.submit_btn_extern'), class:'btn btn-ghost'
+    - else
+      = f.submit class:'btn btn-ghost'

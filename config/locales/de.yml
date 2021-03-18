@@ -81,7 +81,7 @@ de:
 
   home:
     title: "ERUPT"
-    must_log_in: "Logge dich ein um Mitglieder oder Geräte zu erfassen und um Menüs zuzuweisen."
+    body: "blup: my home text"
 
   users:
     mailer:

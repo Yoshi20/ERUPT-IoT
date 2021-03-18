@@ -1,6 +1,5 @@
 class MembersController < ApplicationController
-  before_action :authenticate_user!, except: [:new, :create]
-  #before_action :authenticate_admin!, only: [:create, :destroy]
+  before_action :authenticate_user!, except: [:new_extern, :create_extern, :success_extern]
   before_action :set_member, only: [:show, :edit, :update, :destroy]
   before_action { @section = 'members' }
 
@@ -20,6 +19,12 @@ class MembersController < ApplicationController
     @member = Member.new
   end
 
+  # GET /members/extern/new
+  def new_extern
+    @member = Member.new
+    render "new_extern", layout: "application_extern"
+  end
+
   # GET /members/1/edit
   def edit
   end
@@ -35,14 +40,37 @@ class MembersController < ApplicationController
     add_abo_types_to_member(@member)
     respond_to do |format|
       if @member.save
-        #blup: make one pager for a successful registration from a new member
-        format.html { redirect_to current_user.present? ? @member : '/', notice: t('flash.notice.creating_member') }
+        format.html { redirect_to current_user.present? ? @member : members_path, notice: t('flash.notice.creating_member') }
         format.json { render :show, status: :created, location: @member }
       else
         format.html { render :new, alert: t('flash.alert.creating_member') }
         format.json { render json: @member.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  # POST /members/extern
+  def create_extern
+    @member = Member.new(member_params)
+    @member.card_id = SecureRandom.uuid
+    @member.magma_coins = 0
+    @member.expiration_date = 1.year.from_now
+    @member.number_of_scans = 0
+    add_abo_types_to_member(@member)
+    respond_to do |format|
+      if @member.save
+        format.html { redirect_to members_extern_success_path, layout: "application_extern" }
+        format.json { render :show, status: :created, location: @member }
+      else
+        format.html { render :new_extern, layout: "application_extern", alert: t('flash.alert.creating_member') }
+        format.json { render json: @member.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # GET /members/extern/success
+  def success_extern
+    render "success_extern", layout: "application_extern"
   end
 
   # PATCH/PUT /members/1

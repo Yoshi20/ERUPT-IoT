@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
+  before_action :authenticate_admin!, only: [:index]
   before_action :set_user, only: [:update, :destroy]
   before_action { @section = 'users' }
 

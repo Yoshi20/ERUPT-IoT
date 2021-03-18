@@ -81,7 +81,7 @@ en:
 
   home:
     title: "ERUPT"
-    must_log_in: "Log in to register members or devices and to assign menus."
+    body: "blup: my home text"
 
   users:
     mailer:
