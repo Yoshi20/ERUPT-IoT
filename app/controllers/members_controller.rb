@@ -1,3 +1,6 @@
+include Recaptcha::Adapters::ViewMethods
+include Recaptcha::Adapters::ControllerMethods
+
 class MembersController < ApplicationController
   before_action :authenticate_user!, except: [:new_extern, :create_extern, :success_extern]
   before_action :set_member, only: [:show, :edit, :update, :destroy]
@@ -58,7 +61,7 @@ class MembersController < ApplicationController
     @member.number_of_scans = 0
     add_abo_types_to_member(@member)
     respond_to do |format|
-      if @member.save
+      if verify_recaptcha && @member.save
         format.html { redirect_to members_extern_success_path, layout: "application_extern" }
         format.json { render :show, status: :created, location: @member }
       else

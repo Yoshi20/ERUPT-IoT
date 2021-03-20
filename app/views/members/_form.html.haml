@@ -46,6 +46,9 @@
     .form-check
       = f.check_box :wants_event_emails, checked: (params[:member].present? ? (params[:member][:wants_event_emails] == "1") : (@member.new_record? ? true : @member.wants_event_emails)), class:'form-check-input mr-2'
       = f.label :wants_event_emails, class:'form-check-label'
+  - if extern
+    .form-group{style: 'margin-top: -3rem;'}
+      = recaptcha_tags align: "center"
   - if current_user.present? and !@member.new_record?
     %hr
     .field.form-group

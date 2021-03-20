@@ -145,3 +145,8 @@ en:
       male: "Male"
       female: "Female"
       other: "Other"
+
+  recaptcha:
+    errors:
+      verification_failed: "reCAPTCHA thinks that you're not a human. Please try again"
+      recaptcha_unreachable: "reCAPTCHA server error. Please try again"

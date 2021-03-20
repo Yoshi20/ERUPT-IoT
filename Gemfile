@@ -97,3 +97,6 @@ gem 'devise-i18n'
 
 # See https://github.com/iain/http_accept_language
 gem 'http_accept_language'
+
+# See https://github.com/ambethia/recaptcha
+gem 'recaptcha'
