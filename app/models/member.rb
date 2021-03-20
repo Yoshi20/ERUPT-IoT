@@ -6,4 +6,8 @@ class Member < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :card_id, presence: true, uniqueness: true
 
+  def new?
+    !self.active && self.created_at.today?
+  end
+
 end

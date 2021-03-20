@@ -6,7 +6,7 @@ class MembersController < ApplicationController
   # GET /members
   # GET /members.json
   def index
-    @members = Member.all
+    @members = Member.all.order(created_at: :desc)
   end
 
   # GET /members/1

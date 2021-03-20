@@ -42,9 +42,9 @@
               .admin-list-actions__link
                 = form_for user, role: 'form', method: :patch do |f|
                   = f.check_box :is_admin, checked: !user.is_admin, class: 'd-none'
-                  = f.button type: 'submit', data: { confirm: 'Are you sure?' }, class:'btn btn-ghost btn-square' do
+                  = f.button type: 'submit', class:'btn btn-ghost btn-square' do
                     %span.material-icons.admin-actions__link__icon= 'verified_user'
               .admin-list-actions__link
-                = form_for user, method: :delete, data: { confirm: 'Are you sure?' }, role: 'form', class:'form' do |f|
-                  = button_tag(type: "submit", class:'btn btn-sstm btn-square') do
+                = form_for user, method: :delete, role: 'form', class:'form' do |f|
+                  = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
                     %span.material-icons.admin-actions__link__icon= 'delete'

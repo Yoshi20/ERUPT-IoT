@@ -10,6 +10,7 @@
   %table.table.table-hover.table-borderless
     %thead
       %tr
+        %th.text-center= t('activerecord.attributes.member.active')+'?'
         %th= t('activerecord.attributes.member.first_name')
         %th= t('activerecord.attributes.member.last_name')
         %th= t('activerecord.attributes.member.email')
@@ -24,12 +25,14 @@
         -# %th= t('activerecord.attributes.member.expiration_date')
         %th.text-center= t('activerecord.attributes.member.number_of_scans')
         %th= t('activerecord.attributes.member.comment')
-        %th.text-center= t('activerecord.attributes.member.active')
         -# %th Created at
 
     %tbody.member-list-body.with-show
       - @members.each do |member|
-        %tr{'data-id': member.id, 'data-component'=>'member'}
+        %tr{'data-id': member.id, 'data-component'=>'member', style: "background-color: #{member.new? ? 'aqua' : ''};"}
+          %td.text-center
+            - if member.active
+              .material-icons= 'done'
           %td= member.first_name
           %td= member.last_name
           %td= member.email
@@ -45,19 +48,31 @@
           -# %td= member.expiration_date
           %td.text-center= member.number_of_scans
           %td= member.comment
-          %td.text-center= member.active
           -# %td= member.created_at.to_s(:custom_datetime)
 
           %td.admin-list-actions
+            - if !member.active
+              .admin-list-actions__link
+                = form_for member, method: :patch, role: 'form', class:'form' do |f|
+                  = f.check_box :active, checked: true, hidden: true
+                  = button_tag(type: "submit", class:'btn btn-sstm btn-square') do
+                    %span.material-icons.admin-actions__link__icon= 'done'
             .admin-list-actions__link
               = link_to edit_member_path(member), class: 'btn btn-sstm btn-square' do
                 %span.material-icons.admin-actions__link__icon= 'edit'
             .admin-list-actions__link
-              = form_for member, method: :delete, data: { confirm: 'Are you sure?' }, role: 'form', class:'form' do |f|
-                = button_tag(type: "submit", class:'btn btn-sstm btn-square') do
+              = form_for member, method: :delete, role: 'form', class:'form' do |f|
+                = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
                   %span.material-icons.admin-actions__link__icon= 'delete'
 
+  -# .admin-actions{style: 'left: 0.5rem;'}
+  -#   .admin-actions__link
+  -#     = link_to members_path, class:'btn btn-ghost btn-square' do
+  -#       %span.material-icons.admin-actions__link__icon= 'refresh'
   .admin-actions
+    .admin-actions__link
+      = link_to members_path, class:'btn btn-ghost btn-square' do
+        %span.material-icons.admin-actions__link__icon= 'refresh'
     .admin-actions__link
       = link_to new_member_path, class:'btn btn-ghost btn-square' do
         %span.material-icons.admin-actions__link__icon= 'add'

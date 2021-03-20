@@ -38,8 +38,8 @@
               = link_to edit_device_path(device), class: 'btn btn-sstm btn-square' do
                 %span.material-icons.admin-actions__link__icon= 'edit'
             .admin-list-actions__link
-              = form_for device, method: :delete, data: { confirm: 'Are you sure?' }, role: 'form', class:'form' do |f|
-                = button_tag(type: "submit", class:'btn btn-sstm btn-square') do
+              = form_for device, method: :delete, role: 'form', class:'form' do |f|
+                = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
                   %span.material-icons.admin-actions__link__icon= 'delete'
 
   .admin-actions
