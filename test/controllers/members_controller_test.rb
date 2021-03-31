@@ -17,7 +17,7 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
 
   test "should create member" do
     assert_difference('Member.count') do
-      post members_url, params: { member: { birthdate: @member.birthdate, canton: @member.canton, card_id: @member.card_id, comment: @member.comment, email: @member.email, expiration_date: @member.expiration_date, first_name: @member.first_name, gender: @member.gender, last_name: @member.last_name, magma_coins: @member.magma_coins, mobile_number: @member.mobile_number, number_of_scans: @member.number_of_scans, wants_event_emails: @member.wants_event_emails, wants_newsletter_emails: @member.wants_newsletter_emails } }
+      post members_url, params: { member: { birthdate: @member.birthdate, canton: @member.canton, card_id: @member.card_id, comment: @member.comment, email: @member.email, expiration_date: @member.expiration_date, first_name: @member.first_name, gender: @member.gender, last_name: @member.last_name, magma_coins: @member.magma_coins, mobile_number: @member.mobile_number, wants_event_emails: @member.wants_event_emails, wants_newsletter_emails: @member.wants_newsletter_emails } }
     end
 
     assert_redirected_to member_url(Member.last)
@@ -34,7 +34,7 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update member" do
-    patch member_url(@member), params: { member: { birthdate: @member.birthdate, canton: @member.canton, card_id: @member.card_id, comment: @member.comment, email: @member.email, expiration_date: @member.expiration_date, first_name: @member.first_name, gender: @member.gender, last_name: @member.last_name, magma_coins: @member.magma_coins, mobile_number: @member.mobile_number, number_of_scans: @member.number_of_scans, wants_event_emails: @member.wants_event_emails, wants_newsletter_emails: @member.wants_newsletter_emails } }
+    patch member_url(@member), params: { member: { birthdate: @member.birthdate, canton: @member.canton, card_id: @member.card_id, comment: @member.comment, email: @member.email, expiration_date: @member.expiration_date, first_name: @member.first_name, gender: @member.gender, last_name: @member.last_name, magma_coins: @member.magma_coins, mobile_number: @member.mobile_number, wants_event_emails: @member.wants_event_emails, wants_newsletter_emails: @member.wants_newsletter_emails } }
     assert_redirected_to member_url(@member)
   end
 

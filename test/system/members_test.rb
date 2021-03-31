@@ -25,7 +25,6 @@ class MembersTest < ApplicationSystemTestCase
     fill_in "Last name", with: @member.last_name
     fill_in "Magma coins", with: @member.magma_coins
     fill_in "Mobile number", with: @member.mobile_number
-    fill_in "Number of scans", with: @member.number_of_scans
     check "Wants event emails" if @member.wants_event_emails
     check "Wants newsletter emails" if @member.wants_newsletter_emails
     click_on "Create Member"
@@ -49,7 +48,6 @@ class MembersTest < ApplicationSystemTestCase
     fill_in "Last name", with: @member.last_name
     fill_in "Magma coins", with: @member.magma_coins
     fill_in "Mobile number", with: @member.mobile_number
-    fill_in "Number of scans", with: @member.number_of_scans
     check "Wants event emails" if @member.wants_event_emails
     check "Wants newsletter emails" if @member.wants_newsletter_emails
     click_on "Update Member"

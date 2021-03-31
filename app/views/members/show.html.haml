@@ -69,7 +69,7 @@
         = @member.expiration_date
       %p
         %b= t('activerecord.attributes.member.number_of_scans') + ':'
-        = @member.number_of_scans
+        = @member.scan_events.count
       %p
         %b= t('activerecord.attributes.member.active') + ':'
         = @member.active

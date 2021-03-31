@@ -9,7 +9,7 @@ class MembersController < ApplicationController
   # GET /members
   # GET /members.json
   def index
-    @members = Member.all.order(created_at: :desc)
+    @members = Member.all.includes(:abo_types, :scan_events).order(created_at: :desc)
   end
 
   # GET /members/1
@@ -39,7 +39,6 @@ class MembersController < ApplicationController
     @member.card_id = SecureRandom.uuid
     @member.magma_coins = 0
     @member.expiration_date = 1.year.from_now
-    @member.number_of_scans = 0
     add_abo_types_to_member(@member)
     respond_to do |format|
       if @member.save
@@ -58,7 +57,6 @@ class MembersController < ApplicationController
     @member.card_id = SecureRandom.uuid
     @member.magma_coins = 0
     @member.expiration_date = 1.year.from_now
-    @member.number_of_scans = 0
     add_abo_types_to_member(@member)
     respond_to do |format|
       if verify_recaptcha && @member.save
@@ -117,7 +115,7 @@ class MembersController < ApplicationController
       params.require(:member).permit(:first_name, :last_name, :email, :birthdate,
         :mobile_number, :gender, :canton, :comment, :wants_newsletter_emails,
         :wants_event_emails, :card_id, :magma_coins, :expiration_date,
-        :number_of_scans, :active)
+        :active)
     end
 
     def add_abo_types_to_member(member)

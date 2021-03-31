@@ -14,7 +14,6 @@ one:
   card_id: MyString
   magma_coins: 1.5
   expiration_date: 2021-03-13 21:19:25
-  number_of_scans: 1
 
 two:
   first_name: MyString
@@ -30,4 +29,3 @@ two:
   card_id: MyString
   magma_coins: 1.5
   expiration_date: 2021-03-13 21:19:25
-  number_of_scans: 1
