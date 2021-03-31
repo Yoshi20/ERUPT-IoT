@@ -23,6 +23,7 @@ en:
       creating_member: "Member was successfully created"
       updating_member: "Member was successfully updated"
       deleting_member: "Member was successfully deleted"
+      deleting_scan_event: "Scan event was successfully deleted"
     alert:
       updating_user: "User couldn't be updated!"
       deleting_user: "User couldn't be deleted!"
@@ -33,6 +34,7 @@ en:
       updating_member: "Member couldn't be updated!"
       deleting_member: "Member couldn't be deleted!"
       unauthorized: "Unauthorized! You must be an administrator to make this action"
+      deleting_scan_event: "Scan event couldn't be deleted!"
 
   navigation:
     account:

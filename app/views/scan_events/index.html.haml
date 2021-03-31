@@ -1,0 +1,67 @@
+.row
+  .col
+    %h1.page__title= t('scan_events.title')
+
+.row
+  .col
+    %p= "Total scan_events count = #{ScanEvent.all.count}"
+
+.scan_event-list
+  %table.table.table-hover.table-borderless
+    %thead
+      %tr
+        %th= t('activerecord.attributes.scan_event.member_id')
+        %th Created at
+
+        %th.text-center= t('activerecord.attributes.member.active')+'?'
+        %th= t('activerecord.attributes.member.first_name')
+        %th= t('activerecord.attributes.member.last_name')
+        %th= t('activerecord.attributes.member.email')
+        -# %th= t('activerecord.attributes.member.birthdate')
+        -# %th= t('activerecord.attributes.member.gender')
+        -# %th= t('activerecord.attributes.member.canton')
+        %th= t('activerecord.attributes.member.abo_types')
+        -# %th= t('activerecord.attributes.member.wants_newsletter_emails')
+        -# %th= t('activerecord.attributes.member.wants_event_emails')
+        -# %th= t('activerecord.attributes.member.card_id')
+        %th.text-center= t('activerecord.attributes.member.magma_coins')
+        -# %th= t('activerecord.attributes.member.expiration_date')
+        %th.text-center= t('activerecord.attributes.member.number_of_scans')
+        %th= t('activerecord.attributes.member.comment')
+
+    %tbody.scan_event-list-body
+      - @scan_events.each do |scan_event|
+        %tr{'data-id': scan_event.id, 'data-component'=>'scan_event'}
+          %td= scan_event.member_id
+          %td= scan_event.created_at.to_s(:custom_datetime)
+
+          - member = scan_event.member
+          %td.text-center
+            - if member.active
+              .material-icons= 'done'
+          %td= member.first_name
+          %td= member.last_name
+          %td= member.email
+          -# %td= member.birthdate
+          -# %td= member.mobile_number
+          -# %td= member.gender
+          -# %td= member.canton
+          %td= member.abo_types.map(&:name).join(', ')
+          -# %td= member.wants_newsletter_emails
+          -# %td= member.wants_event_emails
+          -# %td= member.card_id
+          %td.text-center= member.magma_coins
+          -# %td= member.expiration_date
+          %td.text-center= member.number_of_scans
+          %td= member.comment
+
+          %td.admin-list-actions
+            .admin-list-actions__link
+              = form_for scan_event, method: :delete, role: 'form', class:'form' do |f|
+                = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
+                  %span.material-icons.admin-actions__link__icon= 'delete'
+
+  .admin-actions
+    .admin-actions__link
+      = link_to scan_events_path, class:'btn btn-ghost btn-square' do
+        %span.material-icons.admin-actions__link__icon= 'refresh'

@@ -1,0 +1,11 @@
+en:
+  activerecord:
+    models:
+      scan_event:
+        one: "Scan event"
+        other: "Scan events"
+    attributes:
+      scan_event:
+        member_id: "Member"
+  scan_events:
+    title: "Scan events"

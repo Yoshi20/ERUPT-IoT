@@ -23,6 +23,7 @@ de:
       creating_member: "Mitglied wurde erfolgreich erstellt"
       updating_member: "Mitglied wurde erfolgreich aktualisiert"
       deleting_member: "Mitglied wurde erfolgreich gelöscht"
+      deleting_scan_event: "Scan-Event wurde erfolgreich gelöscht"
     alert:
       updating_user: "Benutzer konnte nicht aktualisiert werden!"
       deleting_user: "Benutzer konnte nicht gelöscht werden!"
@@ -33,6 +34,7 @@ de:
       updating_member: "Mitglied konnte nicht aktualisiert werden!"
       deleting_member: "Mitglied konnte nicht gelöscht werden!"
       unauthorized: "Nicht autorisiert! Sie müssen ein Administrator sein, um diese Aktion auszuführen"
+      deleting_scan_event: "Scan-Event konnte nicht gelöscht werden!"
 
   navigation:
     account:

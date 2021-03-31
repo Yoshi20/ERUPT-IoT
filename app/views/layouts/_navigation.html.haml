@@ -15,11 +15,14 @@
         %li.nav-item{role: "presentation", class: (@section == 'devices' ? 'active' : 'inactive')}
           -# = link_to t('devices.title'), devices_path, class: 'nav-link'
 
+        %li.nav-item{role: "presentation", class: (@section == 'menus' ? 'active' : 'inactive')}
+          -# = link_to t('menus.title'), menus_path, class: 'nav-link'
+
         %li.nav-item{role: "presentation", class: (@section == 'members' ? 'active' : 'inactive')}
           = link_to t('members.title'), members_path, class: 'nav-link'
 
-        %li.nav-item{role: "presentation", class: (@section == 'menus' ? 'active' : 'inactive')}
-          -# = link_to t('menus.title'), menus_path, class: 'nav-link'
+        %li.nav-item{role: "presentation", class: (@section == 'scan_events' ? 'active' : 'inactive')}
+          = link_to t('scan_events.title'), scan_events_path, class: 'nav-link'
 
     %ul.navbar-nav.navbar-main.ml-auto
       %li.nav-item.locales-list
