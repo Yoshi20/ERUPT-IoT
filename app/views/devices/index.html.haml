@@ -31,7 +31,7 @@
           %td= device.fw_version
           %td= device.battery
           %td= device.last_time_seen
-          %td= device.created_at.to_s(:custom_datetime)
+          %td= device.created_at.localtime.to_s(:custom_datetime)
 
           %td.admin-list-actions
             .admin-list-actions__link

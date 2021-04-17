@@ -29,7 +29,7 @@
     %tbody.scan_event-list-body
       - @scan_events.each do |scan_event|
         %tr{'data-id': scan_event.id, 'data-component'=>'scan_event'}
-          %td= scan_event.created_at.to_s(:custom_datetime)
+          %td= scan_event.created_at.localtime.to_s(:custom_datetime)
           - member = scan_event.member
           %td.text-center
             - if member.active
@@ -74,8 +74,8 @@
     %tbody.scan_event-list-body
       - @scan_events_no_member.each do |scan_event|
         %tr{'data-id': scan_event.id, 'data-component'=>'scan_event'}
-          %td= scan_event.created_at.to_s(:custom_datetime)
-          %td= scan_event.post_body
+          %td= scan_event.created_at.localtime.to_s(:custom_datetime)
+          %td= scan_event.post_body.gsub('0000000000000000', '.')
 
           %td.admin-list-actions
             .admin-list-actions__link

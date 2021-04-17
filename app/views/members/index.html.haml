@@ -48,7 +48,7 @@
           -# %td= member.expiration_date
           %td.text-center= member.scan_events.count
           %td= member.comment
-          -# %td= member.created_at.to_s(:custom_datetime)
+          -# %td= member.created_at.localtime.to_s(:custom_datetime)
 
           %td.admin-list-actions
             - if !member.active
