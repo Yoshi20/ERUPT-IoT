@@ -36,7 +36,7 @@ class MembersController < ApplicationController
   # POST /members.json
   def create
     @member = Member.new(member_params)
-    @member.card_id = SecureRandom.uuid
+    #@member.card_id = SecureRandom.uuid
     @member.magma_coins = 0
     @member.expiration_date = 1.year.from_now
     add_abo_types_to_member(@member)
@@ -54,7 +54,7 @@ class MembersController < ApplicationController
   # POST /members/extern
   def create_extern
     @member = Member.new(member_params)
-    @member.card_id = SecureRandom.uuid
+    #@member.card_id = SecureRandom.uuid
     @member.magma_coins = 0
     @member.expiration_date = 1.year.from_now
     add_abo_types_to_member(@member)
@@ -80,7 +80,7 @@ class MembersController < ApplicationController
     add_abo_types_to_member(@member)
     respond_to do |format|
       if @member.update(member_params)
-        format.html { redirect_to @member, notice: t('flash.notice.updating_member') }
+        format.html { redirect_to members_url, notice: t('flash.notice.updating_member') }
         format.json { render :show, status: :ok, location: @member }
       else
         format.html { render :edit, alert: t('flash.alert.updating_member') }

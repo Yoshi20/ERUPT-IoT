@@ -4,7 +4,7 @@
 
 .row
   .col
-    %p= "Total scan_events count = #{@scan_events.count}"
+    %p= "Total scan_events count = #{@total_scan_events.count}"
 
 .scan_event-list
   %table.table.table-hover.table-borderless
@@ -28,7 +28,7 @@
 
     %tbody.scan_event-list-body
       - @scan_events.each do |scan_event|
-        %tr{'data-id': scan_event.id, 'data-component'=>'scan_event'}
+        %tr{'data-id': scan_event.id, 'data-component'=>'scan_event', style: "background-color: #{scan_event.new? ? 'aqua' : ''};"}
           %td= scan_event.created_at.localtime.to_s(:custom_datetime)
           - member = scan_event.member
           %td.text-center
@@ -55,26 +55,32 @@
                 = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
                   %span.material-icons.admin-actions__link__icon= 'delete'
 
--# -----------------------------------------------------------------------------
 %br
-%hr
+-# -----------------------------------------------------------------------------
 %br
 
 .row
   .col
-    %p= "Total scan_events_no_member count = #{@scan_events_no_member.count}"
+    %h1.page__title= t('scan_events.title2')
+
+.row
+  .col
+    %p= "Total scan_events_no_member count = #{@total_scan_events_no_member.count}"
 
 .scan_event-list
   %table.table.table-hover.table-borderless
     %thead
       %tr
         %th Timestamp
+        %th UID
         %th post_body
 
     %tbody.scan_event-list-body
       - @scan_events_no_member.each do |scan_event|
-        %tr{'data-id': scan_event.id, 'data-component'=>'scan_event'}
+        %tr{'data-id': scan_event.id, 'data-component'=>'scan_event', style: "background-color: #{scan_event.new? ? 'aqua' : ''};"}
           %td= scan_event.created_at.localtime.to_s(:custom_datetime)
+          - i = scan_event.post_body.index('UID') + 7
+          %td= scan_event.post_body[i... scan_event.post_body.index(',', i)-1]
           %td= scan_event.post_body.gsub('0000000000000000', '.')
 
           %td.admin-list-actions

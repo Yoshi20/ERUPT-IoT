@@ -8,15 +8,17 @@ class ScanEventsController < ApplicationController
   # GET /scan_events
   # GET /scan_events.json
   def index
-    @scan_events = ScanEvent.where("member_id != NULL").order(created_at: :desc).limit(10)
-    @scan_events_no_member = ScanEvent.where(member_id: nil).order(created_at: :desc).limit(10)
+    @total_scan_events = ScanEvent.where.not(member_id: nil)
+    @scan_events = @total_scan_events.order(created_at: :desc).limit(10)
+    @total_scan_events_no_member = ScanEvent.where(member_id: nil)
+    @scan_events_no_member = @total_scan_events_no_member.order(created_at: :desc).limit(10)
   end
 
   # POST /scan_events
   # POST /scan_events.json
   def create
     post_body = params.except(:controller, :action, :scan_event)
-    member = Member.find_by(card_id: params[:card_id])
+    member = Member.find_by(card_id: params[:UID])
     scan_event = nil
     if member.present?
       scan_event = ScanEvent.create(member_id: member.id, post_body: post_body)
@@ -25,7 +27,7 @@ class ScanEventsController < ApplicationController
       scan_event = ScanEvent.create(post_body: post_body)
     end
     if scan_event.present?
-      render "OK", status: :ok
+      render json: {}, status: :ok
     else
       render json: {error: "couldn't create scan_event"}, status: :unprocessable_entity
     end

@@ -9,3 +9,4 @@ de:
         member_id: "Mitglied"
   scan_events:
     title: "Scan-Events"
+    title2: "Scan-Events ohne Mitglied-ID"

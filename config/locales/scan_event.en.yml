@@ -9,3 +9,4 @@ en:
         member_id: "Member"
   scan_events:
     title: "Scan events"
+    title2: "Scan events without member id"

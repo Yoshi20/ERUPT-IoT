@@ -11,6 +11,7 @@
     %thead
       %tr
         %th.text-center= t('activerecord.attributes.member.active')+'?'
+        %th.text-center= t('activerecord.attributes.member.card_id')+'?'
         %th= t('activerecord.attributes.member.first_name')
         %th= t('activerecord.attributes.member.last_name')
         %th= t('activerecord.attributes.member.email')
@@ -32,6 +33,9 @@
         %tr{'data-id': member.id, 'data-component'=>'member', style: "background-color: #{member.new? ? 'aqua' : ''};"}
           %td.text-center
             - if member.active
+              .material-icons= 'done'
+          %td.text-center
+            - if member.card_id.present?
               .material-icons= 'done'
           %td= member.first_name
           %td= member.last_name
