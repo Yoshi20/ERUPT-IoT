@@ -26,10 +26,14 @@ class ScanEventsController < ApplicationController
       # no member yet -> create "empty" ScanEvent
       scan_event = ScanEvent.create(post_body: post_body)
     end
-    if scan_event.present?
-      render json: {}, status: :ok
-    else
-      render json: {error: "couldn't create scan_event"}, status: :unprocessable_entity
+    respond_to do |format|
+      if scan_event.present?
+        format.html { head :ok }
+        format.json { head :no_content }
+      else
+        format.html { head :unprocessable_entity }
+        format.json { render json: scan_event.errors, status: :unprocessable_entity }
+      end
     end
   end
 
