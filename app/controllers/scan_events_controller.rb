@@ -28,11 +28,9 @@ class ScanEventsController < ApplicationController
     end
     respond_to do |format|
       if scan_event.present?
-        format.html { head :ok }
-        format.json { head :no_content }
+        format.html { render plain: "OK", status: :ok }
       else
         format.html { head :unprocessable_entity }
-        format.json { render json: scan_event.errors, status: :unprocessable_entity }
       end
     end
   end
