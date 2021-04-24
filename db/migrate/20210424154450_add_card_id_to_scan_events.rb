@@ -3,7 +3,7 @@ class AddCardIdToScanEvents < ActiveRecord::Migration[6.1]
     add_column :scan_events, :card_id, :string
 
     ScanEvent.all.each do |se|
-      if se.card_id == nil
+      if se.card_id == nil && se.post_body.present?
         i = se.post_body.index('UID') + 7
         se.update(card_id: se.post_body[i... se.post_body.index(',', i)-1])
       end
