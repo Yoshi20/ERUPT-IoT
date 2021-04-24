@@ -23,6 +23,7 @@ en:
       creating_member: "Member was successfully created"
       updating_member: "Member was successfully updated"
       deleting_member: "Member was successfully deleted"
+      updating_scan_event: "Scan event was successfully updated"
       deleting_scan_event: "Scan event was successfully deleted"
     alert:
       updating_user: "User couldn't be updated!"
@@ -34,7 +35,9 @@ en:
       updating_member: "Member couldn't be updated!"
       deleting_member: "Member couldn't be deleted!"
       unauthorized: "Unauthorized! You must be an administrator to make this action"
+      updating_scan_event: "Scan event couldn't be updated!"
       deleting_scan_event: "Scan event couldn't be deleted!"
+      no_card_id: "Scan event has no card id!"
 
   navigation:
     account:
@@ -84,7 +87,7 @@ en:
 
   home:
     title: "ERUPT"
-    body: "blup: my home text"
+    body: "my home text"
 
   users:
     mailer:

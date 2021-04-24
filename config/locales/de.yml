@@ -23,6 +23,7 @@ de:
       creating_member: "Mitglied wurde erfolgreich erstellt"
       updating_member: "Mitglied wurde erfolgreich aktualisiert"
       deleting_member: "Mitglied wurde erfolgreich gelöscht"
+      updating_scan_event: "Scan-Event wurde erfolgreich aktualisiert"
       deleting_scan_event: "Scan-Event wurde erfolgreich gelöscht"
     alert:
       updating_user: "Benutzer konnte nicht aktualisiert werden!"
@@ -34,7 +35,9 @@ de:
       updating_member: "Mitglied konnte nicht aktualisiert werden!"
       deleting_member: "Mitglied konnte nicht gelöscht werden!"
       unauthorized: "Nicht autorisiert! Sie müssen ein Administrator sein, um diese Aktion auszuführen"
+      updating_scan_event: "Scan-Event konnte nicht aktualisiert werden!"
       deleting_scan_event: "Scan-Event konnte nicht gelöscht werden!"
+      no_card_id: "Scan-Event hat keine Karten-ID!"
 
   navigation:
     account:
@@ -84,7 +87,7 @@ de:
 
   home:
     title: "ERUPT"
-    body: "blup: my home text"
+    body: "my home text"
 
   users:
     mailer:

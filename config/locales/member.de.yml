@@ -25,7 +25,7 @@ de:
     title: "Mitglieder"
     new: "Neues Mitglied"
     edit: "Mitglied bearbeiten"
-    prohibited: "prohibited this member from being saved:"
+    prohibited: "verhindern das Speichern dieses Mitglieds:"
     new_extern: "ERUPT-Mitgliedsausweis beantragen"
     submit_btn_extern: "Antrag abschicken"
     success_extern: "Antrag erfolgreich abgeschickt"

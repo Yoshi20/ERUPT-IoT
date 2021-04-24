@@ -55,40 +55,41 @@
                 = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
                   %span.material-icons.admin-actions__link__icon= 'delete'
 
-%br
--# -----------------------------------------------------------------------------
-%br
-
-.row
-  .col
-    %h1.page__title= t('scan_events.title2')
-
-.row
-  .col
-    %p= "Total scan_events_no_member count = #{@total_scan_events_no_member.count}"
-
-.scan_event-list
-  %table.table.table-hover.table-borderless
-    %thead
-      %tr
-        %th Timestamp
-        %th UID
-        %th post_body
-
-    %tbody.scan_event-list-body
-      - @scan_events_no_member.each do |scan_event|
-        %tr{'data-id': scan_event.id, 'data-component'=>'scan_event', style: "background-color: #{scan_event.new? ? 'aqua' : ''};"}
-          %td= scan_event.created_at.localtime.to_s(:custom_datetime)
-          %td= scan_event.card_id
-          %td= scan_event.post_body.gsub('0000000000000000', '.')
-
-          %td.admin-list-actions
-            .admin-list-actions__link
-              = form_for scan_event, method: :delete, role: 'form', class:'form' do |f|
-                = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
-                  %span.material-icons.admin-actions__link__icon= 'delete'
-
   .admin-actions
     .admin-actions__link
       = link_to scan_events_path, class:'btn btn-ghost btn-square' do
         %span.material-icons.admin-actions__link__icon= 'refresh'
+
+-# -----------------------------------------------------------------------------
+- if @total_scan_events_no_member.count > 0
+  %br
+  %br
+
+  .row
+    .col
+      %h1.page__title= t('scan_events.title2')
+
+  .row
+    .col
+      %p= "Total scan_events_no_member count = #{@total_scan_events_no_member.count}"
+
+  .scan_event-list
+    %table.table.table-hover.table-borderless
+      %thead
+        %tr
+          %th Timestamp
+          %th UID
+          %th post_body
+
+      %tbody.scan_event-list-body.with-show
+        - @scan_events_no_member.each do |scan_event|
+          %tr{'data-id': scan_event.id, 'data-component'=>'scan_event', style: "background-color: #{scan_event.new? ? 'aqua' : ''};"}
+            %td= scan_event.created_at.localtime.to_s(:custom_datetime)
+            %td= scan_event.card_id
+            %td= scan_event.post_body.gsub('0000000000000000', '.')
+
+            %td.admin-list-actions
+              .admin-list-actions__link
+                = form_for scan_event, method: :delete, role: 'form', class:'form' do |f|
+                  = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
+                    %span.material-icons.admin-actions__link__icon= 'delete'

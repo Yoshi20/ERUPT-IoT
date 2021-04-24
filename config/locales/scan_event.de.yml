@@ -7,6 +7,9 @@ de:
     attributes:
       scan_event:
         member_id: "Mitglied"
+        card_id: "Karten ID"
   scan_events:
     title: "Scan-Events"
     title2: "Scan-Events ohne Mitglied-ID"
+    link_text: "Willst du diese Karte mit einem Mitglied verknüpfen?"
+    link: "Verknüpfen"

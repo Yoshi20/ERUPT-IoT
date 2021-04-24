@@ -1,0 +1,19 @@
+.scan_event
+  .row
+    .col
+      .page__title
+        %h1
+          = t('activerecord.attributes.scan_event.card_id') + ': '
+          %span{style: "font-weight: normal;"}= @scan_event.card_id
+
+  .row
+    .col.text-center
+      %br
+      %h2= t('scan_events.link_text')
+
+      = form_for @scan_event do |f|
+        .field.form-group
+          = f.select :member_id, options_for_select(members_no_card_id_for_select, @scan_event.member_id), {include_blank: true}, class: 'form-control'
+
+        .actions.form-group.text-center
+          = f.submit t('scan_events.link'), class:'btn btn-ghost'

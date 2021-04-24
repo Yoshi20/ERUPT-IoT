@@ -3,6 +3,7 @@ class ScanEventsController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :authenticate_user!, only: [:index]
   skip_before_action :authenticate_user!, only: [:create]
+  before_action :set_scan_event, only: [:show, :update, :destroy]
   before_action { @section = 'scan_events' }
 
   # GET /scan_events
@@ -12,6 +13,10 @@ class ScanEventsController < ApplicationController
     @scan_events = @total_scan_events.order(created_at: :desc).limit(10)
     @total_scan_events_no_member = ScanEvent.no_member
     @scan_events_no_member = @total_scan_events_no_member.order(created_at: :desc).limit(10)
+  end
+
+  def show
+
   end
 
   # POST /scan_events
@@ -35,10 +40,38 @@ class ScanEventsController < ApplicationController
     end
   end
 
+  # PATCH/PUT /scan_events/1
+  # PATCH/PUT /scan_events/1.json
+  def update
+    respond_to do |format|
+      if @scan_event.card_id.present?
+        member = Member.find(scan_event_params[:member_id]) if scan_event_params[:member_id].present?
+        if member.present? && member.update(card_id: @scan_event.card_id)
+          if @scan_event.update(member_id: scan_event_params[:member_id])
+            # update also all scan_events with the same card_id
+            ScanEvent.where(card_id: @scan_event.card_id).each do |se|
+              se.update(member_id: scan_event_params[:member_id]);
+            end
+            format.html { redirect_to scan_events_url, notice: t('flash.notice.updating_scan_event') }
+            format.json { render :show, status: :ok, location: @scan_event }
+          else
+            format.html { render :show, alert: t('flash.alert.updating_scan_event') }
+            format.json { render json: @scan_event.errors, status: :unprocessable_entity }
+          end
+        else
+          format.html { render :show, alert: t('flash.alert.updating_member') }
+          format.json { render json: member.errors, status: :unprocessable_entity }
+        end
+      else
+        format.html { render :show, alert: t('flash.alert.no_card_id') }
+        format.json { render json: { alert: t('flash.alert.no_card_id') }, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # DELETE /scan_events/1
   # DELETE /scan_events/1.json
   def destroy
-    @scan_event = ScanEvent.find(params[:id])
     respond_to do |format|
       if @scan_event.destroy
         format.html { redirect_to scan_events_url, notice: t('flash.notice.deleting_scan_event') }
@@ -49,5 +82,16 @@ class ScanEventsController < ApplicationController
       end
     end
   end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_scan_event
+      @scan_event = ScanEvent.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def scan_event_params
+      params.require(:scan_event).permit(:member_id)
+    end
 
 end

@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get 'members/extern/success' => 'members#success_extern'
   resources :devices
   resources :members
-  resources :scan_events, only: [:index, :create, :destroy]
+  resources :scan_events, only: [:index, :show, :create, :update, :destroy]
 
   devise_for :users, controllers: { registrations: 'users/registrations', sessions: 'users/sessions', passwords: 'users/passwords' }
   resources :users, only: [:index, :update, :destroy]
