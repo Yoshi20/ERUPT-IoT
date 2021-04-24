@@ -10,7 +10,7 @@ class ScanEventsController < ApplicationController
   def index
     @total_scan_events = ScanEvent.where.not(member_id: nil)
     @scan_events = @total_scan_events.order(created_at: :desc).limit(10)
-    @total_scan_events_no_member = ScanEvent.where(member_id: nil)
+    @total_scan_events_no_member = ScanEvent.no_member
     @scan_events_no_member = @total_scan_events_no_member.order(created_at: :desc).limit(10)
   end
 
@@ -21,10 +21,10 @@ class ScanEventsController < ApplicationController
     member = Member.find_by(card_id: params[:UID])
     scan_event = nil
     if member.present?
-      scan_event = ScanEvent.create(member_id: member.id, post_body: post_body)
+      scan_event = ScanEvent.create(member_id: member.id, post_body: post_body, card_id: params[:UID])
     else
       # no member yet -> create "empty" ScanEvent
-      scan_event = ScanEvent.create(post_body: post_body)
+      scan_event = ScanEvent.create(post_body: post_body, card_id: params[:UID])
     end
     respond_to do |format|
       if scan_event.present?
