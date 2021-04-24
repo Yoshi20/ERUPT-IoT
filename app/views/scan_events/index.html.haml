@@ -86,7 +86,7 @@
           %tr{'data-id': scan_event.id, 'data-component'=>'scan_event', style: "background-color: #{scan_event.new? ? 'aqua' : ''};"}
             %td= scan_event.created_at.localtime.to_s(:custom_datetime)
             %td= scan_event.card_id
-            %td= scan_event.post_body.gsub('0000000000000000', '.')
+            %td= scan_event.post_body&.gsub('0000000000000000', '.')
 
             %td.admin-list-actions
               .admin-list-actions__link

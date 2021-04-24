@@ -13,7 +13,7 @@
 
       = form_for @scan_event do |f|
         .field.form-group
-          = f.select :member_id, options_for_select(members_no_card_id_for_select, @scan_event.member_id), {include_blank: true}, class: 'form-control'
+          = f.select :member_id, options_for_select(members_no_card_id_for_select, @scan_event.member_id), {include_blank: true}
 
         .actions.form-group.text-center
           = f.submit t('scan_events.link'), class:'btn btn-ghost'
