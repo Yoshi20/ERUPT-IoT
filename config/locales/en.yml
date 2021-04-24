@@ -86,8 +86,16 @@ en:
       resend_unlock_inst: "Resend unlock instructions"
 
   home:
-    title: "ERUPT"
-    body: "my home text"
+    title: "How to issue an ERUPT membership:"
+    manual: "Manual"
+    li_1: "The new member has to scan the QR code and fill the form"
+    li_2: "Go to %{link} and check if the email & abo type(s) are valid"
+    li_3: "Cash in the fee from the new member according to the selected abo type(s)"
+    li_4: "Activate the new member by pressing the checkmark button"
+    li_5: "Get a new member card and scan it on the terminal"
+    li_6: "Go to %{link} and click on the new scan event without a member id"
+    li_7: "Select the new member and click on the 'link' button"
+    li_8: "Make sure everything is working by scanning the card again, refreshing the page and checking that the new scann event is showing the new member data"
 
   users:
     mailer:

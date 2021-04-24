@@ -12,6 +12,9 @@
   .collapse.navbar-collapse#navbarSupportedContent
     %ul.navbar-nav.navbar-main.ml-auto
       - if user_signed_in?
+        %li.nav-item{role: "presentation", class: (@section == 'home' ? 'active' : 'inactive')}
+          = link_to t('home.manual'), home_path, class: 'nav-link'
+
         %li.nav-item{role: "presentation", class: (@section == 'devices' ? 'active' : 'inactive')}
           -# = link_to t('devices.title'), devices_path, class: 'nav-link'
 

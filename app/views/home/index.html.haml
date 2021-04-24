@@ -1,6 +1,23 @@
 %h1.page__title
   = t('home.title')
 
-.row{style: 'text-align: center;'}
+.row
   .col
-    = t('home.body')
+    %br
+    %ol{style: 'font-size: 1.25rem;'}
+      %li= t('home.li_1')
+      %br
+      %li= t('home.li_2', link: link_to(t('members.title'), members_path, {target: "_blank"})).html_safe
+      %br
+      %li= t('home.li_3')
+      %br
+      %li= t('home.li_4')
+      %br
+      %li= t('home.li_5')
+      %br
+      %li= t('home.li_6', link: link_to(t('scan_events.title'), scan_events_path, {target: "_blank"})).html_safe
+      %br
+      %li= t('home.li_7')
+      %br
+      %li= t('home.li_8')
+      %br

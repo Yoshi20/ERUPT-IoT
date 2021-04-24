@@ -86,8 +86,16 @@ de:
       resend_unlock_inst: "Anweisungen zum Entsperren erneut senden"
 
   home:
-    title: "ERUPT"
-    body: "my home text"
+    title: "So stellst du eine ERUPT-Mitgliedschaft aus:"
+    manual: "Anleitung"
+    li_1: "Das neue Mitglied muss den QR-Code scannen und das Formular ausfüllen"
+    li_2: "Gehe zu %{link} und prüfe ob das E-Mail und der/die Abo-Typ(en) korrekt sind"
+    li_3: "Kassiere die Gebühr vom neuen Mitglied gemäss dem/den ausgewählten Abo-Typ(en) ein"
+    li_4: "Aktiviere das neue Mitglied indem du den Knopf mit dem Häkchen drückst"
+    li_5: "Hole eine neue Mitgliedskarte und scannen sie auf dem Terminal"
+    li_6: "Gehe zu %{link} und klicke auf das neue Scan-Event ohne Mitglied-ID"
+    li_7: "Wähle das neue Mitglied aus und klicke auf den 'Verknüpfen'-Knopf"
+    li_8: "Stelle sicher, dass alles funktioniert, indem du die Karte erneut scannst, die Seite aktualisierst und überprüfst, dass das neue Scan-Event die Daten des neuen Mitglieds anzeigt "
 
   users:
     mailer:
