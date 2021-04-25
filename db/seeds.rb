@@ -28,3 +28,9 @@ erupt = User.find_by_email('admin@erupt.ch')
 unless erupt.present?
   User.create(username: 'Erupt', email: 'admin@erupt.ch', password: '123456')
 end
+
+# Wifi Display
+disp = WifiDisplay.find_by(dns: "m5-disp-001.local")
+unless disp.present?
+  WifiDisplay.create(dns: 'm5-disp-001.local', path: '/display/member')
+end
