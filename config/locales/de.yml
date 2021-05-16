@@ -95,7 +95,8 @@ de:
     li_5: "Hole eine neue Mitgliedskarte und scannen sie auf dem Terminal"
     li_6: "Gehe zu %{link} und klicke auf das neue Scan-Event ohne Mitglied-ID"
     li_7: "Wähle das neue Mitglied aus und klicke auf den 'Verknüpfen'-Knopf"
-    li_8: "Stelle sicher, dass alles funktioniert, indem du die Karte erneut scannst, die Seite aktualisierst und überprüfst, dass das neue Scan-Event die Daten des neuen Mitglieds anzeigt "
+    li_8: "Stelle sicher, dass alles funktioniert, indem du die Karte erneut scannst, die Seite aktualisierst und überprüfst, dass das neue Scan-Event die Daten des neuen Mitglieds anzeigt"
+    li_9: "Klebe die Sticker gemäss dem/den ausgewählten Abo-Typ(en) auf die Mitgliedskarte"
 
   users:
     mailer:

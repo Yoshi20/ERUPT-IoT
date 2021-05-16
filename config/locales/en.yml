@@ -96,6 +96,7 @@ en:
     li_6: "Go to %{link} and click on the new scan event without a member id"
     li_7: "Select the new member and click on the 'link' button"
     li_8: "Make sure everything is working by scanning the card again, refreshing the page and checking that the new scann event is showing the new member data"
+    li_9: "Put the stickers according to the selected abo type(s) on the member card"
 
   users:
     mailer:
