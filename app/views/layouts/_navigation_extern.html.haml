@@ -4,14 +4,8 @@
     = image_tag('logo.jpg', height: '50px', width: '50px')
     %span.d-none.d-sm-block.d-lg-none.d-xl-block
       = 'ERUPT'
-  %button.navbar-toggler.collapsed{'data-toggle'=>'collapse', 'data-target'=>'#navbarSupportedContent', 'aria-controls'=>'navbarSupportedContent', 'aria-expanded'=>'false', 'aria-label'=>'Toggle navigation'}
-    %span.navbar-toggler-icon
-      %span.line.line--1
-      %span.line.line--2
-      %span.line.line--3
-  .collapse.navbar-collapse#navbarSupportedContent
-    %ul.navbar-nav.navbar-main.ml-auto
-      %li.nav-item.locales-list
-        = link_to 'en', url_for(locale: 'en'), class: 'locales', style: "text-decoration: #{cookies[:locale] == 'en' ? 'underline' : ''}"
-        = '/'
-        = link_to 'de', url_for(locale: 'de'), class: 'locales', style: "text-decoration: #{cookies[:locale] == 'de' ? 'underline' : ''}"
+  %ul.navbar-nav.navbar-main.ml-auto
+    %li.nav-item.locales-list
+      = link_to 'en', url_for(locale: 'en'), class: 'locales', style: "text-decoration: #{cookies[:locale] == 'en' ? 'underline' : ''}"
+      = '/'
+      = link_to 'de', url_for(locale: 'de'), class: 'locales', style: "text-decoration: #{cookies[:locale] == 'de' ? 'underline' : ''}"

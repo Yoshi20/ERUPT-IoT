@@ -6,6 +6,7 @@ de:
         other: "Mitglieder"
     attributes:
       member:
+        abo_types: "Abo-Typen"
         first_name: "Vorname"
         last_name: "Nachname"
         email: "E-Mail"

@@ -8,11 +8,11 @@
           %li= message
 
   .field.form-group
-    = f.label :abo_types, "Abo types *"
+    = f.label :abo_types, "#{t('activerecord.attributes.member.abo_types')} *"
     = f.fields_for :abo_types do |ff|
       .row
         - AboType.all.each_with_index do |at, i|
-          .col
+          .col-12
             .form-check
               - abo_types_name_array = @member.abo_types.map(&:name)
               = ff.check_box at.name, checked: (abo_types_name_array.include?(at.name) || (@member.new_record? && i == 0)), class:'form-check-input mr-2'
@@ -28,6 +28,7 @@
     = f.email_field :email, class: 'form-control'
   .field.form-group
     = f.label :birthdate, "#{t('activerecord.attributes.member.birthdate')} *"
+    %br
     = f.datetime_select :birthdate, default: {hour: 0, minute: 0}, start_year: Date.today.year - 100, end_year: Date.today.year, discard_hour: true, class: 'form-control'
   .field.form-group
     = f.label :mobile_number
@@ -47,7 +48,7 @@
       = f.check_box :wants_event_emails, checked: (params[:member].present? ? (params[:member][:wants_event_emails] == "1") : (@member.new_record? ? true : @member.wants_event_emails)), class:'form-check-input mr-2'
       = f.label :wants_event_emails, class:'form-check-label'
   - if extern
-    .form-group{style: 'margin-top: -3rem;'}
+    .form-group
       = recaptcha_tags align: "center"
   - if current_user.present? and !@member.new_record?
     %hr
