@@ -69,7 +69,7 @@
     .form-group
       .form-check
         = f.check_box :read, checked: (params[:feedback].present? ? (params[:feedback][:read] == "1") : @feedback.read), class:'form-check-input mr-2'
-        %strong= f.label :read, class:'form-check-label'
+        = f.label :read, class:'form-check-label'
 
   .actions.form-group.text-center
     - if extern
