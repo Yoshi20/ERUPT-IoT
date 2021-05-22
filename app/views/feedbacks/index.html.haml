@@ -1,0 +1,77 @@
+.row
+  .col
+    %h1.page__title= t('feedbacks.title')
+
+.row
+  .col
+    %p= "Total feedbacks count = #{Feedback.all.count}"
+  .col
+    %p= "Average location rating = #{@location_rating_average}"
+  .col
+    %p= "Average event rating = #{@event_rating_average}"
+  .col
+    %p
+      = "External link:"
+      = link_to feedbacks_extern_path, feedbacks_extern_path
+
+.feedback-list
+  %table.table.table-hover.table-borderless
+    %thead
+      %tr
+        %th.text-center= t('activerecord.attributes.feedback.read')
+        %th.text-center= "Location " + t('activerecord.attributes.feedback.rating')
+        %th= "Location " + t('activerecord.attributes.feedback.good')
+        %th= "Location " + t('activerecord.attributes.feedback.bad')
+        %th= t('activerecord.attributes.feedback.missing')
+        %th.text-center= "Location " + t('activerecord.attributes.feedback.will_recommend')
+        %th.text-center= "Event " + t('activerecord.attributes.feedback.rating')
+        %th= "Event " + t('activerecord.attributes.feedback.good')
+        %th= "Event " + t('activerecord.attributes.feedback.bad')
+        %th= t('activerecord.attributes.feedback.missing')
+        %th.text-center= "Event " + t('activerecord.attributes.feedback.will_recommend')
+        %th Created at
+
+    %tbody.feedback-list-body.with-show
+      - @feedbacks.each do |feedback|
+        %tr{'data-id': feedback.id, 'data-component'=>'feedback', style: "background-color: #{feedback.new? ? 'aqua' : ''};"}
+          %td.text-center
+            - if feedback.read
+              .material-icons= 'done'
+          %td.text-center= feedback.location_rating
+          %td= feedback.location_good
+          %td= feedback.location_bad
+          %td= feedback.location_missing
+          %td.text-center= feedback.location_will_recommend
+          %td.text-center= feedback.event_rating
+          %td= feedback.event_good
+          %td= feedback.event_bad
+          %td= feedback.event_missing
+          %td.text-center= feedback.event_will_recommend
+          %td= feedback.created_at.localtime.to_s(:custom_datetime)
+
+          %td.admin-list-actions
+            - if !feedback.read
+              .admin-list-actions__link
+                = form_for feedback, method: :patch, role: 'form', class:'form' do |f|
+                  = f.check_box :read, checked: true, hidden: true
+                  = button_tag(type: "submit", class:'btn btn-sstm btn-square') do
+                    %span.material-icons.admin-actions__link__icon= 'done'
+            .admin-list-actions__link
+              = link_to edit_feedback_path(feedback), class: 'btn btn-sstm btn-square' do
+                %span.material-icons.admin-actions__link__icon= 'edit'
+            .admin-list-actions__link
+              = form_for feedback, method: :delete, role: 'form', class:'form' do |f|
+                = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
+                  %span.material-icons.admin-actions__link__icon= 'delete'
+
+  -# .admin-actions{style: 'left: 0.5rem;'}
+  -#   .admin-actions__link
+  -#     = link_to feedbacks_path, class:'btn btn-ghost btn-square' do
+  -#       %span.material-icons.admin-actions__link__icon= 'refresh'
+  .admin-actions
+    .admin-actions__link
+      = link_to feedbacks_path, class:'btn btn-ghost btn-square' do
+        %span.material-icons.admin-actions__link__icon= 'refresh'
+    .admin-actions__link
+      = link_to new_feedback_path, class:'btn btn-ghost btn-square' do
+        %span.material-icons.admin-actions__link__icon= 'add'

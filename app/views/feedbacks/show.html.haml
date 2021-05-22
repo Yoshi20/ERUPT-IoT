@@ -1,0 +1,53 @@
+.feedback
+  .row
+    .col
+      -# .tooltip
+      -#   = image_tag "feedback_types/#{@feedback.feedback_type}.svg", height: '25px', width: '25px', style: 'position: absolute; top: 10px;'
+      -#   %span.tooltiptext
+      -#     = @feedback.feedback_type.name
+      .page__title
+        %h1
+          = "Feedback ##{@feedback.id}"
+
+    -# admin actions -----------------------------------------------------------
+    .admin-actions
+      .admin-actions__link
+        = link_to edit_feedback_path(@feedback), class:'btn btn-ghost btn-square' do
+          %span.material-icons.admin-actions__link__icon= 'edit'
+
+    -# feedback ------------------------------------------------------------------
+  .row
+    .col
+      %p
+        %b= t('activerecord.attributes.feedback.location_rating') + ':'
+        = @feedback.location_rating
+      %p
+        %b= t('activerecord.attributes.feedback.location_good') + ':'
+        = @feedback.location_good
+      %p
+        %b= t('activerecord.attributes.feedback.location_bad') + ':'
+        = @feedback.location_bad
+      %p
+        %b= t('activerecord.attributes.feedback.location_missing') + ':'
+        = @feedback.location_missing
+      %p
+        %b= t('activerecord.attributes.feedback.location_will_recommend') + ':'
+        = @feedback.location_will_recommend
+      %p
+        %b= t('activerecord.attributes.feedback.event_rating') + ':'
+        = @feedback.event_rating
+      %p
+        %b= t('activerecord.attributes.feedback.event_good') + ':'
+        = @feedback.event_good
+      %p
+        %b= t('activerecord.attributes.feedback.event_bad') + ':'
+        = @feedback.event_bad
+        %p
+          %b= t('activerecord.attributes.feedback.event_missing') + ':'
+          = @feedback.event_missing
+      %p
+        %b= t('activerecord.attributes.feedback.event_will_recommend') + ':'
+        = @feedback.event_will_recommend
+      %p
+        %b= t('activerecord.attributes.feedback.read') + ':'
+        = @feedback.read

@@ -1,0 +1,26 @@
+en:
+  activerecord:
+    models:
+      feedback:
+        one: "Feedback"
+        other: "Feedback"
+    attributes:
+      feedback:
+        rating: "Rating"
+        good: "Good"
+        bad: "Bad"
+        missing: "Missing"
+        will_recommend: "recommend?"
+        location_will_recommend: "Will you recommend the location to others?"
+        event_will_recommend: "Will you recommend the event to others?"
+        read: "Read?"
+  feedbacks:
+    title: "Feedback"
+    new: "New feedback"
+    edit: "Edit feedback"
+    prohibited: "prohibited this feedback from being saved:"
+    new_extern: "New feedback"
+    submit_btn_extern: "Submit feedback"
+    success_extern: "Successfully submitted the feedback"
+    success_extern_body: "Thanks a lot for your feedback. We hope to see you again"
+    success_extern_body2: "This page can be closed."

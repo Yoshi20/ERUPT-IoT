@@ -1,0 +1,78 @@
+= form_for @feedback, as: :feedback, url: (extern ? feedbacks_extern_path : (@feedback.new_record? ? feedbacks_path : feedback_path)), method: (@feedback.new_record? ? :post : :put), role: 'form', class:'form' do |f|
+  -# as: :post, url: post_path(@post), method: :patch, html: { class: "edit_post", id: "edit_post_45" } do |f| %>
+  - if @feedback.errors.any?
+    #error_explanation
+      %h2= pluralize(@feedback.errors.count, "error") + ' ' + t('feedbacks.prohibited')
+      %ul
+        - @feedback.errors.full_messages.each do |message|
+          %li= message
+
+  %h2= "Location"
+  .field.form-group
+    %strong= f.label :location_rating, "#{t('activerecord.attributes.feedback.rating')} *"
+    %br
+    .row
+      .col
+        = '1'
+      - 10.times do |i|
+        .col
+          = f.radio_button :location_rating, i, checked: params[:feedback].present? ? params[:feedback][:location_rating] == i : @feedback.location_rating == i
+      .col
+        = '10'
+  .field.form-group
+    %strong= f.label :location_good, "#{t('activerecord.attributes.feedback.good')}"
+    = f.text_field :location_good, class: 'form-control'
+  .field.form-group
+    %strong= f.label :location_bad, "#{t('activerecord.attributes.feedback.bad')}"
+    = f.text_field :location_bad, class: 'form-control'
+  .field.form-group
+    %strong= f.label :location_missing, "#{t('activerecord.attributes.feedback.missing')}"
+    = f.text_field :location_missing, class: 'form-control'
+  .form-group
+    .form-check
+      = f.check_box :location_will_recommend, checked: (params[:feedback].present? ? (params[:feedback][:location_will_recommend] == "1") : @feedback.location_will_recommend), class:'form-check-input mr-2'
+      = f.label :location_will_recommend, class:'form-check-label'
+  %br
+  %h2= "Event"
+  .field.form-group
+    %strong= f.label :event_rating, "#{t('activerecord.attributes.feedback.rating')} *"
+    %br
+    .row
+      .col
+        = '1'
+      - 10.times do |i|
+        .col
+          = f.radio_button :event_rating, i, checked: params[:feedback].present? ? params[:feedback][:event_rating] == i : @feedback.event_rating == i
+      .col
+        = '10'
+  .field.form-group
+    %strong= f.label :event_good, "#{t('activerecord.attributes.feedback.good')}"
+    = f.text_field :event_good, class: 'form-control'
+  .field.form-group
+    %strong= f.label :event_bad, "#{t('activerecord.attributes.feedback.bad')}"
+    = f.text_field :event_bad, class: 'form-control'
+  .field.form-group
+    %strong= f.label :event_missing, "#{t('activerecord.attributes.feedback.missing')}"
+    = f.text_field :event_missing, class: 'form-control'
+  .form-group
+    .form-check
+      = f.check_box :event_will_recommend, checked: (params[:feedback].present? ? (params[:feedback][:event_will_recommend] == "1") : @feedback.event_will_recommend), class:'form-check-input mr-2'
+      = f.label :event_will_recommend, class:'form-check-label'
+  - if extern
+    .form-group
+      = recaptcha_tags align: "center"
+
+  - if current_user.present? and !@feedback.new_record?
+    %hr
+    .field.form-group
+      %strong= "Admin section:"
+    .form-group
+      .form-check
+        = f.check_box :read, checked: (params[:feedback].present? ? (params[:feedback][:read] == "1") : @feedback.read), class:'form-check-input mr-2'
+        %strong= f.label :read, class:'form-check-label'
+
+  .actions.form-group.text-center
+    - if extern
+      = f.submit t('feedbacks.submit_btn_extern'), class:'btn btn-ghost'
+    - else
+      = f.submit class:'btn btn-ghost'

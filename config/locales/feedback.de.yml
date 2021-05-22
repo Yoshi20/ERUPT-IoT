@@ -1,0 +1,26 @@
+de:
+  activerecord:
+    models:
+      feedback:
+        one: "Feedback"
+        other: "Feedback"
+    attributes:
+      feedback:
+        rating: "Bewertung"
+        good: "Gut"
+        bad: "Schlecht"
+        missing: "Es fehlte"
+        will_recommend: "weiterempfehlen?"
+        location_will_recommend: "Wirst du die Location weiterempfehlen?"
+        event_will_recommend: "Wirst du das Event weiterempfehlen?"
+        read: "Gelesen?"
+  feedbacks:
+    title: "Feedback"
+    new: "Neues Feedback"
+    edit: "Feedback bearbeiten"
+    prohibited: "verhindern das Speichern dieses Feedbacks:"
+    new_extern: "Neues Feedback"
+    submit_btn_extern: "Feedback abschicken"
+    success_extern: "Feedback erfolgreich abgeschickt"
+    success_extern_body: "Vielen dank für dein Feedback. Wir hoffen dich auch weiterhin bei uns begrüssen zu dürfen"
+    success_extern_body2: "Diese Seite kann geschlossen werden."

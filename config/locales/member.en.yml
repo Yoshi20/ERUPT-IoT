@@ -30,5 +30,5 @@ en:
     new_extern: "ERUPT membership card application"
     submit_btn_extern: "Send application"
     success_extern: "Application sent successfully "
-    success_extern_body: "Please pay the selected abo type(s) at the cash register to receive your membership card."
+    success_extern_body: "Please pay the selected abo type(s) at the cash register to receive your membership card"
     success_extern_body2: "This page can be closed."

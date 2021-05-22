@@ -8,7 +8,7 @@
           %li= message
 
   .field.form-group
-    = f.label :abo_types, "#{t('activerecord.attributes.member.abo_types')} *"
+    %strong= f.label :abo_types, "#{t('activerecord.attributes.member.abo_types')} *"
     = f.fields_for :abo_types do |ff|
       .row
         - AboType.all.each_with_index do |at, i|
@@ -18,26 +18,26 @@
               = ff.check_box at.name, checked: (abo_types_name_array.include?(at.name) || (@member.new_record? && i == 0)), class:'form-check-input mr-2'
               = ff.label at.name, at.name, class:'form-check-label'
   .field.form-group
-    = f.label :first_name, "#{t('activerecord.attributes.member.first_name')} *"
+    %strong= f.label :first_name, "#{t('activerecord.attributes.member.first_name')} *"
     = f.text_field :first_name, class: 'form-control'
   .field.form-group
-    = f.label :last_name, "#{t('activerecord.attributes.member.last_name')} *"
+    %strong= f.label :last_name, "#{t('activerecord.attributes.member.last_name')} *"
     = f.text_field :last_name, class: 'form-control'
   .field.form-group
-    = f.label :email, "#{t('activerecord.attributes.member.email')} *"
+    %strong= f.label :email, "#{t('activerecord.attributes.member.email')} *"
     = f.email_field :email, class: 'form-control'
   .field.form-group
-    = f.label :birthdate, "#{t('activerecord.attributes.member.birthdate')} *"
+    %strong= f.label :birthdate, "#{t('activerecord.attributes.member.birthdate')} *"
     %br
     = f.datetime_select :birthdate, default: {hour: 0, minute: 0}, start_year: Date.today.year - 100, end_year: Date.today.year, discard_hour: true, class: 'form-control'
   .field.form-group
-    = f.label :mobile_number
+    %strong= f.label :mobile_number
     = f.text_field :mobile_number, class: 'form-control'
   .field.form-group
-    = f.label :gender
+    %strong= f.label :gender
     = f.select :gender, options_for_select(genders_for_select, @member.gender), {include_blank: true}, class: 'form-control'
   .field.form-group
-    = f.label :canton
+    %strong= f.label :canton
     = f.select :canton, options_for_select(cantons_for_select, @member.canton), {include_blank: true}, class: 'form-control'
   .form-group.mb-0
     .form-check
@@ -55,21 +55,21 @@
     .field.form-group
       %strong= "Admin section:"
     .field.form-group
-      = f.label :card_id
+      %strong= f.label :card_id
       = f.text_field :card_id, class: 'form-control'
     .field.form-group
-      = f.label :magma_coins
+      %strong= f.label :magma_coins
       = f.text_field :magma_coins, class: 'form-control'
     .field.form-group
-      = f.label :expiration_date
+      %strong= f.label :expiration_date
       = f.datetime_select :expiration_date, class: 'form-control'
     .field.form-group
-      = f.label :comment
+      %strong= f.label :comment
       = f.text_area :comment, class: 'form-control'
     .form-group
       .form-check
         = f.check_box :active, checked: (params[:member].present? ? (params[:member][:active] == "1") : @member.active), class:'form-check-input mr-2'
-        = f.label :active, class:'form-check-label'
+        %strong= f.label :active, class:'form-check-label'
 
   .actions.form-group.text-center
     - if extern
