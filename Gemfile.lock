@@ -219,6 +219,7 @@ GEM
       ffi (~> 1.0)
     recaptcha (5.8.0)
       json
+    redis (4.2.5)
     regexp_parser (2.1.1)
     responders (3.0.1)
       actionpack (>= 5.0)
@@ -311,6 +312,7 @@ DEPENDENCIES
   rails-i18n (~> 6.0.0)
   rails_12factor
   recaptcha
+  redis (~> 4.0)
   sass-rails (>= 6)
   selenium-webdriver
   spring
