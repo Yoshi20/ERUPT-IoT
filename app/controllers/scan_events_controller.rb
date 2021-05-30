@@ -30,29 +30,17 @@ class ScanEventsController < ApplicationController
     scan_event = nil
     if member.present?
       scan_event = ScanEvent.create(member_id: member.id, post_body: post_body, card_id: params[:UID])
-      # make a POST request on the display
+      # send data via ws
       post_data = {
         first_name: member.first_name,
         magma_coins: member.magma_coins,
         abo_types: member.abo_types.map{|at| at.name}.join(' ')
       }
       WifiDisplay.all.each do |disp|
-        begin
-          http = Net::HTTP.new(disp.ip, 80)
-          http.open_timeout = 4
-          response = http.post(disp.path, post_data.to_json)
-        rescue
-          begin
-            http2 = Net::HTTP.new(disp.dns, 80)
-            http2.open_timeout = 16
-            response2 = http2.post(disp.path, post_data.to_json)
-            if JSON.parse(response2.body)["success"] == true
-              response3 = http2.get('/ip')
-              disp.update(ip: JSON.parse(response3.body)["ip"])
-            end
-          rescue
-          end
-        end
+        ActionCable.server.broadcast(
+          disp.name,
+          post_data
+        )
       end
     else
       # no member yet -> create "empty" ScanEvent

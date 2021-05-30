@@ -30,7 +30,7 @@ unless erupt.present?
 end
 
 # Wifi Display
-disp = WifiDisplay.find_by(dns: "m5-disp-001.local")
+disp = WifiDisplay.find_by(name: "m5-disp-001")
 unless disp.present?
-  WifiDisplay.create(dns: 'm5-disp-001.local', path: '/display/member')
+  WifiDisplay.create(name: 'm5-disp-001')
 end
