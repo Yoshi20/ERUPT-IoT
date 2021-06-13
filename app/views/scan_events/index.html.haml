@@ -41,7 +41,7 @@
           -# %td= member.mobile_number
           -# %td= member.gender
           -# %td= member.canton
-          %td= member.abo_types.active.map(&:name).join(', ')
+          %td= scan_event.abo_types.present? ? scan_event.abo_types : member.abo_types.active.map(&:name).join(', ')
           -# %td= member.wants_newsletter_emails
           -# %td= member.wants_event_emails
           -# %td= member.card_id

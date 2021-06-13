@@ -29,12 +29,13 @@ class ScanEventsController < ApplicationController
     member = Member.find_by(card_id: params[:UID])
     scan_event = nil
     if member.present?
-      scan_event = ScanEvent.create(member_id: member.id, post_body: post_body, card_id: params[:UID])
+      member_abo_types = member.abo_types.active.map{|at| at.name}.join(' ')
+      scan_event = ScanEvent.create(member_id: member.id, post_body: post_body, abo_types: member_abo_types, card_id: params[:UID])
       # send data via ws
       post_data = {
         first_name: member.first_name,
         magma_coins: member.magma_coins,
-        abo_types: member.abo_types.active.map{|at| at.name}.join(' ')
+        abo_types: member_abo_types
       }
       WifiDisplay.all.each do |disp|
         ActionCable.server.broadcast(
