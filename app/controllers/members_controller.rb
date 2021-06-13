@@ -127,8 +127,13 @@ class MembersController < ApplicationController
             if at_key_value[1] == "0"
               member.abo_types.delete(at)
             elsif at_key_value[1] == "1" and !member.abo_types.include?(at)
-              member.abo_types << at
+              atm = AboTypesMember.new
+              atm.abo_type = at
+              atm.member = member
+              atm.expiration_date = 1.year.from_now
+              member.abo_types_members << atm
             end
+
           end
         end
       end

@@ -41,12 +41,12 @@
           -# %td= member.mobile_number
           -# %td= member.gender
           -# %td= member.canton
-          %td= member.abo_types.map(&:name).join(', ')
+          %td= member.abo_types.active.map(&:name).join(', ')
           -# %td= member.wants_newsletter_emails
           -# %td= member.wants_event_emails
           -# %td= member.card_id
           %td.text-center= member.magma_coins
-          -# %td= member.expiration_date
+          -# %td= member.expiration_date.localtime.to_s(:custom_datetime)
           -# %td= member.comment
 
           %td.admin-list-actions

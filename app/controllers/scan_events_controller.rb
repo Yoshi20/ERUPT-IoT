@@ -34,7 +34,7 @@ class ScanEventsController < ApplicationController
       post_data = {
         first_name: member.first_name,
         magma_coins: member.magma_coins,
-        abo_types: member.abo_types.map{|at| at.name}.join(' ')
+        abo_types: member.abo_types.active.map{|at| at.name}.join(' ')
       }
       WifiDisplay.all.each do |disp|
         ActionCable.server.broadcast(

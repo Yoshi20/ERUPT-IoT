@@ -48,7 +48,11 @@
         = @member.canton
         %p
           %b= t('activerecord.attributes.member.abo_types') + ':'
-          = @member.abo_types.map(&:name).join(', ')
+          = @member.abo_types.active.map(&:name).join(', ')
+        - @member.abo_types_members.each do |atm|
+          %p
+            %b= t('activerecord.attributes.member.expiration_date') + '_' + atm.abo_type.name + ':'
+            %span{style: atm.expiration_date < Time.now ? 'color: red' : ''}= atm.expiration_date.localtime.to_s(:custom_datetime)
       %p
         %b= t('activerecord.attributes.member.comment') + ':'
         = @member.comment
@@ -66,7 +70,7 @@
         = @member.magma_coins
       %p
         %b= t('activerecord.attributes.member.expiration_date') + ':'
-        = @member.expiration_date
+        = @member.expiration_date.localtime.to_s(:custom_datetime)
       %p
         %b= t('activerecord.attributes.member.number_of_scans') + ':'
         = @member.scan_events.count

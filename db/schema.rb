@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_30_155325) do
+ActiveRecord::Schema.define(version: 2021_06_13_143201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,9 +21,12 @@ ActiveRecord::Schema.define(version: 2021_05_30_155325) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "abo_types_members", id: false, force: :cascade do |t|
+  create_table "abo_types_members", force: :cascade do |t|
     t.bigint "abo_type_id", null: false
     t.bigint "member_id", null: false
+    t.datetime "expiration_date", precision: 6, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["abo_type_id", "member_id"], name: "index_abo_types_members_on_abo_type_id_and_member_id"
   end
 

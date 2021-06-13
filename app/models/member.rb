@@ -1,5 +1,6 @@
 class Member < ApplicationRecord
-  has_and_belongs_to_many :abo_types
+  has_many :abo_types_members
+  has_many :abo_types, through: :abo_types_members
   has_many :scan_events, dependent: :destroy
 
   validates :first_name, presence: true

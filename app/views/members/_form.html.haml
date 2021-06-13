@@ -14,7 +14,7 @@
         - AboType.all.each_with_index do |at, i|
           .col-12
             .form-check
-              - abo_types_name_array = @member.abo_types.map(&:name)
+              - abo_types_name_array = @member.abo_types.active.map(&:name)
               = ff.check_box at.name, checked: (abo_types_name_array.include?(at.name) || (@member.new_record? && i == 0)), class:'form-check-input mr-2'
               = ff.label at.name, at.name, class:'form-check-label'
   .field.form-group
