@@ -13,7 +13,6 @@ one:
   wants_event_emails: false
   card_id: MyString
   magma_coins: 1.5
-  expiration_date: 2021-03-13 21:19:25
 
 two:
   first_name: MyString
@@ -28,4 +27,3 @@ two:
   wants_event_emails: false
   card_id: MyString
   magma_coins: 1.5
-  expiration_date: 2021-03-13 21:19:25

@@ -27,7 +27,6 @@
         -# %th= t('activerecord.attributes.member.wants_event_emails')
         -# %th= t('activerecord.attributes.member.card_id')
         %th.text-center= t('activerecord.attributes.member.magma_coins')
-        -# %th= t('activerecord.attributes.member.expiration_date')
         %th.text-center= t('activerecord.attributes.member.number_of_scans')
         %th= t('activerecord.attributes.member.comment')
         -# %th Created at
@@ -53,7 +52,6 @@
           -# %td= member.wants_event_emails
           -# %td= member.card_id
           %td.text-center= member.magma_coins
-          -# %td= member.expiration_date.localtime.to_s(:custom_datetime)
           %td.text-center= member.scan_events.count
           %td= member.comment
           -# %td= member.created_at.localtime.to_s(:custom_datetime)

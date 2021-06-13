@@ -19,7 +19,6 @@ class MembersTest < ApplicationSystemTestCase
     fill_in "Card", with: @member.card_id
     fill_in "Comment", with: @member.comment
     fill_in "Email", with: @member.email
-    fill_in "Expiration date", with: @member.expiration_date
     fill_in "First name", with: @member.first_name
     fill_in "Gender", with: @member.gender
     fill_in "Last name", with: @member.last_name
@@ -42,7 +41,6 @@ class MembersTest < ApplicationSystemTestCase
     fill_in "Card", with: @member.card_id
     fill_in "Comment", with: @member.comment
     fill_in "Email", with: @member.email
-    fill_in "Expiration date", with: @member.expiration_date
     fill_in "First name", with: @member.first_name
     fill_in "Gender", with: @member.gender
     fill_in "Last name", with: @member.last_name

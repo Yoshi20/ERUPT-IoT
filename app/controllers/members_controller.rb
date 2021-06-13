@@ -38,7 +38,6 @@ class MembersController < ApplicationController
     @member = Member.new(member_params)
     #@member.card_id = SecureRandom.uuid
     @member.magma_coins = 0
-    @member.expiration_date = 1.year.from_now
     add_abo_types_to_member(@member)
     respond_to do |format|
       if @member.save
@@ -56,7 +55,6 @@ class MembersController < ApplicationController
     @member = Member.new(member_params)
     #@member.card_id = SecureRandom.uuid
     @member.magma_coins = 0
-    @member.expiration_date = 1.year.from_now
     add_abo_types_to_member(@member)
     respond_to do |format|
       if verify_recaptcha && @member.save
@@ -114,8 +112,7 @@ class MembersController < ApplicationController
     def member_params
       params.require(:member).permit(:first_name, :last_name, :email, :birthdate,
         :mobile_number, :gender, :canton, :comment, :wants_newsletter_emails,
-        :wants_event_emails, :card_id, :magma_coins, :expiration_date,
-        :active)
+        :wants_event_emails, :card_id, :magma_coins, :active)
     end
 
     def add_abo_types_to_member(member)

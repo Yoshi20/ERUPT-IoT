@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_13_180550) do
+ActiveRecord::Schema.define(version: 2021_06_13_180551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,7 +79,6 @@ ActiveRecord::Schema.define(version: 2021_06_13_180550) do
     t.boolean "wants_event_emails"
     t.string "card_id"
     t.float "magma_coins"
-    t.datetime "expiration_date"
     t.boolean "active", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

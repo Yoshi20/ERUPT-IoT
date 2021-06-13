@@ -69,9 +69,6 @@
         %b= t('activerecord.attributes.member.magma_coins') + ':'
         = @member.magma_coins
       %p
-        %b= t('activerecord.attributes.member.expiration_date') + ':'
-        = @member.expiration_date.localtime.to_s(:custom_datetime)
-      %p
         %b= t('activerecord.attributes.member.number_of_scans') + ':'
         = @member.scan_events.count
       %p
