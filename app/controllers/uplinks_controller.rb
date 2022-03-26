@@ -18,8 +18,6 @@ class UplinksController < ApplicationController
       # when "21"  # any button clicked with image ID
       # when "22"  # specific button clicked
       when "30"  # Oxobutton event (https://oxobutton.ch/products/oxobutton-lorawan/documentation#uplink))
-        puts 'blup2'
-        puts payload[2..3]
         button_number = payload[2..3].to_i(16) unless payload[2..3].nil?
         is_heartbeat = payload[4..5].to_i(16) != 0 unless payload[4..5].nil?
         image_code = payload[8..11]

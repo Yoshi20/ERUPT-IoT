@@ -48,9 +48,8 @@
 
     %ul.navbar-nav.navbar-main.ml-auto
       %li.nav-item.locales-list
-        = link_to 'en', url_for(locale: 'en'), class: 'locales', style: "text-decoration: #{cookies[:locale] == 'en' ? 'underline' : ''}"
-        = '/'
-        = link_to 'de', url_for(locale: 'de'), class: 'locales', style: "text-decoration: #{cookies[:locale] == 'de' ? 'underline' : ''}"
+        = link_to image_tag("flags/united-kingdom.svg", width: '20px', height: '20px', class: 'language_flag', style: "border-bottom: #{cookies[:locale] == 'en' ? '1px solid white' : ''};"), url_for(locale: 'en')
+        = link_to image_tag("flags/germany.svg", width: '20px', height: '20px', class: 'language_flag', style: "border-bottom: #{cookies[:locale] == 'de' ? '1px solid white' : ''};"), url_for(locale: 'de')
 
     %ul.navbar-nav.navbar-account
       - if user_signed_in?
