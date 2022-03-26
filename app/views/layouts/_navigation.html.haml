@@ -30,11 +30,20 @@
         %li.nav-item{role: "presentation", class: (@section == 'feedbacks' ? 'active' : 'inactive')}
           = link_to t('feedbacks.title'), feedbacks_path, class: 'nav-link'
 
-        %li.nav-item{role: "presentation", class: (@section == 'devices' ? 'active' : 'inactive')}
-          -# = link_to t('devices.title'), devices_path, class: 'nav-link'
+        %li.nav-item.nav-link.d-none.d-lg-block= '/'
 
-        %li.nav-item{role: "presentation", class: (@section == 'menus' ? 'active' : 'inactive')}
-          -# = link_to t('menus.title'), menus_path, class: 'nav-link'
+        %li.nav-item{role: "presentation", class: (@section == 'orders' ? 'active' : 'inactive')}
+          = link_to t('orders.title'), orders_path, class: 'nav-link'
+
+        %li.nav-item.nav-link.d-none.d-lg-block= '/'
+
+        %li.nav-item{role: "presentation", class: (@section == 'devices' ? 'active' : 'inactive')}
+          = link_to t('devices.title'), devices_path, class: 'nav-link'
+
+        -# %li.nav-item.nav-link.d-none.d-lg-block= '/'
+        -#
+        -# %li.nav-item{role: "presentation", class: (@section == 'menus' ? 'active' : 'inactive')}
+        -#   = link_to t('menus.title'), menus_path, class: 'nav-link'
 
     %ul.navbar-nav.navbar-main.ml-auto
       %li.nav-item.locales-list

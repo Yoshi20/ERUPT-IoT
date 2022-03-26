@@ -106,6 +106,9 @@ en:
     li_8: "Make sure everything is working by scanning the card again, refreshing the page and checking that the new scann event is showing the new member data"
     li_9: "Put the stickers according to the selected abo type(s) on the member card"
 
+  orders:
+    title: "Orders"
+
   users:
     mailer:
       welcome: "Welcome to ERUPT"

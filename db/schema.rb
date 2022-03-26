@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_13_180551) do
+ActiveRecord::Schema.define(version: 2022_03_26_131800) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,18 @@ ActiveRecord::Schema.define(version: 2021_06_13_180551) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "orders", force: :cascade do |t|
+    t.string "title"
+    t.string "text"
+    t.string "data"
+    t.boolean "acknowledged", default: false
+    t.string "acknowledged_by"
+    t.datetime "acknowledged_at"
+    t.bigint "device_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "scan_events", force: :cascade do |t|
     t.bigint "member_id"
     t.datetime "created_at", precision: 6, null: false
@@ -123,5 +135,6 @@ ActiveRecord::Schema.define(version: 2021_06_13_180551) do
 
   add_foreign_key "devices", "device_types"
   add_foreign_key "devices", "users"
+  add_foreign_key "orders", "devices"
   add_foreign_key "scan_events", "members"
 end

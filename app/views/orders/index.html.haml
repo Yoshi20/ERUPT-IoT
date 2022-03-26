@@ -1,0 +1,39 @@
+.row
+  .col
+    %h1.page__title= t('orders.title')
+
+.row
+  .col
+    %p= "Total orders count = #{@orders.count}"
+
+.order-list
+  %table.table.table-hover.table-borderless
+    %thead
+      %tr
+        %th= t('activerecord.attributes.order.title')
+        %th= t('activerecord.attributes.order.text')
+        %th.text-center= t('activerecord.attributes.order.acknowledged')
+        %th= t('activerecord.attributes.order.acknowledged_at')
+        %th= t('activerecord.attributes.order.created_at')
+
+    %tbody.order-list-body
+      - @orders.each do |order|
+        %tr{'data-id': order.id, 'data-component'=>'order', style: "background-color: #{order.new? ? 'aqua' : ''};"}
+          %td= order.title
+          %td= order.text
+          %td.text-center
+            - if order.acknowledged
+              .material-icons= 'done'
+          %td= order.acknowledged_at.present? ? order.acknowledged_at.localtime.to_s(:custom_datetime) : ''
+          %td= order.created_at.localtime.to_s(:custom_datetime)
+
+          %td.admin-list-actions
+            .admin-list-actions__link
+              = form_for order, method: :delete, role: 'form', class:'form' do |f|
+                = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
+                  %span.material-icons.admin-actions__link__icon= 'delete'
+
+  .admin-actions
+    .admin-actions__link
+      = link_to orders_path, class:'btn btn-ghost btn-square' do
+        %span.material-icons.admin-actions__link__icon= 'refresh'
