@@ -91,9 +91,11 @@ en:
       title: "Resend unlock instructions"
       resend_unlock_inst: "Resend unlock instructions"
 
-  home:
-    title: "How to issue an ERUPT membership:"
-    manual: "Manual"
+  membership:
+    title: "Membership"
+    manual:
+      title_short: "Manual"
+      title: "How to issue an ERUPT membership:"
     li_1: "The new member has to scan the QR code and fill the form"
     li_2: "Go to %{link} and check if the email & abo type(s) are valid"
     li_3: "Cash in the fee from the new member according to the selected abo type(s)"

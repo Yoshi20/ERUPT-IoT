@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   mount ActionCable.server => '/cable'
 
-  get 'home' => 'home#index'
+  get 'membership' => 'membership#index'
 
   resources :devices
   get 'members/extern', to: redirect('members/extern/new')
