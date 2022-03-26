@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
   mount ActionCable.server => '/cable'
 
+  post 'lora_uplink' => 'uplinks#lora_uplink'
+
   get 'membership' => 'membership#index'
 
   resources :devices

@@ -28,6 +28,8 @@ en:
       deleting_feedback: "Feedback was successfully deleted"
       updating_scan_event: "Scan event was successfully updated"
       deleting_scan_event: "Scan event was successfully deleted"
+      updating_order: "Order was successfully updated"
+      deleting_order: "Order was successfully deleted"
     alert:
       updating_user: "User couldn't be updated!"
       deleting_user: "User couldn't be deleted!"
@@ -44,6 +46,8 @@ en:
       updating_scan_event: "Scan event couldn't be updated!"
       deleting_scan_event: "Scan event couldn't be deleted!"
       no_card_id: "Scan event has no card id!"
+      updating_order: "Order couldn't be updated!"
+      deleting_order: "Order couldn't be deleted!"
 
   navigation:
     account:

@@ -1,6 +1,5 @@
 class DevicesController < ApplicationController
-  before_action :authenticate_user!
-  #before_action :authenticate_admin!, only: [:create, :destroy]
+  before_action :authenticate_admin!
   before_action :set_device, only: [:show, :edit, :update, :destroy]
   before_action { @section = 'devices' }
 

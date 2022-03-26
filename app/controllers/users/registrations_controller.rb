@@ -68,7 +68,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   def authenticate_admin!
-    unless current_user.present? and current_user.is_admin?
+    unless current_user.present? && current_user.admin?
       render_forbidden
       return
     end
