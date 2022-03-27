@@ -7,8 +7,8 @@
     %p= "Total scan_events count = #{@total_scan_events.count}"
 
 .scan_event-list
-  %table.table.table-hover.table-borderless
-    %thead
+  %table.table.table-hover
+    %thead.table-header
       %tr
         %th Timestamp
         %th.text-center= t('activerecord.attributes.member.active')+'?'
@@ -74,8 +74,8 @@
       %p= "Total scan_events_no_member count = #{@total_scan_events_no_member.count}"
 
   .scan_event-list
-    %table.table.table-hover.table-borderless
-      %thead
+    %table.table.table-hover
+      %thead.table-header
         %tr
           %th Timestamp
           %th UID

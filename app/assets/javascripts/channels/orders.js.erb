@@ -1,0 +1,18 @@
+//= require cable
+
+App.orders = App.cable.subscriptions.create('OrdersChannel', {
+  received: function(order) {
+    $.ajax({
+      method: 'get',
+      url: 'orders/' + order.id,
+      data: null,
+      dataType: 'html',
+      error: function() {
+        return console.log("error: get order partial ajax request");
+      },
+      success: function(response) {
+        return $('#orders').append(response);
+      }
+    });
+  }
+});

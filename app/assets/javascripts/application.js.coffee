@@ -14,6 +14,7 @@
 #= require turbolinks
 #= require jquery3
 #= require bootstrap-sprockets
+#= require_tree ./channels
 #= require_tree .
 
 document.addEventListener 'turbolinks:load', ->

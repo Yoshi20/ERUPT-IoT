@@ -1,31 +1,39 @@
 .row
   .col
-    %h1.page__title= t('orders.title')
+    %h1.page__title= t('orders.closed.title')
 
 .row
   .col
     %p= "Total orders count = #{@orders.count}"
 
 .order-list
-  %table.table.table-hover.table-borderless
-    %thead
+  %table.table.table-hover
+    %thead.table-header
       %tr
         %th= t('activerecord.attributes.order.title')
         %th= t('activerecord.attributes.order.text')
-        %th.text-center= t('activerecord.attributes.order.acknowledged')
-        %th= t('activerecord.attributes.order.acknowledged_at')
-        %th= t('activerecord.attributes.order.created_at')
+        %th.hidden= t('activerecord.attributes.order.data')
+        -# %th.text-center= t('activerecord.attributes.order.acknowledged') + '?'
+        %th.text-center= t('activerecord.attributes.order.acknowledged_by')
+        %th.text-center= t('activerecord.attributes.order.acknowledged_at')
+        %th.text-center= 'Minutes open'
 
     %tbody.order-list-body
       - @orders.each do |order|
         %tr{'data-id': order.id, 'data-component'=>'order', style: "background-color: #{order.new? ? 'aqua' : ''};"}
           %td= order.title
           %td= order.text
-          %td.text-center
-            - if order.acknowledged
-              .material-icons= 'done'
-          %td= order.acknowledged_at.present? ? order.acknowledged_at.localtime.to_s(:custom_datetime) : ''
-          %td= order.created_at.localtime.to_s(:custom_datetime)
+          %td.hidden= order.data
+          -# %td.text-center
+          -#   - if order.acknowledged
+          -#     .material-icons= 'done'
+          %td.text-center= order.acknowledged_by
+          - if order.acknowledged_at.present?
+            %td.text-center= order.acknowledged_at.localtime.to_s(:custom_datetime)
+            %td.text-center= (order.acknowledged_at.to_i - order.created_at.to_i)/60
+          - else
+            %td.text-center
+            %td.text-center
 
           %td.admin-list-actions
             .admin-list-actions__link

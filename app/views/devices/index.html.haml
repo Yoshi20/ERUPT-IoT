@@ -7,8 +7,8 @@
     %p= "Total devices count = #{Device.all.count}"
 
 .device-list
-  %table.table.table-hover.table-borderless
-    %thead
+  %table.table.table-hover
+    %thead.table-header
       %tr
         %th= t('activerecord.attributes.device.name')
         %th= t('activerecord.attributes.device.dev_eui')

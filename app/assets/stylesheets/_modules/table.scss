@@ -6,7 +6,7 @@
   }
   .table-header {
     th {
-      border: none;
+      border-top: none;
       color: $color-grey;
       font-weight: 600;
       text-transform: uppercase;
@@ -41,6 +41,17 @@
     }
     a:hover {
       color: $color-red;
+    }
+  }
+}
+
+#orders {
+  tr {
+    height: 5rem;
+    td {
+      width: 33%;
+      font-size: 16px;
+      text-align: center;
     }
   }
 }

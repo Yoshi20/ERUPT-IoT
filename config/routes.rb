@@ -18,7 +18,8 @@ Rails.application.routes.draw do
   post 'feedbacks/extern' => 'feedbacks#create_extern'
   get 'feedbacks/extern/success' => 'feedbacks#success_extern'
   resources :feedbacks
-  resources :orders, only: [:index, :update, :destroy]
+  resources :orders, only: [:index, :show, :update, :destroy]
+  get 'orders_fullscreen' => 'orders#index_fullscreen'
 
   devise_for :users, controllers: { registrations: 'users/registrations', sessions: 'users/sessions', passwords: 'users/passwords' }
   resources :users, only: [:index, :update, :destroy]

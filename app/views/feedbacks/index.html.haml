@@ -15,8 +15,8 @@
       = link_to feedbacks_extern_path, feedbacks_extern_path, style: 'font-size: small;'
 
 .feedback-list
-  %table.table.table-hover.table-borderless
-    %thead
+  %table.table.table-hover
+    %thead.table-header
       %tr
         %th.text-center= t('activerecord.attributes.feedback.read')
         %th.text-center= "Location " + t('activerecord.attributes.feedback.rating')

@@ -31,11 +31,7 @@ class UplinksController < ApplicationController
             data: params.to_json.to_s,
             device_id: device.id,
           )
-          #blup
-          # ActionCable.server.broadcast(
-          #   disp.name,
-          #   post_data
-          # )
+          ActionCable.server.broadcast('OrdersChannel', event)
         end
       else
         raise "lora_message_id: \"#{lora_message_id}\" is invalid"

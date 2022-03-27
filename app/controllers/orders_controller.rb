@@ -5,21 +5,30 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = Order.all
+    @orders = Order.where(acknowledged: true).order(created_at: :desc)
+  end
+
+  # GET /orders_fullscreen
+  def index_fullscreen
+    @orders = Order.where(acknowledged: false)
+    render "index_fullscreen", layout: "application_fullscreen"
   end
 
   # GET /orders/1
   # GET /orders/1.json
   def show
-
+    respond_to do |format|
+      format.js {render partial: 'single_order', locals: {order: @order}, layout: false}
+    end
   end
 
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
     respond_to do |format|
-      if @order.update(order_params)
-        format.html { redirect_to orders_url, notice: t('flash.notice.updating_order') }
+      @order.acknowledge(current_user) if order_params[:acknowledged]
+      if @order.save
+        format.html { redirect_to orders_fullscreen_url, notice: t('flash.notice.updating_order') }
         format.json { render :show, status: :ok, location: @order }
       else
         format.html { render :show, alert: t('flash.alert.updating_order') }

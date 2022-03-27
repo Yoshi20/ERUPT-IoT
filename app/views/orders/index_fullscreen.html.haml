@@ -1,0 +1,5 @@
+.order-list
+  %table.table.table-hover.table-dark{style: 'margin-bottom: 0;'}
+    %tbody.order-list-body#orders
+      - @orders.each do |order|
+        = render partial: 'single_order', locals: {order: order}

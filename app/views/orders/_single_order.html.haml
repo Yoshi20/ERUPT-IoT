@@ -1,0 +1,10 @@
+%tr
+  %td
+    %strong= order.title
+  %td
+    = form_for order, role: 'form', method: :patch do |f|
+      = f.check_box :acknowledged, checked: true, class: 'd-none'
+      = f.button(type: 'submit', class:'btn btn-block btn-lg btn-sstm', style: 'height: 40px;') do
+        = t('orders.close')
+  %td
+    %strong= order.created_at.localtime.to_s(:custom_datetime_hour)

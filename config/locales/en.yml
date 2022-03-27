@@ -112,6 +112,13 @@ en:
 
   orders:
     title: "Orders"
+    open:
+      title: 'Open orders'
+      title_short: 'Open'
+    closed:
+      title: 'Closed orders'
+      title_short: 'Closed'
+    close: 'Close'
 
   users:
     mailer:

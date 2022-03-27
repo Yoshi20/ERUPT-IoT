@@ -112,6 +112,13 @@ de:
 
   orders:
     title: "Bestellungen"
+    open:
+      title: 'Offene Bestellungen'
+      title_short: 'Offen'
+    closed:
+      title: 'Quittierte Bestellungen'
+      title_short: 'Quittiert'
+    close: 'Quittieren'
 
   users:
     mailer:
