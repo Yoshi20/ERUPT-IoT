@@ -1,4 +1,5 @@
 //= require cable
+//= require set_orders_event_listener
 
 App.orders = App.cable.subscriptions.create('OrdersChannel', {
   received: function(order) {
@@ -11,7 +12,9 @@ App.orders = App.cable.subscriptions.create('OrdersChannel', {
         return console.log("error: get order partial ajax request");
       },
       success: function(response) {
-        return $('#orders').append(response);
+        $('#orders').append(response);
+        set_orders_event_listener();
+        return
       }
     });
   }

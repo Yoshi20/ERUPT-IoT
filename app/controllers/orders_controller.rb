@@ -29,9 +29,9 @@ class OrdersController < ApplicationController
       @order.acknowledge(current_user) if order_params[:acknowledged]
       if @order.save
         format.html { redirect_to orders_fullscreen_url, notice: t('flash.notice.updating_order') }
-        format.json { render :show, status: :ok, location: @order }
+        format.json { render json: {order: @order}, status: :ok }
       else
-        format.html { render :show, alert: t('flash.alert.updating_order') }
+        format.html { redirect_to orders_fullscreen_url, notice: t('flash.alert.updating_order') }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end
@@ -45,7 +45,7 @@ class OrdersController < ApplicationController
         format.html { redirect_to orders_url, notice: t('flash.notice.deleting_order') }
         format.json { head :no_content }
       else
-        format.html { render :show, alert: t('flash.alert.deleting_order') }
+        format.html { redirect_to orders_url, notice: t('flash.alert.deleting_order') }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end

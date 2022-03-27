@@ -57,3 +57,5 @@ document.addEventListener 'turbolinks:load', ->
     }, 500)
 
   $('.toast').toast({delay: 10000}).toast('show')
+
+  set_orders_event_listener()
