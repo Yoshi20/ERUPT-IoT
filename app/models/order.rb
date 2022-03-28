@@ -2,7 +2,7 @@ class Order < ApplicationRecord
   belongs_to :device
 
   def new?
-    self.created_at > 5.minute.ago
+    self.acknowledged_at > 5.minute.ago
   end
 
   def acknowledge(user)

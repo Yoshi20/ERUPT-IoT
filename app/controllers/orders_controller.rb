@@ -5,7 +5,7 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = Order.where(acknowledged: true).order(created_at: :desc)
+    @orders = Order.where(acknowledged: true).order(acknowledged_at: :desc)
   end
 
   # GET /orders_fullscreen

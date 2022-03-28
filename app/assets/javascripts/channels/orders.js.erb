@@ -13,6 +13,7 @@ App.orders = App.cable.subscriptions.create('OrdersChannel', {
       },
       success: function(response) {
         $('#orders').append(response);
+        $('#orders').find('tr:last').addClass('fadeIn')
         set_orders_event_listener();
         return
       }

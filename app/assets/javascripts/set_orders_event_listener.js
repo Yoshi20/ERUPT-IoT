@@ -21,7 +21,10 @@ set_orders_event_listener = function() {
           return console.log('error: patch order ajax request');
         },
         success: function(response) {
-          return $form.closest('tr').remove();
+          $form.closest('tr').addClass('fadeOut');
+          setTimeout(function() {
+            $form.closest('tr').remove();
+          }, 1000);
         }
       });
     });
