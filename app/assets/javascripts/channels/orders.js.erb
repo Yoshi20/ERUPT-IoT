@@ -1,6 +1,26 @@
 //= require cable
 //= require set_orders_event_listener
 
+i = 0
+tds = []
+ctrs = []
+
+setInterval(function() {
+  for(var j = 0; j < i; j++) {
+    ctrs[j]++;
+    if (ctrs[j] >= 60) {
+      tds[j].html(Math.floor(ctrs[j]/60)+' min');
+      if (ctrs[j] >= 60*10) {
+        tds[j].css("color", "red");
+      } else if (ctrs[j] >= 60*5) {
+        tds[j].css("color", "yellow");
+      }
+    } else {
+      tds[j].html(ctrs[j]+' sek');
+    }
+  }
+}, 1000);
+
 App.orders = App.cable.subscriptions.create('OrdersChannel', {
   received: function(order) {
     $.ajax({
@@ -13,7 +33,11 @@ App.orders = App.cable.subscriptions.create('OrdersChannel', {
       },
       success: function(response) {
         $('#orders').append(response);
-        $('#orders').find('tr:last').addClass('fadeIn')
+        $tr = $('#orders').find('tr:last')
+        $tr.addClass('fadeIn')
+        tds[i] = $tr.find('td:last')
+        ctrs[i] = 0
+        i++;
         set_orders_event_listener();
         return
       }
