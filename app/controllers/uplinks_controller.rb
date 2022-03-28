@@ -6,10 +6,11 @@ class UplinksController < ApplicationController
   # POST /lora_uplink
   # POST /lora_uplink.json
   def lora_uplink
-    device = Device.find_by(dev_eui: params[:hardware_serial])
+    dev_eui = params['uplink']['end_device_ids']['dev_eui']
+    device = Device.find_by(dev_eui: dev_eui)
     return head :not_found if device.nil?
-    return head :not_found unless params[:payload_raw].present?
-    payload = Base64.decode64(params[:payload_raw]).bytes.map{|b| sprintf("%02X", b)}.join
+    payload_raw = params['uplink']['uplink_message']['frm_payload']
+    payload = Base64.decode64(payload_raw).bytes.map{|b| sprintf("%02X", b)}.join
     event = nil
     lora_message_id = payload[0...2]
     ActiveRecord::Base.transaction do
