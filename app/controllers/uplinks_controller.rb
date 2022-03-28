@@ -1,6 +1,7 @@
 class UplinksController < ApplicationController
   protect_from_forgery with: :null_session
-  skip_before_action :authenticate_user!, only: [:lora_uplink]
+  skip_before_action :verify_authenticity_token
+  skip_before_action :authenticate_user!
 
   # POST /lora_uplink
   # POST /lora_uplink.json
