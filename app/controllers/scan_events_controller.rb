@@ -19,7 +19,10 @@ class ScanEventsController < ApplicationController
   end
 
   def show
-
+    respond_to do |format|
+      format.html {render 'show'}
+      format.js {render partial: 'scan_event', locals: {scan_event: @scan_event, layout: false}}
+    end
   end
 
   # POST /scan_events
@@ -49,6 +52,7 @@ class ScanEventsController < ApplicationController
     end
     respond_to do |format|
       if scan_event.present?
+        ActionCable.server.broadcast('ScanEventsChannel', scan_event)
         format.html { render plain: "OK", status: :ok }
       else
         format.html { head :unprocessable_entity }

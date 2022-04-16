@@ -9,9 +9,9 @@ class OrdersController < ApplicationController
   end
 
   # GET /orders_fullscreen
-  def index_fullscreen
+  def index_open
     @orders = Order.where(acknowledged: false)
-    render "index_fullscreen", layout: "application_fullscreen"
+    render "index_open", layout: "application_fullscreen"
   end
 
   # GET /orders/1

@@ -24,7 +24,7 @@ set_orders_event_listener = function() {
           $form.closest('tr').addClass('fadeOut');
           setTimeout(function() {
             $form.closest('tr').remove();
-          }, 1000);
+          }, 800);
         }
       });
     });

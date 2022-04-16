@@ -1,0 +1,20 @@
+//= require cable
+
+App.scan_events = App.cable.subscriptions.create('ScanEventsChannel', {
+  received: function(scan_event) {
+    $.ajax({
+      method: 'get',
+      url: 'scan_events/' + scan_event.id + '.js',
+      data: null,
+      dataType: 'html',
+      error: function() {
+        return console.log("error: get scan_event partial ajax request");
+      },
+      success: function(response) {
+        $('#scan_events').prepend(response);
+        //blup
+        return
+      }
+    });
+  }
+});

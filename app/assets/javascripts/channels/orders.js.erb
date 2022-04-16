@@ -4,28 +4,31 @@
 i = 0
 tds = []
 ctrs = []
+intervalID = 0
 
-setInterval(function() {
-  for(var j = 0; j < i; j++) {
-    ctrs[j]++;
-    if (ctrs[j] >= 60) {
-      tds[j].html(Math.floor(ctrs[j]/60)+' min');
-      if (ctrs[j] >= 60*10) {
-        tds[j].css("color", "red");
-      } else if (ctrs[j] >= 60*5) {
-        tds[j].css("color", "yellow");
+function startInterval() {
+  return setInterval(function() {
+    for(var j = 0; j < i; j++) {
+      ctrs[j]++;
+      if (ctrs[j] >= 60) {
+        tds[j].html(Math.floor(ctrs[j]/60)+' min');
+        if (ctrs[j] >= 60*10) {
+          tds[j].css("color", "red");
+        } else if (ctrs[j] >= 60*5) {
+          tds[j].css("color", "yellow");
+        }
+      } else {
+        tds[j].html(ctrs[j]+' sek');
       }
-    } else {
-      tds[j].html(ctrs[j]+' sek');
     }
-  }
-}, 1000);
+  }, 1000);
+}
 
 App.orders = App.cable.subscriptions.create('OrdersChannel', {
   received: function(order) {
     $.ajax({
       method: 'get',
-      url: 'orders/' + order.id,
+      url: 'orders/' + order.id + '.js',
       data: null,
       dataType: 'html',
       error: function() {
@@ -39,6 +42,9 @@ App.orders = App.cable.subscriptions.create('OrdersChannel', {
         ctrs[i] = 0
         i++;
         set_orders_event_listener();
+        if (intervalID == 0) {
+          intervalID = startInterval();
+        }
         return
       }
     });

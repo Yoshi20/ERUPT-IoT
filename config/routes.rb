@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   get 'feedbacks/extern/success' => 'feedbacks#success_extern'
   resources :feedbacks
   resources :orders, only: [:index, :show, :update, :destroy]
-  get 'orders_fullscreen' => 'orders#index_fullscreen'
+  get 'orders_fullscreen' => 'orders#index_open'
 
   devise_for :users, controllers: { registrations: 'users/registrations', sessions: 'users/sessions', passwords: 'users/passwords' }
   resources :users, only: [:index, :update, :destroy]
