@@ -100,3 +100,6 @@ gem 'http_accept_language'
 
 # See https://github.com/ambethia/recaptcha
 gem 'recaptcha'
+
+# See https://github.com/pusher/push-notifications-ruby
+gem 'pusher-push-notifications'

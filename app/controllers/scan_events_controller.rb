@@ -1,5 +1,6 @@
 require "uri"
 require "net/http"
+require 'pusher/push_notifications'
 
 class ScanEventsController < ApplicationController
   # For APIs, you may want to use :null_session instead.
@@ -53,6 +54,20 @@ class ScanEventsController < ApplicationController
     respond_to do |format|
       if scan_event.present?
         ActionCable.server.broadcast('ScanEventsChannel', scan_event)
+
+        #blup
+        data = {
+          web: {
+            notification: {
+              title: 'Hello',
+              body: 'Hello, world!',
+              deep_link: 'https://www.pusher.com'
+            }
+          }
+        }
+        puts data #blup
+        Pusher::PushNotifications.publish_to_interests(interests: ['hello'], payload: data)
+
         format.html { render plain: "OK", status: :ok }
       else
         format.html { head :unprocessable_entity }
