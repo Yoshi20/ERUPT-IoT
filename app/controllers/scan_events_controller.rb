@@ -47,6 +47,19 @@ class ScanEventsController < ApplicationController
           post_data
         )
       end
+      # push notification
+      data = {
+        web: {
+          notification: {
+            title: 'ScanEvent',
+            body: "#{member.first_name} #{member.last_name}",
+            icon: 'logo.jpg',
+            deep_link: 'https://www.pusher.com', # blup
+            hide_notification_if_site_has_focus: false,
+          }
+        }
+      }
+      Pusher::PushNotifications.publish_to_interests(interests: ['scan_events'], payload: data)
     else
       # no member yet -> create "empty" ScanEvent
       scan_event = ScanEvent.create(post_body: post_body, card_id: params[:UID])
@@ -54,20 +67,6 @@ class ScanEventsController < ApplicationController
     respond_to do |format|
       if scan_event.present?
         ActionCable.server.broadcast('ScanEventsChannel', scan_event)
-
-        #blup
-        data = {
-          web: {
-            notification: {
-              title: 'Hello',
-              body: 'Hello, world!',
-              deep_link: 'https://www.pusher.com'
-            }
-          }
-        }
-        puts data #blup
-        Pusher::PushNotifications.publish_to_interests(interests: ['hello'], payload: data)
-
         format.html { render plain: "OK", status: :ok }
       else
         format.html { head :unprocessable_entity }

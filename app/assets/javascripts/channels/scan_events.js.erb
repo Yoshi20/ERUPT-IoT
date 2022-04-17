@@ -12,7 +12,6 @@ App.scan_events = App.cable.subscriptions.create('ScanEventsChannel', {
       },
       success: function(response) {
         $('#scan_events').prepend(response);
-        //blup
         return
       }
     });

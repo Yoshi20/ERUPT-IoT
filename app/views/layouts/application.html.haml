@@ -9,6 +9,7 @@
     %meta{:content => "width=device-width, initial-scale=1, shrink-to-fit=no", :name => "viewport"}
     = favicon_link_tag 'logo.jpg'
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload'
+    %script{:src => "https://js.pusher.com/beams/1.0/push-notifications-cdn.js"}
     = javascript_include_tag 'application', 'data-turbolinks-track' => 'reload'
     = csrf_meta_tags
     = csp_meta_tag
