@@ -53,8 +53,8 @@ class ScanEventsController < ApplicationController
           notification: {
             title: 'ScanEvent',
             body: "#{member.first_name} #{member.last_name}",
-            icon: 'logo.jpg',
-            deep_link: 'https://www.pusher.com', # blup
+            icon: request.base_url + '/' + ActionController::Base.helpers.asset_path("logo.jpg"),
+            deep_link: 'https://10.0.0.10/', # blup
             hide_notification_if_site_has_focus: false,
           }
         }
