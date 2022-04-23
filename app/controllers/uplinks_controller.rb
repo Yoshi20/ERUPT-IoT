@@ -34,6 +34,12 @@ class UplinksController < ApplicationController
             device_id: device.id,
           )
           ActionCable.server.broadcast('OrdersChannel', event)
+          WifiDisplay.all.each do |disp|
+            ActionCable.server.broadcast(
+              disp.name,
+              { title: device.name, beep: 1 }
+            )
+          end
         end
       else
         raise "lora_message_id: \"#{lora_message_id}\" is invalid"
