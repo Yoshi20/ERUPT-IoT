@@ -17,6 +17,7 @@
       %tr
         %th.text-center= t('activerecord.attributes.member.active')+'?'
         %th.text-center= t('activerecord.attributes.member.card_id')+'?'
+        %th.text-center= t('activerecord.attributes.member.ggleap_uuid')+'?'
         %th= t('activerecord.attributes.member.first_name')
         %th= t('activerecord.attributes.member.last_name')
         %th= t('activerecord.attributes.member.email')
@@ -40,6 +41,9 @@
               .material-icons= 'done'
           %td.text-center
             - if member.card_id.present?
+              .material-icons= 'done'
+          %td.text-center
+            - if member.ggleap_uuid.present?
               .material-icons= 'done'
           %td= member.first_name
           %td= member.last_name

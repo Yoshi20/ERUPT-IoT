@@ -30,7 +30,7 @@ class DevicesController < ApplicationController
     @device.user = current_user
     respond_to do |format|
       if @device.save
-        format.html { redirect_to @device, notice: t('flash.notice.creating_device') }
+        format.html { redirect_to devices_url, notice: t('flash.notice.creating_device') }
         format.json { render :show, status: :created, location: @device }
       else
         format.html { render :new, alert: t('flash.alert.creating_device') }
@@ -42,7 +42,7 @@ class DevicesController < ApplicationController
   def update
     respond_to do |format|
       if @device.update(device_params)
-        format.html { redirect_to @device, notice: t('flash.notice.updating_device') }
+        format.html { redirect_to devices_url, notice: t('flash.notice.updating_device') }
         format.json { render :show, status: :ok, location: @device }
       else
         format.html { render :edit, alert: t('flash.alert.updating_device') }
@@ -80,7 +80,7 @@ class DevicesController < ApplicationController
   #   else
   #     notice = t('devices.send_downlink.notice.no_devaddr')
   #   end
-  #   redirect_to @device, notice: notice
+  #   redirect_to devices_url, notice: notice
   # end
 
   private

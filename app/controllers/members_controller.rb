@@ -112,7 +112,7 @@ class MembersController < ApplicationController
     def member_params
       params.require(:member).permit(:first_name, :last_name, :email, :birthdate,
         :mobile_number, :gender, :canton, :comment, :wants_newsletter_emails,
-        :wants_event_emails, :card_id, :magma_coins, :active)
+        :wants_event_emails, :card_id, :magma_coins, :active, :ggleap_uuid)
     end
 
     def add_abo_types_to_member(member)
