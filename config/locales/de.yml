@@ -30,6 +30,7 @@ de:
       deleting_scan_event: "Scan-Event wurde erfolgreich gelöscht"
       updating_order: "Bestellung wurde erfolgreich aktualisiert"
       deleting_order: "Bestellung wurde erfolgreich gelöscht"
+      sync_with_ggleap: "Mitglieder wurden erfolgreich mit den ggLeap Benutzer synchronisiert"
     alert:
       updating_user: "Benutzer konnte nicht aktualisiert werden!"
       deleting_user: "Benutzer konnte nicht gelöscht werden!"
@@ -48,6 +49,7 @@ de:
       no_card_id: "Scan-Event hat keine Karten-ID!"
       updating_order: "Bestellung konnte nicht aktualisiert werden!"
       deleting_order: "Bestellung konnte nicht gelöscht werden!"
+      sync_with_ggleap: "Mitglieder konnten nicht mit den ggLeap Benutzer synchronisiert werden!"
 
   navigation:
     account:

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get 'members/extern/new' => 'members#new_extern'
   post 'members/extern' => 'members#create_extern'
   get 'members/extern/success' => 'members#success_extern'
+  post 'members/sync_with_ggleap' => 'members#sync_with_ggleap'
   resources :members
   resources :scan_events, only: [:index, :show, :create, :update, :destroy]
   get 'feedbacks/extern', to: redirect('feedbacks/extern/new')

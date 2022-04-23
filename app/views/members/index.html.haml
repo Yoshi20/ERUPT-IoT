@@ -82,6 +82,9 @@
   -#       %span.material-icons.admin-actions__link__icon= 'refresh'
   .admin-actions
     .admin-actions__link
+      = button_to members_sync_with_ggleap_path, method: :post, class: 'btn btn-sstm' do
+        %span Sync ggLeap
+    .admin-actions__link
       = link_to members_path, class:'btn btn-ghost btn-square' do
         %span.material-icons.admin-actions__link__icon= 'refresh'
     .admin-actions__link

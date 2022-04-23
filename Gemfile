@@ -103,3 +103,6 @@ gem 'recaptcha'
 
 # See https://github.com/pusher/push-notifications-ruby
 gem 'pusher-push-notifications'
+
+# See: https://github.com/jnunemaker/httparty
+gem 'httparty'

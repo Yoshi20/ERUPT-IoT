@@ -102,6 +102,17 @@ class MembersController < ApplicationController
     end
   end
 
+  # POST /members/sync_with_ggleap
+  def sync_with_ggleap
+    respond_to do |format|
+      if Member::sync_with_ggleap_users
+        format.html { redirect_to members_path, notice: t('flash.notice.sync_with_ggleap') }
+      else
+        format.html { redirect_to members_path, alert: t('flash.alert.sync_with_ggleap') }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_member

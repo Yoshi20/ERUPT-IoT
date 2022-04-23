@@ -35,6 +35,13 @@ class ScanEventsController < ApplicationController
     if member.present?
       member_abo_types = member.abo_types.active.map{|at| at.name}.join(' ')
       scan_event = ScanEvent.create(member_id: member.id, post_body: post_body, abo_types: member_abo_types, card_id: params[:UID])
+      # get data from ggLeap if present
+      if member.ggleap_uuid.present?
+        jwt = Request::ggleap_auth
+        ggleap_user = Request::ggleap_user(jwt, member.ggleap_uuid)
+        member.magma_coins = ggleap_user["Balance"]
+        member.save
+      end
       # send data via ws
       post_data = {
         first_name: member.first_name,

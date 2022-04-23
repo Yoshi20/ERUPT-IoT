@@ -30,6 +30,7 @@ en:
       deleting_scan_event: "Scan event was successfully deleted"
       updating_order: "Order was successfully updated"
       deleting_order: "Order was successfully deleted"
+      sync_with_ggleap: "Members were successfully synchronized with the ggLeap users"
     alert:
       updating_user: "User couldn't be updated!"
       deleting_user: "User couldn't be deleted!"
@@ -48,6 +49,7 @@ en:
       no_card_id: "Scan event has no card id!"
       updating_order: "Order couldn't be updated!"
       deleting_order: "Order couldn't be deleted!"
+      sync_with_ggleap: "Members couldn't be synchronized with the ggLeap users!"
 
   navigation:
     account:
