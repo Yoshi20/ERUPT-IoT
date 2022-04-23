@@ -29,11 +29,11 @@ class OrdersController < ApplicationController
       @order.acknowledge(current_user) if order_params[:acknowledged]
       if @order.save
         if order_params[:acknowledged]
-          last_open_order = Order.open.last
+          open_order_ctr = Order.open.count
           WifiDisplay.all.each do |disp|
             ActionCable.server.broadcast(
               disp.name,
-              { title: last_open_order.present? ? last_open_order.title : "" }
+              { open_order_ctr: open_order_ctr }
             )
           end
         end

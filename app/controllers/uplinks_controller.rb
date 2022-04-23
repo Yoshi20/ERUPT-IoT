@@ -34,10 +34,14 @@ class UplinksController < ApplicationController
             device_id: device.id,
           )
           ActionCable.server.broadcast('OrdersChannel', event)
+          open_order_ctr = Order.open.count
           WifiDisplay.all.each do |disp|
             ActionCable.server.broadcast(
               disp.name,
-              { title: device.name, beep: 1 }
+              {
+                open_order_ctr: open_order_ctr,
+                beep: 1,
+              }
             )
           end
         end
