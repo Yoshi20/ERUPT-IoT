@@ -61,7 +61,7 @@ class ScanEventsController < ApplicationController
             title: 'ScanEvent',
             body: "#{member.first_name} #{member.last_name}",
             icon: request.base_url + '/' + ActionController::Base.helpers.asset_path("logo.jpg"),
-            deep_link: 'https://10.0.0.10/', # blup
+            deep_link: (member.ggleap_uuid.present? ? "https://admin.ggleap.com/shop?user=#{member.ggleap_uuid}" : "https://admin.ggleap.com/users"),
             hide_notification_if_site_has_focus: false,
           }
         }
