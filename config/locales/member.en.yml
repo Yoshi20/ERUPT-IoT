@@ -22,6 +22,7 @@ en:
         expiration_date: "Expiration date"
         number_of_scans: "Number of scans"
         active: "Activated"
+        locked: "Locked"
         ggleap_uuid: "ggLeap UUID"
   members:
     title: "Members"
