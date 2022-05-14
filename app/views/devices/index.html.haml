@@ -35,6 +35,9 @@
 
           %td.admin-list-actions
             .admin-list-actions__link
+              = link_to device_path(device), class:'btn btn-sstm btn-square' do
+                %span.material-icons.admin-actions__link__icon= 'visibility'
+            .admin-list-actions__link
               = link_to edit_device_path(device), class: 'btn btn-sstm btn-square' do
                 %span.material-icons.admin-actions__link__icon= 'edit'
             .admin-list-actions__link

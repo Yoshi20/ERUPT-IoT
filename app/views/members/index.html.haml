@@ -69,6 +69,9 @@
                   = button_tag(type: "submit", class:'btn btn-sstm btn-square') do
                     %span.material-icons.admin-actions__link__icon= 'done'
             .admin-list-actions__link
+              = link_to member_path(member), class:'btn btn-sstm btn-square' do
+                %span.material-icons.admin-actions__link__icon= 'visibility'
+            .admin-list-actions__link
               = link_to edit_member_path(member), class: 'btn btn-sstm btn-square' do
                 %span.material-icons.admin-actions__link__icon= 'edit'
             .admin-list-actions__link
