@@ -33,7 +33,7 @@ class UplinksController < ApplicationController
             data: params.to_json.to_s,
             device_id: device.id,
           )
-          ActionCable.server.broadcast('OrdersChannel', event)
+          ActionCable.server.broadcast('OrdersChannel', event.attributes.except("data")) # broadcast new order
           open_order_ctr = Order.open.count
           WifiDisplay.all.each do |disp|
             ActionCable.server.broadcast(

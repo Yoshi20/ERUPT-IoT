@@ -1,4 +1,4 @@
-%tr
+%tr{id: "order-#{order.id}"}
   %td= order.title
   %td
     = form_for order, role: 'form', method: :patch do |f|

@@ -26,27 +26,37 @@ function startInterval() {
 
 App.orders = App.cable.subscriptions.create('OrdersChannel', {
   received: function(order) {
-    $.ajax({
-      method: 'get',
-      url: 'orders/' + order.id + '.js',
-      data: null,
-      dataType: 'html',
-      error: function() {
-        return console.log("error: get order partial ajax request");
-      },
-      success: function(response) {
-        $('#orders').append(response);
-        $tr = $('#orders').find('tr:last')
-        $tr.addClass('fadeIn')
-        tds[i] = $tr.find('td:last')
-        ctrs[i] = 0
-        i++;
-        set_orders_event_listener();
-        if (intervalID == 0) {
-          intervalID = startInterval();
+    if (order.acknowledged) {
+      /* remove acknowledged order */
+      $order_tr = $('#order-'+order.id)
+      $order_tr.addClass('fadeOut');
+      setTimeout(function() {
+        $order_tr.remove();
+      }, 800);
+    } else {
+      /* request and append new order */
+      $.ajax({
+        method: 'get',
+        url: 'orders/' + order.id + '.js',
+        data: null,
+        dataType: 'html',
+        error: function() {
+          return console.log("error: get order partial ajax request");
+        },
+        success: function(response) {
+          $('#orders').append(response);
+          $tr = $('#orders').find('tr:last')
+          $tr.addClass('fadeIn')
+          tds[i] = $tr.find('td:last')
+          ctrs[i] = 0
+          i++;
+          set_orders_event_listener();
+          if (intervalID == 0) {
+            intervalID = startInterval();
+          }
+          return
         }
-        return
-      }
-    });
+      });
+    }
   }
 });

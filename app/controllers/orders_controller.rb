@@ -30,6 +30,7 @@ class OrdersController < ApplicationController
       if @order.save
         if order_params[:acknowledged]
           open_order_ctr = Order.open.count
+          ActionCable.server.broadcast('OrdersChannel', @order.attributes.except("data")) # broadcast acknowledged order
           WifiDisplay.all.each do |disp|
             ActionCable.server.broadcast(
               disp.name,
