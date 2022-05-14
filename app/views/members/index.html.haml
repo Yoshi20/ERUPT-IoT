@@ -85,7 +85,8 @@
   -#       %span.material-icons.admin-actions__link__icon= 'refresh'
   .admin-actions
     .admin-actions__link
-      = button_to members_sync_with_ggleap_path, method: :post, class: 'btn btn-sstm' do
+      = button_to members_sync_with_ggleap_path, method: :post, class: 'btn btn-sstm', onclick: "document.getElementById('sync-ggleap-spinner').classList.remove('hidden');" do
+        %span#sync-ggleap-spinner.spinner-border.spinner-border-sm.hidden{role:"status", "aria-hidden":"true"}
         %span Sync ggLeap
     .admin-actions__link
       = link_to members_path, class:'btn btn-ghost btn-square' do
