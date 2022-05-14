@@ -106,3 +106,6 @@ gem 'pusher-push-notifications'
 
 # See: https://github.com/jnunemaker/httparty
 gem 'httparty'
+
+# See https://github.com/mislav/will_paginate
+gem 'will_paginate'

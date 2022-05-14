@@ -76,6 +76,9 @@
                 = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
                   %span.material-icons.admin-actions__link__icon= 'delete'
 
+  .member-list-footer
+    = render 'paginator', members: @members
+
   -# .admin-actions{style: 'left: 0.5rem;'}
   -#   .admin-actions__link
   -#     = link_to members_path, class:'btn btn-ghost btn-square' do

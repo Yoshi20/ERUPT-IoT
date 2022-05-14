@@ -9,7 +9,7 @@ class MembersController < ApplicationController
   # GET /members
   # GET /members.json
   def index
-    @members = Member.all.includes(:abo_types, :scan_events).order(created_at: :desc)
+    @members = Member.all.includes(:abo_types, :scan_events).order(created_at: :desc).paginate(page: params[:page], per_page: Member::MAX_MEMBERS_PER_PAGE)
   end
 
   # GET /members/1
