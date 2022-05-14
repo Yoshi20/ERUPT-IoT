@@ -5,7 +5,7 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = Order.closed
+    @orders = Order.closed.paginate(page: params[:page], per_page: Order::MAX_ORDERS_PER_PAGE)
   end
 
   # GET /orders_fullscreen
