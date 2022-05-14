@@ -25,77 +25,38 @@
           .mobile_number= " (#{@device.user.mobile_number})"
 
     -# device ------------------------------------------------------------------
-    .device__stats
-      .row
-        -# - if @device.device_type.present?
-        -#   .col
-        -#     .device__stats__single{class: (@device.gender.nil? && @device.birth_year.nil?) ? 'device__stats__single--last' : ''}
-        -#       %strong
-        -#         = t("defines.device_types.#{@device.device_type}")
-        -#       %span
-        -#         = t('devices.device_type')
-        -# - if @device.birth_year.present?
-        -#   .col
-        -#     .device__stats__single{class: (@device.gender.nil?) ? 'device__stats__single--last' : ''}
-        -#       %strong
-        -#         = @device.birth_year
-        -#       %span
-        -#         = t('devices.birth_year')
-        -# - if @device.gender.present?
-        -#   .col
-        -#     .device__stats__single.device__stats__single--last
-        -#       %strong
-        -#         = t("defines.genders.#{@device.gender}")
-        -#       %span
-        -#         = t('devices.gender')
-
-    .device__stats
-      .row
-        -# .col
-        -#   .device__stats__single
-        -#     %strong
-        -#       = @device.best_rank
-        -#     %span
-        -#       = t('devices.best_rank')
-        -# .col
-        -#   .device__stats__single
-        -#     %strong
-        -#       = @device.wins
-        -#     %span
-        -#       = t('devices.wins')
-        -# .col
-        -#   .device__stats__single
-        -#     %strong
-        -#       = @device.losses
-        -#     %span
-        -#       = t('devices.losses')
-        -# .col
-        -#   .device__stats__single.device__stats__single--last
-        -#     %strong
-        -#       = @device.points
-        -#     %span
-        -#       = t('devices.points')
-
-    .device__stats
-      .row
-        -# .col
-        -#   .device__stats__single
-        -#     %strong
-        -#       = self_assessment_defines[@device.self_assessment]
-        -#     %span
-        -#       = t('devices.self_assessment')
-        -# .col
-        -#   .device__stats__single
-        -#     %strong
-        -#       - if @device.losses == 0 and @device.wins == 0
-        -#         = '-'
-        -#       - else
-        -#         = "#{@device.win_loss_ratio} %"
-        -#     %span
-        -#       = t('devices.win_loss')
-        -# .col
-        -#   .device__stats__single.device__stats__single--last
-        -#     %strong
-        -#       = tournament_experience_defines[@device.tournament_experience]
-        -#     %span
-        -#       = t('devices.experience')
+  .row
+    .col
+      %p
+        %b= t('activerecord.attributes.device.dev_eui') + ':'
+        = @device.dev_eui
+      %p
+        %b= t('activerecord.attributes.device.app_eui') + ':'
+        = @device.app_eui
+      %p
+        %b= t('activerecord.attributes.device.app_key') + ':'
+        = @device.app_key
+      %p
+        %b= t('activerecord.attributes.device.hw_version') + ':'
+        = @device.hw_version
+      %p
+        %b= t('activerecord.attributes.device.fw_version') + ':'
+        = @device.fw_version
+      %p
+        %b= t('activerecord.attributes.device.battery') + ':'
+        = @device.battery
+      %p
+        %b= t('activerecord.attributes.device.last_time_seen') + ':'
+        = @device.last_time_seen.localtime.to_s(:custom_datetime)
+      %p
+        %b= t('activerecord.attributes.device.created_at') + ':'
+        = @device.created_at.localtime.to_s(:custom_datetime)
+      %p
+        %b= t('activerecord.attributes.device.updated_at') + ':'
+        = @device.updated_at.localtime.to_s(:custom_datetime)
+      %p
+        %b= t('activerecord.attributes.device.device_type_id') + ':'
+        = @device.device_type_id
+      %p
+        %b= t('activerecord.attributes.device.user_id') + ':'
+        = @device.user_id
