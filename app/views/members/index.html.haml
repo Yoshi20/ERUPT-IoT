@@ -15,7 +15,6 @@
   %table.table.table-hover
     %thead.table-header
       %tr
-        %th.text-center= t('activerecord.attributes.member.active')+'?'
         %th.text-center= t('activerecord.attributes.member.card_id')+'?'
         %th.text-center= t('activerecord.attributes.member.ggleap_uuid')+'?'
         %th= t('activerecord.attributes.member.first_name')
@@ -31,14 +30,11 @@
         %th.text-center= t('activerecord.attributes.member.magma_coins')
         %th.text-center= t('activerecord.attributes.member.number_of_scans')
         %th= t('activerecord.attributes.member.comment')
-        -# %th Created at
+        %th.text-center= t('activerecord.attributes.member.locked')+'?'
 
     %tbody.member-list-body.with-show
       - @members.each do |member|
         %tr{'data-id': member.id, 'data-component'=>'member', style: "background-color: #{member.new? ? 'aqua' : ''};"}
-          %td.text-center
-            - if member.active
-              .material-icons= 'done'
           %td.text-center
             - if member.card_id.present?
               .material-icons= 'done'
@@ -59,15 +55,11 @@
           %td.text-center= member.magma_coins
           %td.text-center= member.scan_events.count
           %td= member.comment
-          -# %td= member.created_at.localtime.to_s(:custom_datetime)
+          %td.text-center
+            - if member.locked
+              .material-icons= 'done'
 
           %td.admin-list-actions
-            - if !member.active
-              .admin-list-actions__link
-                = form_for member, method: :patch, role: 'form', class:'form' do |f|
-                  = f.check_box :active, checked: true, hidden: true
-                  = button_tag(type: "submit", class:'btn btn-sstm btn-square') do
-                    %span.material-icons.admin-actions__link__icon= 'done'
             .admin-list-actions__link
               = link_to member_path(member), class:'btn btn-sstm btn-square' do
                 %span.material-icons.admin-actions__link__icon= 'visibility'

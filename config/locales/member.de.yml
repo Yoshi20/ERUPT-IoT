@@ -21,7 +21,6 @@ de:
         magma_coins: "Magma-Münzen"
         expiration_date: "Ablaufdatum"
         number_of_scans: "Anzahl Scanns"
-        active: "Aktiviert"
         ggleap_uuid: "ggLeap UUID"
   members:
     title: "Mitglieder"

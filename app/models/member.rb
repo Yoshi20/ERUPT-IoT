@@ -9,7 +9,7 @@ class Member < ApplicationRecord
   MAX_MEMBERS_PER_PAGE = 50
 
   def new?
-    (!self.active || !self.card_id.present?) && self.created_at.today?
+    (!self.card_id.present?) && self.created_at.today?
   end
 
   def self.sync_with_ggleap_users

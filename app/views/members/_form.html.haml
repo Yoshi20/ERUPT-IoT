@@ -68,8 +68,8 @@
       = f.text_area :comment, class: 'form-control'
     .form-group
       .form-check
-        = f.check_box :active, checked: (params[:member].present? ? (params[:member][:active] == "1") : @member.active), class:'form-check-input mr-2'
-        = f.label :active, class:'form-check-label'
+        = f.check_box :locked, checked: (params[:member].present? ? (params[:member][:locked] == "1") : @member.locked), class:'form-check-input mr-2'
+        = f.label :locked, class:'form-check-label'
 
   .actions.form-group.text-center
     - if extern
