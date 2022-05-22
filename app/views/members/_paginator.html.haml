@@ -4,7 +4,7 @@
       %li= hidden_field_tag 'total_pages', members.total_pages
       %li.left-arrow
         - if members.current_page.present? && members.current_page > 1
-          = link_to members_path(search: params[:search], filter: params[:filter], page: members.current_page-1), aria: {label: "Previous"} do
+          = link_to members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: params[:sort], order: params[:order], page: members.current_page-1), aria: {label: "Previous"} do
             %span{"aria-hidden"=> "true"}
               &laquo;
         - else
@@ -13,10 +13,10 @@
               &laquo;
 
       - (1..members.total_pages).each do |page|
-        %li{class: "#{"active" if page == members.current_page}"}= link_to page.to_s, members_path(search: params[:search], filter: params[:filter], page: page), value: page
+        %li{class: "#{"active" if page == members.current_page}"}= link_to page.to_s, members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: params[:sort], order: params[:order], page: page), value: page
       %li.right-arrow
         - if members.try(:current_page).present? && members.current_page < members.total_pages
-          = link_to members_path(search: params[:search], filter: params[:filter], page: members.current_page+1), aria: {label: "Next"} do
+          = link_to members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: params[:sort], order: params[:order], page: members.current_page+1), aria: {label: "Next"} do
             %span{"aria-hidden"=> "true"}
               &raquo;
         - else

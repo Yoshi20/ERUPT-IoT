@@ -24,22 +24,23 @@
   %table.table.table-hover
     %thead.table-header
       %tr
-        %th.text-center= t('activerecord.attributes.member.card_id')+'?'
-        %th.text-center= t('activerecord.attributes.member.ggleap_uuid')+'?'
-        %th= t('activerecord.attributes.member.first_name')
-        %th= t('activerecord.attributes.member.last_name')
-        %th= t('activerecord.attributes.member.email')
-        -# %th= t('activerecord.attributes.member.birthdate')
-        -# %th= t('activerecord.attributes.member.gender')
-        -# %th= t('activerecord.attributes.member.canton')
-        %th= t('activerecord.attributes.member.abo_types')
-        -# %th= t('activerecord.attributes.member.wants_newsletter_emails')
-        -# %th= t('activerecord.attributes.member.wants_event_emails')
-        -# %th= t('activerecord.attributes.member.card_id')
-        %th.text-center= t('activerecord.attributes.member.magma_coins')
-        %th.text-center= t('activerecord.attributes.member.number_of_scans')
-        %th= t('activerecord.attributes.member.comment')
-        %th.text-center= t('activerecord.attributes.member.locked')+'?'
+
+
+        %th.text-center= link_to t('activerecord.attributes.member.card_id')+'?', members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'card_id', order: 'asc'), style: 'color: black;'
+        %th.text-center= link_to t('activerecord.attributes.member.ggleap_uuid')+'?', members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'ggleap_uuid', order: 'asc'), style: 'color: black;'
+        %th= link_to t('activerecord.attributes.member.first_name'), members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'first_name', order: 'asc'), style: 'color: black;'
+        %th= link_to t('activerecord.attributes.member.last_name'), members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'last_name', order: 'asc'), style: 'color: black;'
+        %th= link_to t('activerecord.attributes.member.email'), members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'email', order: 'asc'), style: 'color: black;'
+        -# %th= link_to t('activerecord.attributes.member.birthdate'), members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'birthdate', order: 'asc'), style: 'color: black;'
+        -# %th= link_to t('activerecord.attributes.member.gender'), members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'gender', order: 'asc'), style: 'color: black;'
+        -# %th= link_to t('activerecord.attributes.member.canton'), members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'canton', order: 'asc'), style: 'color: black;'
+        %th= link_to t('activerecord.attributes.member.abo_types'), members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'abo_types', order: 'asc'), style: 'color: black;'
+        -# %th= link_to t('activerecord.attributes.member.wants_newsletter_emails'), members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'wants_newsletter_emails', order: 'asc'), style: 'color: black;'
+        -# %th= link_to t('activerecord.attributes.member.wants_event_emails'), members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'wants_event_emails', order: 'asc'), style: 'color: black;'
+        %th.text-center= link_to t('activerecord.attributes.member.magma_coins')+'?', members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'magma_coins', order: 'asc'), style: 'color: black;'
+        %th.text-center= link_to t('activerecord.attributes.member.number_of_scans')+'?', members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'number_of_scans', order: 'asc'), style: 'color: black;'
+        %th= link_to t('activerecord.attributes.member.comment'), members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'comment', order: 'asc'), style: 'color: black;'
+        %th.text-center= link_to t('activerecord.attributes.member.locked')+'?', members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'locked', order: 'asc'), style: 'color: black;'
 
     %tbody.member-list-body.with-show
       - @members.each do |member|
@@ -57,10 +58,9 @@
           -# %td= member.mobile_number
           -# %td= member.gender
           -# %td= member.canton
-          %td= member.abo_types.active.map(&:name).join(', ')
+          %td= member.abo_types.map(&:name).join(', ')
           -# %td= member.wants_newsletter_emails
           -# %td= member.wants_event_emails
-          -# %td= member.card_id
           %td.text-center= member.magma_coins
           %td.text-center= member.scan_events.count
           %td= member.comment

@@ -67,6 +67,15 @@ document.addEventListener 'turbolinks:load', ->
   $('tbody.with-show').on 'click', 'tr', (e) ->
     openUrl(this, e, (e.button == 1));
 
+  # a click on sort table header toggels its order param
+  $('th a').on 'click', (e) ->
+    wlhref = window.location.href
+    if wlhref.includes('order=') && this.href.includes('order=')
+      if wlhref.includes('order=asc')
+        this.href = this.href.replace('order=asc', 'order=desc')
+      else if wlhref.includes('order=desc')
+        this.href = this.href.replace('order=desc', 'order=asc')
+
   $('.scroll-top').on 'click', (e) ->
     $('html, body').animate({
       scrollTop: 0

@@ -2,6 +2,8 @@ include Recaptcha::Adapters::ViewMethods
 include Recaptcha::Adapters::ControllerMethods
 
 class MembersController < ApplicationController
+  require 'will_paginate/array'
+
   before_action :authenticate_user!, except: [:new_extern, :create_extern, :success_extern]
   before_action :set_member, only: [:show, :edit, :update, :destroy]
   before_action { @section = 'members' }
@@ -24,7 +26,32 @@ class MembersController < ApplicationController
         end
       end
     end
-    @members = @members.order(created_at: :desc).paginate(page: params[:page], per_page: Member::MAX_MEMBERS_PER_PAGE)
+    # handle sort parameter
+    if params[:sort].present?
+      case params[:sort]
+      when 'abo_types'
+        if params[:order] == "desc"
+          @members = @members.sort_by do |m|
+            m.abo_types.map(&:name).join(', ')
+          end.paginate(page: params[:page], per_page: Member::MAX_MEMBERS_PER_PAGE)
+        else
+          @members = @members.sort_by do |m|
+            m.abo_types.map(&:name).join(', ')
+          end.reverse.paginate(page: params[:page], per_page: Member::MAX_MEMBERS_PER_PAGE)
+        end
+      when 'number_of_scans'
+        @members = @members.left_joins(:scan_events).group(:id).order('COUNT(scan_events.id)').paginate(page: params[:page], per_page: Member::MAX_MEMBERS_PER_PAGE)
+      else
+        sanitizedOrder = ActiveRecord::Base.sanitize_sql_for_order("members.?".gsub('?', params[:sort]))
+        @members = @members.order(sanitizedOrder).paginate(page: params[:page], per_page: Member::MAX_MEMBERS_PER_PAGE)
+      end
+    else
+      @members = @members.order(created_at: :desc).paginate(page: params[:page], per_page: Member::MAX_MEMBERS_PER_PAGE)
+    end
+    # handle the order parameter
+    if params[:order] == "desc" and !@members.is_a?(Array)
+      @members = @members.reverse_order
+    end
   end
 
   # GET /members/1
