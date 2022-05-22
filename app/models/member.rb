@@ -12,6 +12,29 @@ class Member < ApplicationRecord
     (!self.card_id.present?) && self.created_at.today?
   end
 
+  def self.search(search)
+    if search
+      sanitizedSearch = ActiveRecord::Base.sanitize_sql_like(search)
+      where("first_name ~* '.*" + ApplicationController.helpers.unaccent(sanitizedSearch) + ".*'").or(where(  # ~* is the case-insensitive regexp operator
+        "last_name ~* '.*" + ApplicationController.helpers.unaccent(sanitizedSearch) + ".*'").or(where(
+            "email ~* '.*" + ApplicationController.helpers.unaccent(sanitizedSearch) + ".*'"
+          )
+        )
+      )
+    else
+      :all
+    end
+  end
+
+  def self.iLikeSearch(search)
+    if search
+      sanitizedSearch = ActiveRecord::Base.sanitize_sql_like(search)
+      where("first_name ILIKE ? or last_name ILIKE ? or email ILIKE ?", "%#{sanitizedSearch}%", "%#{sanitizedSearch}%", "%#{sanitizedSearch}%")
+    else
+      :all
+    end
+  end
+
   def self.sync_with_ggleap_users
     jwt = Request::ggleap_auth
     ggleap_users = Request::ggleap_users(jwt)

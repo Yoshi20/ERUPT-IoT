@@ -11,6 +11,15 @@
       = "External link:"
       = link_to members_extern_path, members_extern_path, style: 'font-size: small;'
 
+-# search form
+.row
+  .col
+    .search-form.form-group
+      = form_tag members_path, method: 'get', class: 'form-inline' do
+        = search_field_tag :search, params[:search], class: 'form-control', placeholder: t('members.search')
+        = button_tag type: 'submit', class: 'btn btn-default', name: nil do
+          %span.material-icons= 'search'
+
 .member-list
   %table.table.table-hover
     %thead.table-header

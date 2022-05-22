@@ -9,7 +9,22 @@ class MembersController < ApplicationController
   # GET /members
   # GET /members.json
   def index
-    @members = Member.all.includes(:abo_types, :scan_events).order(created_at: :desc).paginate(page: params[:page], per_page: Member::MAX_MEMBERS_PER_PAGE)
+    @members = Member.all.includes(:abo_types, :scan_events)
+    # handle search parameter
+    if params[:search].present?
+      begin
+        @members = @members.search(params[:search])
+        if @members.empty?
+          flash.now[:alert] = t('flash.alert.search_members')
+        end
+      rescue ActiveRecord::StatementInvalid
+        @members = Member.all.includes(:abo_types, :scan_events).iLikeSearch(params[:search])
+        if @members.empty?
+          flash.now[:alert] = t('flash.alert.search_members')
+        end
+      end
+    end
+    @members = @members.order(created_at: :desc).paginate(page: params[:page], per_page: Member::MAX_MEMBERS_PER_PAGE)
   end
 
   # GET /members/1

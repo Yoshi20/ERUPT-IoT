@@ -57,7 +57,9 @@
     text-align: center;
   }
   .btn {
-    width: 10%;
+    width: 9%; // fallback
+    width: calc(10% - 5px);
+    margin-left: 5px;
     border: none;
     .material-icons {
       font-size: 20px;
