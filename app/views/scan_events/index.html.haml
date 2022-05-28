@@ -63,7 +63,7 @@
 
     %tbody.scan_event-list-body#scan_events
       - @scan_events.each do |scan_event|
-        = render partial: 'scan_event', locals: {scan_event: scan_event}
+        = render partial: 'scan_event', locals: {scan_event: scan_event} if scan_event.member.present?
 
   .admin-actions
     .admin-actions__link
