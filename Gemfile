@@ -109,3 +109,6 @@ gem 'httparty'
 
 # See https://github.com/mislav/will_paginate
 gem 'will_paginate'
+
+# See https://github.com/argerim/select2-rails
+gem "select2-rails"

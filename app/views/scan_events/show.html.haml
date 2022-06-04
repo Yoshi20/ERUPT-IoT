@@ -13,7 +13,21 @@
 
       = form_for @scan_event do |f|
         .field.form-group
-          = f.select :member_id, options_for_select(members_no_card_id_for_select, @scan_event.member_id), {include_blank: true}
-
+          = f.select :member_id, options_for_select(members_no_card_id_for_select, @scan_event.member_id), {include_blank: true}, class: 'form-control', id: 'select2'
         .actions.form-group.text-center
           = f.submit t('scan_events.link'), class:'btn btn-ghost'
+
+:javascript
+  document.addEventListener('turbolinks:load', function() {
+    $('#select2').select2({
+      theme: "bootstrap",
+      // language: I18n.locale
+    });
+  });
+
+:css
+  .select2 {
+    width: 330px !important;
+    margin-left: auto;
+    margin-right: auto;
+  }

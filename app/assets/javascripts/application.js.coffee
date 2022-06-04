@@ -14,6 +14,7 @@
 #= require turbolinks
 #= require jquery3
 #= require bootstrap-sprockets
+#= require select2
 #= require_tree ./channels
 #= require_tree .
 

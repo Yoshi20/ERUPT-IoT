@@ -258,6 +258,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    select2-rails (4.0.13)
     selenium-webdriver (4.1.0)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
@@ -341,6 +342,7 @@ DEPENDENCIES
   recaptcha
   redis (~> 4.0)
   sass-rails (>= 6)
+  select2-rails
   selenium-webdriver
   spring
   turbolinks (~> 5)
