@@ -1,8 +1,8 @@
-%tr{id: "order-#{order.id}"}
-  %td= order.title
+%tr{id: "order-#{order[:id]}"}
+  %td= order[:title] + (order[:count] > 1 ? " (#{order[:count]})" : '')
   %td
-    = form_for order, role: 'form', method: :patch do |f|
+    = form_for Order.find(order[:id]), role: 'form', method: :patch do |f|
       = f.check_box :acknowledged, checked: true, class: 'd-none'
       = f.button(type: 'submit', class:'btn btn-block btn-lg btn-sstm', style: 'height: 40px;') do
         = t('orders.close')
-  %td= order.created_at.localtime.to_s(:custom_datetime_hour)
+  %td= order[:created_at].localtime.to_s(:custom_datetime_hour)

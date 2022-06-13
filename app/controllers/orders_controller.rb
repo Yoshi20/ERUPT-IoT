@@ -10,15 +10,22 @@ class OrdersController < ApplicationController
 
   # GET /orders_fullscreen
   def index_open
-    @orders = Order.open
+    @orders = Order.open_as_hash_with_counter
     render "index_open", layout: "application_fullscreen"
   end
 
   # GET /orders/1
   # GET /orders/1.json
   def show
+    order = {}
+    Order.open_as_hash_with_counter.each do |o|
+      if o[:title] == @order.title
+        order = o
+        break
+      end
+    end
     respond_to do |format|
-      format.js {render partial: 'single_order', locals: {order: @order}, layout: false}
+      format.js {render partial: 'single_order', locals: {order: order}, layout: false}
     end
   end
 
@@ -29,6 +36,11 @@ class OrdersController < ApplicationController
       @order.acknowledge(current_user) if order_params[:acknowledged]
       if @order.save
         if order_params[:acknowledged]
+          # Also ack orders with the same title
+          Order.open.where(title: @order.title).each do |o|
+            o.acknowledge(current_user)
+            o.save
+          end
           open_order_ctr = Order.open.count
           ActionCable.server.broadcast('OrdersChannel', @order.attributes.except("data")) # broadcast acknowledged order
           WifiDisplay.all.each do |disp|

@@ -24,6 +24,17 @@ function startInterval() {
   }, 1000);
 }
 
+function exctractTitle(html, withoutCounter = true) {
+  // <tr id='order-410'>
+  // <td>test_device (16)</td>
+  // <td>
+  let new_title = html.substring(html.indexOf('<td>')+4, html.indexOf('</td>'))
+  if(withoutCounter && new_title.indexOf(')') >= 0) {
+    new_title = new_title.substring(0, new_title.lastIndexOf(' '))
+  }
+  return new_title
+}
+
 App.orders = App.cable.subscriptions.create('OrdersChannel', {
   received: function(order) {
     if (order.acknowledged) {
@@ -44,17 +55,33 @@ App.orders = App.cable.subscriptions.create('OrdersChannel', {
           return console.log("error: get order partial ajax request");
         },
         success: function(response) {
-          $('#orders').append(response);
-          $tr = $('#orders').find('tr:last')
-          $tr.addClass('fadeIn')
-          tds[i] = $tr.find('td:last')
-          ctrs[i] = 0
-          i++;
-          set_orders_event_listener();
-          if (intervalID == 0) {
-            intervalID = startInterval();
+          /* Check if title already exists */
+          let foundTitle = false
+          let new_title = exctractTitle(response, true);
+          $('#orders tr').each(function(i) {
+            let title = exctractTitle(this.innerHTML, true);
+            if(title == new_title) {
+              /* We have a match -> only update counter (title) */
+              let new_title_with_counter = exctractTitle(response, false);
+              $(this).find('td')[0].innerHTML = new_title_with_counter;
+              foundTitle = true;
+              return false;
+            }
+          })
+          if (!foundTitle) {
+            /* This is a new order -> append and start timer */
+            $('#orders').append(response);
+            $tr = $('#orders').find('tr:last');
+            $tr.addClass('fadeIn');
+            tds[i] = $tr.find('td:last');
+            ctrs[i] = 0;
+            i++;
+            set_orders_event_listener();
+            if (intervalID == 0) {
+              intervalID = startInterval();
+            }
           }
-          return
+          return;
         }
       });
     }
