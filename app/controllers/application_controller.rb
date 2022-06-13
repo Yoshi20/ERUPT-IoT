@@ -2,6 +2,9 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
+  rescue_from ActionController::InvalidAuthenticityToken do |ex|
+    redirect_to new_user_session_path, alert: t('flash.alert.login_failed')
+  end
 
   before_action :set_locale
   before_action :authenticate_user!, except: [:index, :show]

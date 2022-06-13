@@ -51,6 +51,7 @@ de:
       updating_order: "Bestellung konnte nicht aktualisiert werden!"
       deleting_order: "Bestellung konnte nicht gelöscht werden!"
       sync_with_ggleap: "Mitglieder konnten nicht mit den ggLeap Benutzer synchronisiert werden!"
+      login_failed: "Login fehlgeschlagen! Bitte versuche es erneut"
 
   navigation:
     account:

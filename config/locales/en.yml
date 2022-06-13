@@ -51,6 +51,7 @@ en:
       updating_order: "Order couldn't be updated!"
       deleting_order: "Order couldn't be deleted!"
       sync_with_ggleap: "Members couldn't be synchronized with the ggLeap users!"
+      login_failed: "Login failed! Please try again"
 
   navigation:
     account:
