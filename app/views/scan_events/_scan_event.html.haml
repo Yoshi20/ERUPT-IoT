@@ -1,23 +1,24 @@
-%tr{'data-id': scan_event.id, 'data-component'=>'scan_event', style: "background-color: #{scan_event.new? ? 'aqua' : ''};"}
-  %td= scan_event.created_at.localtime.to_s(:custom_datetime)
-  - member = scan_event.member
-  %td= member&.first_name
-  %td= member&.last_name
-  %td= member&.email
-  -# %td= member&.birthdate
-  -# %td= member&.mobile_number
-  -# %td= member&.gender
-  -# %td= member&.canton
-  %td= scan_event.abo_types.present? ? scan_event.abo_types : member&.abo_types.active.map(&:name).join(', ')
-  -# %td= member&.wants_newsletter_emails
-  -# %td= member&.wants_event_emails
-  -# %td= member&.card_id
-  %td.text-center= member&.magma_coins
-  -# %td= member&.expiration_date.localtime.to_s(:custom_datetime)
-  -# %td= member&.comment
+- if scan_event.present?
+  %tr{'data-id': scan_event.id, 'data-component'=>'scan_event', style: "background-color: #{scan_event.new? ? 'aqua' : ''};"}
+    %td= scan_event.created_at.localtime.to_s(:custom_datetime)
+    - member = scan_event.member
+    %td= member&.first_name
+    %td= member&.last_name
+    %td= member&.email
+    -# %td= member&.birthdate
+    -# %td= member&.mobile_number
+    -# %td= member&.gender
+    -# %td= member&.canton
+    %td= scan_event.abo_types.present? ? scan_event.abo_types : member&.abo_types&.active&.map(&:name)&.join(', ')
+    -# %td= member&.wants_newsletter_emails
+    -# %td= member&.wants_event_emails
+    -# %td= member&.card_id
+    %td.text-center= member&.magma_coins
+    -# %td= member&.expiration_date.localtime.to_s(:custom_datetime)
+    -# %td= member&.comment
 
-  %td.admin-list-actions
-    .admin-list-actions__link
-      = form_for scan_event, method: :delete, role: 'form', class:'form' do |f|
-        = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
-          %span.material-icons.admin-actions__link__icon= 'delete'
+    %td.admin-list-actions
+      .admin-list-actions__link
+        = form_for scan_event, method: :delete, role: 'form', class:'form' do |f|
+          = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
+            %span.material-icons.admin-actions__link__icon= 'delete'
