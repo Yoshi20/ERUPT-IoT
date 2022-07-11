@@ -75,5 +75,8 @@
         %b= t('activerecord.attributes.member.number_of_scans') + ':'
         = @member.scan_events.count
       %p
+        %b= t('activerecord.attributes.member.is_hourly_worker') + ':'
+        = @member.is_hourly_worker
+      %p
         %b= t('activerecord.attributes.member.locked') + ':'
         = @member.locked

@@ -68,6 +68,10 @@
       = f.text_area :comment, class: 'form-control'
     .form-group
       .form-check
+        = f.check_box :is_hourly_worker, checked: (params[:member].present? ? (params[:member][:is_hourly_worker] == "1") : @member.is_hourly_worker), class:'form-check-input mr-2'
+        = f.label :is_hourly_worker, class:'form-check-label'
+    .form-group
+      .form-check
         = f.check_box :locked, checked: (params[:member].present? ? (params[:member][:locked] == "1") : @member.locked), class:'form-check-input mr-2'
         = f.label :locked, class:'form-check-label'
 

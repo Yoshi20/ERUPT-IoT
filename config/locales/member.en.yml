@@ -21,8 +21,9 @@ en:
         magma_coins: "Magma coins"
         expiration_date: "Expiration date"
         number_of_scans: "Number of scans"
-        locked: "Locked"
         ggleap_uuid: "ggLeap UUID"
+        is_hourly_worker: "Hourly worker"
+        locked: "Locked"
   members:
     title: "Members"
     new: "New member"

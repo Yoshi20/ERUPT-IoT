@@ -22,6 +22,8 @@ de:
         expiration_date: "Ablaufdatum"
         number_of_scans: "Anzahl Scanns"
         ggleap_uuid: "ggLeap UUID"
+        is_hourly_worker: "Stundenarbeiter"
+        locked: "Gesperrt"
   members:
     title: "Mitglieder"
     new: "Neues Mitglied"

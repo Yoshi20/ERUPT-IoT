@@ -39,7 +39,7 @@ class ScanEventsController < ApplicationController
       if member.ggleap_uuid.present?
         jwt = Request::ggleap_auth
         ggleap_user = Request::ggleap_user(jwt, member.ggleap_uuid)
-        member.magma_coins = ggleap_user["Balance"]
+        member.magma_coins = ggleap_user["Balance"] # blup: this should be CoinBalance not Balance
         member.save
       end
       # send data via ws
@@ -67,6 +67,7 @@ class ScanEventsController < ApplicationController
         }
       }
       Pusher::PushNotifications.publish_to_interests(interests: ['scan_events'], payload: data)
+      # blup: hier Stündeler händlä...
     else
       # no member yet -> create "empty" ScanEvent
       scan_event = ScanEvent.create(post_body: post_body, card_id: params[:UID])
