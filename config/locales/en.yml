@@ -114,6 +114,10 @@ en:
     li_8: "Make sure everything is working by scanning the card again and checking that the new scann event is showing the new member's data"
     li_9: "Put the stickers according to the selected abo type(s) on the member card"
 
+  time_stamps:
+    title: "Time stamps"
+    title2: "Time stamps of the hourly worker"
+
   orders:
     title: "Orders"
     open:

@@ -1,0 +1,35 @@
+.row
+  .col
+    %h1.page__title= t('time_stamps.title2')
+
+.row
+  .col
+    %p= "Total scan_events count = #{@scan_events.count}"
+
+.scan_event-list
+  %table.table.table-hover
+    %thead.table-header
+      %tr
+        %th Timestamp
+        %th= t('activerecord.attributes.member.first_name')
+        %th= t('activerecord.attributes.member.last_name')
+        %th= t('activerecord.attributes.member.email')
+        -# %th= t('activerecord.attributes.member.birthdate')
+        -# %th= t('activerecord.attributes.member.gender')
+        -# %th= t('activerecord.attributes.member.canton')
+        %th= t('activerecord.attributes.member.abo_types')
+        -# %th= t('activerecord.attributes.member.wants_newsletter_emails')
+        -# %th= t('activerecord.attributes.member.wants_event_emails')
+        -# %th= t('activerecord.attributes.member.card_id')
+        %th.text-center= t('activerecord.attributes.member.magma_coins')
+        -# %th= t('activerecord.attributes.member.expiration_date')
+        -# %th= t('activerecord.attributes.member.comment')
+
+    %tbody.scan_event-list-body#scan_events
+      - @scan_events.each do |scan_event|
+        = render partial: 'scan_events/scan_event', locals: {scan_event: scan_event} if scan_event.member.present?
+
+  .admin-actions
+    .admin-actions__link
+      = link_to scan_events_path, class:'btn btn-ghost btn-square' do
+        %span.material-icons.admin-actions__link__icon= 'refresh'

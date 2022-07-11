@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   resources :orders, only: [:index, :show, :update, :destroy]
   get 'orders_fullscreen' => 'orders#index_open'
 
+  get 'time_stamps' => 'time_stamps#index'
+
   devise_for :users, controllers: { registrations: 'users/registrations', sessions: 'users/sessions', passwords: 'users/passwords' }
   resources :users, only: [:index, :update, :destroy]
 

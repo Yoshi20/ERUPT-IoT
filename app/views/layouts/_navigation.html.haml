@@ -27,6 +27,11 @@
 
         %li.nav-item.nav-link.d-none.d-lg-block= '/'
 
+        %li.nav-item{role: "presentation", class: (@section == 'time_stamps' ? 'active' : 'inactive')}
+          = link_to t('time_stamps.title'), time_stamps_path, class: 'nav-link'
+
+        %li.nav-item.nav-link.d-none.d-lg-block= '/'
+
         %li.nav-item{role: "presentation", class: (@section == 'feedbacks' ? 'active' : 'inactive')}
           = link_to t('feedbacks.title'), feedbacks_path, class: 'nav-link'
 
