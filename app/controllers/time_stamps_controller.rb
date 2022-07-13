@@ -5,15 +5,14 @@ class TimeStampsController < ApplicationController
   # GET /time_stamps
   # GET /time_stamps.json
   def index
-    @total_scan_events = ScanEvent.all.includes(:member).where(member: {is_hourly_worker: true})
-    @scan_events = @total_scan_events.order(created_at: :desc).limit(20)
+    @total_scan_events = ScanEvent.all.includes(:member).where(member: {is_hourly_worker: true}).where("hourly_worker_in IS true OR hourly_worker_out IS true")
+    @scan_events = @total_scan_events.order(created_at: :desc).limit(30)
   end
 
   # POST /time_stamps/export
   require 'csv'
   def export
-    @scan_events = ScanEvent.all.includes(:member).where(member: {is_hourly_worker: true}).order(created_at: :desc)
-    first_scan_event = @scan_events.first
+    @scan_events = ScanEvent.all.includes(:member).where(member: {is_hourly_worker: true}).where("hourly_worker_in IS true OR hourly_worker_out IS true").order(created_at: :desc)
     csv_data = CSV.generate do |csv|
       @scan_events.each_with_index do |scan_event, i|
         scan_event_hash = scan_event.attributes.slice(

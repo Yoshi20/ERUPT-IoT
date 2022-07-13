@@ -24,10 +24,9 @@
   %table.table.table-hover
     %thead.table-header
       %tr
-
-
         %th.text-center= link_to t('activerecord.attributes.member.card_id')+'?', members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'card_id', order: 'asc'), style: 'color: black;'
         %th.text-center= link_to t('activerecord.attributes.member.ggleap_uuid')+'?', members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'ggleap_uuid', order: 'asc'), style: 'color: black;'
+        %th.text-center= link_to t('activerecord.attributes.member.is_hourly_worker')+'?', members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'is_hourly_worker', order: 'asc'), style: 'color: black;'
         %th= link_to t('activerecord.attributes.member.first_name'), members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'first_name', order: 'asc'), style: 'color: black;'
         %th= link_to t('activerecord.attributes.member.last_name'), members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'last_name', order: 'asc'), style: 'color: black;'
         %th= link_to t('activerecord.attributes.member.email'), members_path(search: params[:search], filter: params[:filter], 'filter-data': params['filter-data'], sort: 'email', order: 'asc'), style: 'color: black;'
@@ -50,6 +49,9 @@
               .material-icons= 'done'
           %td.text-center
             - if member.ggleap_uuid.present?
+              .material-icons= 'done'
+          %td.text-center
+            - if member.is_hourly_worker.present?
               .material-icons= 'done'
           %td= member.first_name
           %td= member.last_name
