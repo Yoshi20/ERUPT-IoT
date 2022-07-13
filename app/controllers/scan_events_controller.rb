@@ -13,16 +13,17 @@ class ScanEventsController < ApplicationController
   # GET /scan_events
   # GET /scan_events.json
   def index
-    @total_scan_events = ScanEvent.where.not(member_id: nil)
+    @total_scan_events = ScanEvent.includes(:member).where.not(member_id: nil)
     @scan_events = @total_scan_events.order(created_at: :desc).limit(10)
     @total_scan_events_no_member = ScanEvent.no_member
     @scan_events_no_member = @total_scan_events_no_member.order(created_at: :desc).limit(10)
   end
 
   def show
+    is_hourly_worker = @scan_event.hourly_worker_in || @scan_event.hourly_worker_out
     respond_to do |format|
       format.html {render 'show'}
-      format.js {render partial: 'scan_event', locals: {scan_event: @scan_event, layout: false}}
+      format.js {render partial: is_hourly_worker ? 'time_stamps/scan_event' : 'scan_events/scan_event', locals: {scan_event: @scan_event, layout: false}}
     end
   end
 
@@ -67,7 +68,24 @@ class ScanEventsController < ApplicationController
         }
       }
       Pusher::PushNotifications.publish_to_interests(interests: ['scan_events'], payload: data)
-      # blup: hier Stündeler händlä...
+      # hourly worker
+      if member.is_hourly_worker
+        # find last scan_event
+        now = Time.now
+        last_scan_events = ScanEvent.where(member_id: member.id).where.not(id: scan_event.id)
+        last_scan_event = last_scan_events.last
+        scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("created_at >= ?", now.beginning_of_month)
+        if last_scan_event.present? && last_scan_event.hourly_worker_in
+          delta_time = now.to_i - last_scan_event.created_at.to_i
+          scan_event.update(
+            hourly_worker_out: true,
+            hourly_worker_delta_time: delta_time,
+            hourly_worker_monthly_time: delta_time + scan_event_this_month.sum(&:hourly_worker_delta_time)
+          )
+        else
+          scan_event.update(hourly_worker_in: true)
+        end
+      end
     else
       # no member yet -> create "empty" ScanEvent
       scan_event = ScanEvent.create(post_body: post_body, card_id: params[:UID])

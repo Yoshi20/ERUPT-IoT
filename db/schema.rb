@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_10_135617) do
+ActiveRecord::Schema.define(version: 2022_07_11_181636) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,6 +105,10 @@ ActiveRecord::Schema.define(version: 2022_07_10_135617) do
     t.string "post_body"
     t.string "card_id"
     t.string "abo_types"
+    t.boolean "hourly_worker_in", default: false
+    t.boolean "hourly_worker_out", default: false
+    t.bigint "hourly_worker_delta_time"
+    t.bigint "hourly_worker_monthly_time"
   end
 
   create_table "users", force: :cascade do |t|
