@@ -76,11 +76,12 @@ class ScanEventsController < ApplicationController
       if member.is_hourly_worker
         # find last scan_event
         now = Time.now
-        last_scan_events = ScanEvent.where(member_id: member.id).where.not(id: scan_event.id)
+        last_scan_events = ScanEvent.where(member_id: member.id).where.not(id: scan_event.id).where("hourly_worker_time_stamp < ?", now)
         last_scan_event = last_scan_events.last
         scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", now.beginning_of_month)
         if last_scan_event.present? && last_scan_event.hourly_worker_in
           delta_time = now.to_i - last_scan_event.hourly_worker_time_stamp.to_i
+          delta_time = delta_time - 30.minutes.to_i if delta_time.present? && delta_time > 5.hours.to_i
           scan_event.update(
             hourly_worker_time_stamp: now,
             hourly_worker_out: true,
@@ -111,10 +112,11 @@ class ScanEventsController < ApplicationController
     respond_to do |format|
       if scan_event_params["hourly_worker_time_stamp(5i)"].present?
         time_stamp = Time.new(scan_event_params['hourly_worker_time_stamp(1i)'], scan_event_params['hourly_worker_time_stamp(2i)'], scan_event_params['hourly_worker_time_stamp(3i)'],  scan_event_params['hourly_worker_time_stamp(4i)'],  scan_event_params['hourly_worker_time_stamp(5i)'])
-        last_scan_events = ScanEvent.where(member_id: @scan_event.member.id).where.not(id: @scan_event.id)
+        last_scan_events = ScanEvent.where(member_id: @scan_event.member.id).where.not(id: @scan_event.id).where("hourly_worker_time_stamp < ?", time_stamp)
         last_scan_event = last_scan_events.last
         scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", time_stamp.beginning_of_month)
         delta_time = time_stamp.to_i - last_scan_event.hourly_worker_time_stamp.to_i if @scan_event.hourly_worker_out
+        delta_time = delta_time - 30.minutes.to_i if delta_time.present? && delta_time > 5.hours.to_i
         monthly_time = delta_time + scan_event_this_month.sum(&:hourly_worker_delta_time) if @scan_event.hourly_worker_out
         if @scan_event.update(hourly_worker_time_stamp: time_stamp, hourly_worker_delta_time: delta_time, hourly_worker_monthly_time: monthly_time)
           format.html { redirect_to time_stamps_url, notice: t('flash.notice.updating_scan_event') }
