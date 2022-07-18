@@ -11,7 +11,11 @@ App.scan_events = App.cable.subscriptions.create('ScanEventsChannel', {
         return console.log("error: get scan_event partial ajax request");
       },
       success: function(response) {
-        $('#scan_events').prepend(response);
+        if (response.includes('time_stamp')) {
+          $('#time_stamps').prepend(response);
+        } else {
+          $('#scan_events').prepend(response);
+        }
         return
       }
     });

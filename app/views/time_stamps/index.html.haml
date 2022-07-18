@@ -20,7 +20,7 @@
         %th.text-center= "Δt [h]"
         %th.text-center= "Monthly Δt [h]"
 
-    %tbody.scan_event-list-body#scan_events
+    %tbody.scan_event-list-body#time_stamps
       - @scan_events.each do |scan_event|
         = render partial: 'time_stamps/scan_event', locals: {scan_event: scan_event} if scan_event.member.present?
 
