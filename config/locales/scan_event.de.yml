@@ -11,5 +11,6 @@ de:
   scan_events:
     title: "Scan-Events"
     title2: "Scan-Events ohne Mitglied-ID"
+    edit: "Scan-Event bearbeiten"
     link_text: "Willst du diese Karte mit einem Mitglied verknüpfen?"
     link: "Verknüpfen"

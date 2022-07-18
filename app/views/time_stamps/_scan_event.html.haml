@@ -1,16 +1,19 @@
-- if scan_event.present?
+- if scan_event.present? && scan_event.hourly_worker_time_stamp.present?
   %tr{'data-id': scan_event.id, 'data-component'=>'scan_event', style: "background-color: #{scan_event.hourly_worker_in ? 'yellow' : 'lightgreen'};"}
-    %td= scan_event.created_at.localtime.to_s(:custom_datetime)
+    %td= scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime)
     - member = scan_event.member
     %td= member&.first_name
     %td= member&.last_name
     -# %td.text-center= scan_event.hourly_worker_in
     -# %td.text-center= scan_event.hourly_worker_out
-    %td.text-center= scan_event.hourly_worker_delta_time.present? ? (scan_event.hourly_worker_delta_time.to_f/60).round(2) : ""
+    %td.text-center= scan_event.hourly_worker_delta_time.present? ? (scan_event.hourly_worker_delta_time.to_f/3600).round(2) : ""
     %td.text-center= scan_event.hourly_worker_monthly_time.present? ? (scan_event.hourly_worker_monthly_time.to_f/3600).round(2) : ""
 
     - if current_user.present? && current_user.admin?
       %td.admin-list-actions
+        .admin-list-actions__link
+          = link_to edit_scan_event_path(scan_event), class: 'btn btn-sstm btn-square' do
+            %span.material-icons.admin-actions__link__icon= 'edit'
         .admin-list-actions__link
           = form_for scan_event, method: :delete, role: 'form', class:'form' do |f|
             = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do

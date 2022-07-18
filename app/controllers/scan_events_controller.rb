@@ -7,7 +7,7 @@ class ScanEventsController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :authenticate_user!, only: [:index]
   skip_before_action :authenticate_user!, only: [:create]
-  before_action :set_scan_event, only: [:show, :update, :destroy]
+  before_action :set_scan_event, only: [:show, :edit, :update, :destroy]
   before_action { @section = 'scan_events' }
 
   # GET /scan_events
@@ -25,6 +25,10 @@ class ScanEventsController < ApplicationController
       format.html {render 'show'}
       format.js {render partial: is_hourly_worker ? 'time_stamps/scan_event' : 'scan_events/scan_event', locals: {scan_event: @scan_event, layout: false}}
     end
+  end
+
+  # GET /scan_events/1/edit
+  def edit
   end
 
   # POST /scan_events
@@ -74,16 +78,17 @@ class ScanEventsController < ApplicationController
         now = Time.now
         last_scan_events = ScanEvent.where(member_id: member.id).where.not(id: scan_event.id)
         last_scan_event = last_scan_events.last
-        scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("created_at >= ?", now.beginning_of_month)
+        scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", now.beginning_of_month)
         if last_scan_event.present? && last_scan_event.hourly_worker_in
-          delta_time = now.to_i - last_scan_event.created_at.to_i
+          delta_time = now.to_i - last_scan_event.hourly_worker_time_stamp.to_i
           scan_event.update(
+            hourly_worker_time_stamp: now,
             hourly_worker_out: true,
             hourly_worker_delta_time: delta_time,
             hourly_worker_monthly_time: delta_time + scan_event_this_month.sum(&:hourly_worker_delta_time)
           )
         else
-          scan_event.update(hourly_worker_in: true)
+          scan_event.update(hourly_worker_time_stamp: now, hourly_worker_in: true)
         end
       end
     else
@@ -104,7 +109,21 @@ class ScanEventsController < ApplicationController
   # PATCH/PUT /scan_events/1.json
   def update
     respond_to do |format|
-      if @scan_event.card_id.present?
+      if scan_event_params["hourly_worker_time_stamp(5i)"].present?
+        time_stamp = Time.new(scan_event_params['hourly_worker_time_stamp(1i)'], scan_event_params['hourly_worker_time_stamp(2i)'], scan_event_params['hourly_worker_time_stamp(3i)'],  scan_event_params['hourly_worker_time_stamp(4i)'],  scan_event_params['hourly_worker_time_stamp(5i)'])
+        last_scan_events = ScanEvent.where(member_id: @scan_event.member.id).where.not(id: @scan_event.id)
+        last_scan_event = last_scan_events.last
+        scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", time_stamp.beginning_of_month)
+        delta_time = time_stamp.to_i - last_scan_event.hourly_worker_time_stamp.to_i if @scan_event.hourly_worker_out
+        monthly_time = delta_time + scan_event_this_month.sum(&:hourly_worker_delta_time) if @scan_event.hourly_worker_out
+        if @scan_event.update(hourly_worker_time_stamp: time_stamp, hourly_worker_delta_time: delta_time, hourly_worker_monthly_time: monthly_time)
+          format.html { redirect_to time_stamps_url, notice: t('flash.notice.updating_scan_event') }
+          format.json { render :show, status: :ok, location: @scan_event }
+        else
+          format.html { render :edit, alert: t('flash.alert.updating_scan_event') }
+          format.json { render json: @scan_event.errors, status: :unprocessable_entity }
+        end
+      elsif @scan_event.card_id.present?
         member = Member.find(scan_event_params[:member_id]) if scan_event_params[:member_id].present?
         if member.present? && member.update(card_id: @scan_event.card_id)
           if @scan_event.update(member_id: scan_event_params[:member_id])
@@ -133,8 +152,9 @@ class ScanEventsController < ApplicationController
   # DELETE /scan_events/1.json
   def destroy
     respond_to do |format|
+      is_hourly_worker = @scan_event.hourly_worker_time_stamp.present?
       if @scan_event.destroy
-        format.html { redirect_to scan_events_url, notice: t('flash.notice.deleting_scan_event') }
+        format.html { redirect_to is_hourly_worker ? time_stamps_url : scan_events_url, notice: t('flash.notice.deleting_scan_event') }
         format.json { head :no_content }
       else
         format.html { render :show, alert: t('flash.alert.deleting_scan_event') }
@@ -151,7 +171,7 @@ class ScanEventsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def scan_event_params
-      params.require(:scan_event).permit(:member_id)
+      params.require(:scan_event).permit(:member_id, :hourly_worker_time_stamp)
     end
 
 end

@@ -11,5 +11,6 @@ en:
   scan_events:
     title: "Scan events"
     title2: "Scan events without member id"
+    edit: "Edit scan event"
     link_text: "Would you like to link this card with a member?"
     link: "Link"
