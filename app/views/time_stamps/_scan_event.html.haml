@@ -2,19 +2,26 @@
   %tr.time_stamp{'data-id': scan_event.id, 'data-component'=>'scan_event', style: "background-color: #{scan_event.hourly_worker_in ? 'yellow' : 'lightgreen'};"}
     - wd = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][scan_event.hourly_worker_time_stamp.localtime.wday]
     - datetime = scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime)
-    -# - from = scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime_hour)
-    -# - to = scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime_hour)
     %td= "#{wd}, #{datetime}"
     - member = scan_event.member
     %td= member&.first_name
     %td= member&.last_name
-    -# %td.text-center= scan_event.hourly_worker_in
-    -# %td.text-center= scan_event.hourly_worker_out
+    %td.text-center= scan_event.hourly_worker_in ? scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime_hour) : ""
+    %td.text-center= scan_event.hourly_worker_out ? scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime_hour) : ""
     %td.text-center= scan_event.hourly_worker_delta_time.present? ? (scan_event.hourly_worker_delta_time.to_f/3600).round(2) : ""
     %td.text-center= scan_event.hourly_worker_monthly_time.present? ? (scan_event.hourly_worker_monthly_time.to_f/3600).round(2) : ""
 
     - if current_user.present? && current_user.admin?
       %td.admin-list-actions
+        - if scan_event.hourly_worker_out
+          .admin-list-actions__link
+            = form_for scan_event, role: 'form', class:'form' do |f|
+              .field.form-group.hidden
+                .form-group-inline{style: 'width: 50%; margin-left: auto; margin-right: auto;'}
+                  = f.datetime_select :hourly_worker_time_stamp
+              .actions.form-group.text-center
+                = f.button class:'btn btn-sstm btn-square' do
+                  %span.material-icons.admin-actions__link__icon= 'refresh'
         .admin-list-actions__link
           = link_to edit_scan_event_path(scan_event), class: 'btn btn-sstm btn-square' do
             %span.material-icons.admin-actions__link__icon= 'edit'
