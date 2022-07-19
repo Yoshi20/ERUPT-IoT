@@ -40,38 +40,6 @@ class ScanEventsController < ApplicationController
     if member.present?
       member_abo_types = member.abo_types.map{|at| at.name}.join(' ')
       scan_event = ScanEvent.create(member_id: member.id, post_body: post_body, abo_types: member_abo_types, card_id: params[:UID])
-      # get data from ggLeap if present
-      if member.ggleap_uuid.present?
-        jwt = Request::ggleap_auth
-        ggleap_user = Request::ggleap_user(jwt, member.ggleap_uuid)
-        member.magma_coins = ggleap_user["Balance"] # blup: this should be CoinBalance not Balance
-        member.save
-      end
-      # send data via ws
-      post_data = {
-        first_name: member.first_name,
-        magma_coins: member.magma_coins,
-        abo_types: member_abo_types
-      }
-      WifiDisplay.all.each do |disp|
-        ActionCable.server.broadcast(
-          disp.name,
-          post_data
-        )
-      end
-      # push notification
-      data = {
-        web: {
-          notification: {
-            title: 'ScanEvent',
-            body: "#{member.first_name} #{member.last_name}",
-            icon: request.base_url + '/' + ActionController::Base.helpers.asset_path("logo.jpg"),
-            deep_link: (member.ggleap_uuid.present? ? "https://admin.ggleap.com/shop?user=#{member.ggleap_uuid}" : "https://admin.ggleap.com/users"),
-            hide_notification_if_site_has_focus: false,
-          }
-        }
-      }
-      Pusher::PushNotifications.publish_to_interests(interests: ['scan_events'], payload: data)
       # hourly worker
       if member.is_hourly_worker
         # find last scan_event
@@ -92,10 +60,48 @@ class ScanEventsController < ApplicationController
         else
           scan_event.update(
             hourly_worker_time_stamp: now,
-            hourly_worker_in: true
+            hourly_worker_in: true,
+            hourly_worker_monthly_time: last_scan_event&.hourly_worker_monthly_time
           )
         end
       end
+      # get data from ggLeap if present
+      if member.ggleap_uuid.present?
+        jwt = Request::ggleap_auth
+        ggleap_user = Request::ggleap_user(jwt, member.ggleap_uuid)
+        member.magma_coins = ggleap_user["Balance"] # blup: this should be CoinBalance not Balance
+        member.save
+      end
+      # send data via ws
+      post_data = {
+        first_name: member.first_name,
+        magma_coins: member.magma_coins,
+        abo_types: member_abo_types,
+        is_hourly_worker: member.is_hourly_worker,
+        hourly_worker_in: scan_event.hourly_worker_in,
+        hourly_worker_out: scan_event.hourly_worker_out,
+        hourly_worker_delta_time: scan_event.hourly_worker_delta_time,
+        hourly_worker_monthly_time: scan_event.hourly_worker_monthly_time
+      }
+      WifiDisplay.all.each do |disp|
+        ActionCable.server.broadcast(
+          disp.name,
+          post_data
+        )
+      end
+      # push notification
+      data = {
+        web: {
+          notification: {
+            title: 'ScanEvent',
+            body: "#{member.first_name} #{member.last_name}",
+            icon: request.base_url + '/' + ActionController::Base.helpers.asset_path("logo.jpg"),
+            deep_link: (member.ggleap_uuid.present? ? "https://admin.ggleap.com/shop?user=#{member.ggleap_uuid}" : "https://admin.ggleap.com/users"),
+            hide_notification_if_site_has_focus: false,
+          }
+        }
+      }
+      Pusher::PushNotifications.publish_to_interests(interests: ['scan_events'], payload: data)
     else
       # no member yet -> create "empty" ScanEvent
       scan_event = ScanEvent.create(post_body: post_body, card_id: params[:UID])

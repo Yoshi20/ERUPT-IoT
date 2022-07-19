@@ -9,7 +9,7 @@
     %td.text-center= scan_event.hourly_worker_in ? scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime_hour) : ""
     %td.text-center= scan_event.hourly_worker_out ? scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime_hour) : ""
     %td.text-center= scan_event.hourly_worker_delta_time.present? ? (scan_event.hourly_worker_delta_time.to_f/3600).round(2) : ""
-    %td.text-center= scan_event.hourly_worker_monthly_time.present? ? (scan_event.hourly_worker_monthly_time.to_f/3600).round(2) : ""
+    %td.text-center= (scan_event.hourly_worker_monthly_time.present? && scan_event.hourly_worker_out) ? (scan_event.hourly_worker_monthly_time.to_f/3600).round(2) : ""
 
     - if current_user.present? && current_user.admin?
       %td.admin-list-actions
