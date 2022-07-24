@@ -6,6 +6,7 @@ class TimeStampsController < ApplicationController
   # GET /time_stamps.json
   def index
     @total_scan_events = ScanEvent.all.includes(:member).where(member: {is_hourly_worker: true}).where("hourly_worker_in IS true OR hourly_worker_out IS true")
+    @total_scan_events = @total_scan_events.where(member: {id: params[:member_filter]}) if params[:member_filter].present?
     @scan_events = @total_scan_events.order(hourly_worker_time_stamp: :desc).limit(30)
   end
 

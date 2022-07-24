@@ -4,6 +4,10 @@
 
 .row
   .col
+    = form_tag time_stamps_path, method: :get, class: "form" do
+      .field.form-group{style: 'width: 60%;'}
+        = select_tag :member_filter, options_for_select(Member.where(is_hourly_worker: true).order(:first_name).map{ |m| ["#{m.first_name} #{m.last_name[0]}.", m.id]}, params[:member_filter]), {prompt: 'Filter', class: 'form-control', id: 'select_hourly_worker'}
+  .col
     %p= "Total scan_events count = #{@total_scan_events.count}"
   .col
     %p.text-center= "Yellow => IN / Green => OUT"
@@ -30,5 +34,12 @@
       = button_to time_stamps_export_path, method: :post, class:'btn btn-ghost btn-square' do
         %span.material-icons.admin-actions__link__icon= 'assignment_return'
     .admin-actions__link
-      = link_to time_stamps_path, class:'btn btn-ghost btn-square' do
+      = link_to time_stamps_path(member_filter: params[:member_filter]), class:'btn btn-ghost btn-square' do
         %span.material-icons.admin-actions__link__icon= 'refresh'
+
+:javascript
+  document.addEventListener('turbolinks:load', function() {
+    $('#select_hourly_worker').on("change", function() {
+      $(this).closest('form').submit();
+    });
+  });
