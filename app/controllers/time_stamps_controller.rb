@@ -27,7 +27,7 @@ class TimeStampsController < ApplicationController
           hour_out: scan_event.hourly_worker_out ? scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime_hour) : nil,
           delta_time_h: scan_event.hourly_worker_out ? (scan_event.hourly_worker_delta_time.to_f/3600).round(2) : nil,
           monthly_time_h: scan_event.hourly_worker_out ? (scan_event.hourly_worker_monthly_time.to_f/3600).round(2) : nil,
-          has_removed_30_min: scan_event.hourly_worker_has_removed_30_min,
+          removed_time_h: scan_event.hourly_worker_has_removed_30_min ? 0.5 : nil,
         }
         csv << scan_event_hash.keys if i == 0
         csv << scan_event_hash.values
