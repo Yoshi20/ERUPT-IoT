@@ -14,6 +14,7 @@ class TimeStampsController < ApplicationController
   require 'csv'
   def export
     @scan_events = ScanEvent.all.includes(:member).where(member: {is_hourly_worker: true}).where("hourly_worker_in IS true OR hourly_worker_out IS true").order(hourly_worker_time_stamp: :desc)
+    @scan_events = @scan_events.where(member: {id: params[:member_filter]}) if params[:member_filter].present?
     csv_data = CSV.generate do |csv|
       @scan_events.each_with_index do |scan_event, i|
         wd = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][scan_event.hourly_worker_time_stamp.localtime.wday]
@@ -32,7 +33,8 @@ class TimeStampsController < ApplicationController
         csv << scan_event_hash.values
       end
     end
-    send_data(csv_data.gsub('""', ''), type: 'text/csv', filename: "hourly_worker_time_stamps_#{Time.now.to_i}.csv")
+    hourly_worker_name = params[:member_filter].present? ? "#{Member.find(params[:member_filter]).first_name}s" : "hourly_worker"
+    send_data(csv_data.gsub('""', ''), type: 'text/csv', filename: "#{hourly_worker_name}_time_stamps_#{Time.now.to_i}.csv")
   end
 
 end

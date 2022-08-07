@@ -30,9 +30,10 @@
 
 
   .admin-actions
-    .admin-actions__link
-      = button_to time_stamps_export_path, method: :post, class:'btn btn-ghost btn-square' do
-        %span.material-icons.admin-actions__link__icon= 'assignment_return'
+    - if @scan_events.any?
+      .admin-actions__link
+        = button_to time_stamps_export_path(member_filter: params[:member_filter]), method: :post, class:'btn btn-ghost btn-square' do
+          %span.material-icons.admin-actions__link__icon= 'assignment_return'
     .admin-actions__link
       = link_to time_stamps_path(member_filter: params[:member_filter]), class:'btn btn-ghost btn-square' do
         %span.material-icons.admin-actions__link__icon= 'refresh'
