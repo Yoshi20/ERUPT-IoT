@@ -8,7 +8,12 @@
     %td= member&.last_name
     %td.text-center= scan_event.hourly_worker_in ? scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime_hour) : ""
     %td.text-center= scan_event.hourly_worker_out ? scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime_hour) : ""
-    %td.text-center= scan_event.hourly_worker_delta_time.present? ? (scan_event.hourly_worker_delta_time.to_f/3600).round(2) : ""
+    - hourly_worker_delta_time_string = ""
+    - if scan_event.hourly_worker_delta_time.present?
+      - hourly_worker_delta_time = (scan_event.hourly_worker_delta_time.to_f/3600)
+      - hourly_worker_delta_time_string = "<strong>#{hourly_worker_delta_time.round(2)}</strong>".html_safe
+      - hourly_worker_delta_time_string = (hourly_worker_delta_time_string + " (#{(hourly_worker_delta_time+0.5).round(2)} - 0.5)").html_safe if scan_event.hourly_worker_has_removed_30_min
+    %td.text-center= hourly_worker_delta_time_string
     %td.text-center= (scan_event.hourly_worker_monthly_time.present? && scan_event.hourly_worker_out) ? (scan_event.hourly_worker_monthly_time.to_f/3600).round(2) : ""
 
     - if current_user.present? && current_user.admin?
