@@ -83,7 +83,7 @@ class MembersController < ApplicationController
     add_abo_types_to_member(@member)
     respond_to do |format|
       if @member.save
-        format.html { redirect_to current_user.present? ? @member : members_path, notice: t('flash.notice.creating_member') }
+        format.html { redirect_to current_user.present? ? member_path(@member) : members_path, notice: t('flash.notice.creating_member') }
         format.json { render :show, status: :created, location: @member }
       else
         format.html { render :new, alert: t('flash.alert.creating_member') }

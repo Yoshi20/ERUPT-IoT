@@ -40,7 +40,7 @@ class FeedbacksController < ApplicationController
     @feedback = Feedback.new(feedback_params)
     respond_to do |format|
       if @feedback.save
-        format.html { redirect_to current_user.present? ? @feedback : feedbacks_path, notice: t('flash.notice.creating_feedback') }
+        format.html { redirect_to current_user.present? ? feedback_path(@feedback) : feedbacks_path, notice: t('flash.notice.creating_feedback') }
         format.json { render :show, status: :created, location: @feedback }
       else
         format.html { render :new, alert: t('flash.alert.creating_feedback') }
