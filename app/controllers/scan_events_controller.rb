@@ -38,82 +38,92 @@ class ScanEventsController < ApplicationController
     member = Member.find_by(card_id: params[:UID])
     scan_event = nil
     if member.present?
-      member_abo_types = member.abo_types.map{|at| at.name}.join(' ')
-      scan_event = ScanEvent.create(member_id: member.id, post_body: post_body, abo_types: member_abo_types, card_id: params[:UID])
-      # hourly worker
-      if member.is_hourly_worker
-        # find last scan_event
-        now = Time.now
-        last_scan_events = ScanEvent.where(member_id: member.id).where.not(id: scan_event.id).where("hourly_worker_time_stamp <= ?", now)
-        last_scan_event = last_scan_events.last
-        if last_scan_event.present? && last_scan_event.hourly_worker_in
-          delta_time = now.to_i - last_scan_event&.hourly_worker_time_stamp.to_i
-          has_removed_30_min = false
-          if delta_time > 5.hours.to_i
-            delta_time = delta_time - 30.minutes.to_i
-            has_removed_30_min = true
+      last_scan_event = ScanEvent.where(member_id: member.id).order(:created_at).last
+      if last_scan_event.created_at < Time.now - 30.seconds
+        member_abo_types = member.abo_types.map{|at| at.name}.join(' ')
+        scan_event = ScanEvent.create(member_id: member.id, post_body: post_body, abo_types: member_abo_types, card_id: params[:UID])
+        # hourly worker
+        if member.is_hourly_worker
+          # find last scan_event
+          now = Time.now
+          last_scan_events = ScanEvent.where(member_id: member.id).where.not(id: scan_event.id).where("hourly_worker_time_stamp <= ?", now)
+          last_scan_event = last_scan_events.last
+          if last_scan_event.present? && last_scan_event.hourly_worker_in
+            delta_time = now.to_i - last_scan_event&.hourly_worker_time_stamp.to_i
+            has_removed_30_min = false
+            if delta_time > 5.hours.to_i
+              delta_time = delta_time - 30.minutes.to_i
+              has_removed_30_min = true
+            end
+            scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", now.beginning_of_month)
+            monthly_time = delta_time + scan_event_this_month.sum(&:hourly_worker_delta_time)
+            scan_event.update(
+              hourly_worker_time_stamp: now,
+              hourly_worker_out: true,
+              hourly_worker_delta_time: delta_time,
+              hourly_worker_monthly_time: monthly_time,
+              hourly_worker_has_removed_30_min: has_removed_30_min
+            )
+          else
+            scan_event.update(
+              hourly_worker_time_stamp: now,
+              hourly_worker_in: true,
+              hourly_worker_monthly_time: last_scan_event&.hourly_worker_monthly_time
+            )
           end
-          scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", now.beginning_of_month)
-          monthly_time = delta_time + scan_event_this_month.sum(&:hourly_worker_delta_time)
-          scan_event.update(
-            hourly_worker_time_stamp: now,
-            hourly_worker_out: true,
-            hourly_worker_delta_time: delta_time,
-            hourly_worker_monthly_time: monthly_time,
-            hourly_worker_has_removed_30_min: has_removed_30_min
-          )
-        else
-          scan_event.update(
-            hourly_worker_time_stamp: now,
-            hourly_worker_in: true,
-            hourly_worker_monthly_time: last_scan_event&.hourly_worker_monthly_time
+        end
+        # get data from ggLeap if present
+        if member.ggleap_uuid.present?
+          jwt = Request::ggleap_auth
+          ggleap_user = Request::ggleap_user(jwt, member.ggleap_uuid)
+          member.magma_coins = ggleap_user["Balance"] # blup: this should be CoinBalance not Balance
+          member.save
+        end
+        # send data via ws
+        post_data = {
+          first_name: member.first_name,
+          magma_coins: member.magma_coins,
+          abo_types: member_abo_types,
+          is_hourly_worker: member.is_hourly_worker,
+          hourly_worker_in: scan_event.hourly_worker_in,
+          hourly_worker_out: scan_event.hourly_worker_out,
+          hourly_worker_delta_time: scan_event.hourly_worker_delta_time,
+          hourly_worker_monthly_time: scan_event.hourly_worker_monthly_time
+        }
+        WifiDisplay.all.each do |disp|
+          ActionCable.server.broadcast(
+            disp.name,
+            post_data
           )
         end
-      end
-      # get data from ggLeap if present
-      if member.ggleap_uuid.present?
-        jwt = Request::ggleap_auth
-        ggleap_user = Request::ggleap_user(jwt, member.ggleap_uuid)
-        member.magma_coins = ggleap_user["Balance"] # blup: this should be CoinBalance not Balance
-        member.save
-      end
-      # send data via ws
-      post_data = {
-        first_name: member.first_name,
-        magma_coins: member.magma_coins,
-        abo_types: member_abo_types,
-        is_hourly_worker: member.is_hourly_worker,
-        hourly_worker_in: scan_event.hourly_worker_in,
-        hourly_worker_out: scan_event.hourly_worker_out,
-        hourly_worker_delta_time: scan_event.hourly_worker_delta_time,
-        hourly_worker_monthly_time: scan_event.hourly_worker_monthly_time
-      }
-      WifiDisplay.all.each do |disp|
-        ActionCable.server.broadcast(
-          disp.name,
-          post_data
-        )
-      end
-      # push notification
-      data = {
-        web: {
-          notification: {
-            title: 'ScanEvent',
-            body: "#{member.first_name} #{member.last_name}",
-            icon: request.base_url + '/' + ActionController::Base.helpers.asset_path("logo.jpg"),
-            deep_link: (member.ggleap_uuid.present? ? "https://admin.ggleap.com/shop?user=#{member.ggleap_uuid}" : "https://admin.ggleap.com/users"),
-            hide_notification_if_site_has_focus: false,
+        # push notification
+        data = {
+          web: {
+            notification: {
+              title: 'ScanEvent',
+              body: "#{member.first_name} #{member.last_name}",
+              icon: request.base_url + '/' + ActionController::Base.helpers.asset_path("logo.jpg"),
+              deep_link: (member.ggleap_uuid.present? ? "https://admin.ggleap.com/shop?user=#{member.ggleap_uuid}" : "https://admin.ggleap.com/users"),
+              hide_notification_if_site_has_focus: false,
+            }
           }
         }
-      }
-      Pusher::PushNotifications.publish_to_interests(interests: ['scan_events'], payload: data)
+        Pusher::PushNotifications.publish_to_interests(interests: ['scan_events'], payload: data)
+        # broadcast scan_event via ws
+        ActionCable.server.broadcast('ScanEventsChannel', scan_event)
+      else
+        # last_scan_event is no older than 30 seconds -> return the last one
+        scan_event = last_scan_event
+        # do not broadcast scan_event via ws in this case
+      end
     else
       # no member yet -> create "empty" ScanEvent
       scan_event = ScanEvent.create(post_body: post_body, card_id: params[:UID])
+      # broadcast scan_event via ws
+      ActionCable.server.broadcast('ScanEventsChannel', scan_event)
     end
     respond_to do |format|
       if scan_event.present?
-        ActionCable.server.broadcast('ScanEventsChannel', scan_event)
         format.html { render plain: "OK", status: :ok }
       else
         format.html { head :unprocessable_entity }
