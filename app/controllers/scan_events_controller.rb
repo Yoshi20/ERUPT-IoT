@@ -34,12 +34,13 @@ class ScanEventsController < ApplicationController
   # POST /scan_events
   # POST /scan_events.json
   def create
-    post_body = params.except(:controller, :action, :scan_event)
-    member = Member.find_by(card_id: params[:UID])
+    post_body = params.except(:controller, :action, :scan_event, :authenticity_token)
+    member = Member.find(params[:member_id]) if params[:member_id].present?
+    member = Member.find_by(card_id: params[:UID]) if params[:UID].present?
     scan_event = nil
     if member.present?
       last_scan_event = ScanEvent.where(member_id: member.id).order(:created_at).last
-      if last_scan_event.created_at < Time.now - 30.seconds
+      if last_scan_event.nil? || last_scan_event.created_at < Time.now - 30.seconds
         member_abo_types = member.abo_types.map{|at| at.name}.join(' ')
         scan_event = ScanEvent.create(member_id: member.id, post_body: post_body, abo_types: member_abo_types, card_id: params[:UID])
         # hourly worker
@@ -124,7 +125,11 @@ class ScanEventsController < ApplicationController
     end
     respond_to do |format|
       if scan_event.present?
-        format.html { render plain: "OK", status: :ok }
+        if params[:member_id].present?
+          format.html { redirect_to time_stamps_url(member_filter: params[:member_id]), notice: t('flash.notice.creating_scan_event') }
+        else
+          format.html { render plain: "OK", status: :ok }
+        end
       else
         format.html { head :unprocessable_entity }
       end

@@ -37,6 +37,14 @@
     .admin-actions__link
       = link_to time_stamps_path(member_filter: params[:member_filter]), class:'btn btn-ghost btn-square' do
         %span.material-icons.admin-actions__link__icon= 'refresh'
+    - if params[:member_filter].present?
+      .admin-actions__link
+        = form_tag scan_events_path, method: :post, class: "form" do
+          = text_field_tag :member_id, params[:member_filter], type: "hidden"
+          = button_tag(type: "submit", value: "manually added time stamp", class:'btn btn-ghost btn-square') do
+            %span.material-icons.admin-actions__link__icon= 'add'
+
+
 
 :javascript
   document.addEventListener('turbolinks:load', function() {

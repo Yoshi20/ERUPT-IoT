@@ -26,6 +26,7 @@ de:
       creating_feedback: "Feedback wurde erfolgreich erstellt"
       updating_feedback: "Feedback wurde erfolgreich aktualisiert"
       deleting_feedback: "Feedback wurde erfolgreich gelöscht"
+      creating_scan_event: "Scan-Event wurde erfolgreich erstellt"
       updating_scan_event: "Scan-Event wurde erfolgreich aktualisiert"
       deleting_scan_event: "Scan-Event wurde erfolgreich gelöscht"
       updating_order: "Bestellung wurde erfolgreich aktualisiert"

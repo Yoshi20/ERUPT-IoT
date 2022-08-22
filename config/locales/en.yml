@@ -26,6 +26,7 @@ en:
       creating_feedback: "Feedback was successfully created"
       updating_feedback: "Feedback was successfully updated"
       deleting_feedback: "Feedback was successfully deleted"
+      creating_scan_event: "Scan event was successfully created"
       updating_scan_event: "Scan event was successfully updated"
       deleting_scan_event: "Scan event was successfully deleted"
       updating_order: "Order was successfully updated"
