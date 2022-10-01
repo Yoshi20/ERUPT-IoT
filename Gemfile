@@ -81,6 +81,10 @@ gem 'haml-rails'
 # See https://devcenter.heroku.com/articles/getting-started-with-rails4#visit-your-application
 group :staging, :production do
   gem 'rails_12factor'
+  # Workaround for a problem when using Ruby 3.1.2 with Rails 6
+  gem 'net-smtp', require: false
+  gem 'net-imap', require: false
+  gem 'net-pop', require: false
 end
 
 # See https://nokogiri.org/
