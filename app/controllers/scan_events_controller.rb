@@ -56,7 +56,7 @@ class ScanEventsController < ApplicationController
               delta_time = delta_time - 30.minutes.to_i
               has_removed_30_min = true
             end
-            scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", now.beginning_of_month)
+            scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", beginning_of_work_month(now))
             monthly_time = delta_time + scan_event_this_month.sum(&:hourly_worker_delta_time)
             scan_event.update(
               hourly_worker_time_stamp: now,
@@ -151,11 +151,11 @@ class ScanEventsController < ApplicationController
             delta_time = delta_time - 30.minutes.to_i
             has_removed_30_min = true
           end
-          scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", time_stamp.beginning_of_month)
+          scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", beginning_of_work_month(time_stamp))
           monthly_time = delta_time + scan_event_this_month.sum(&:hourly_worker_delta_time)
         end
         if @scan_event.update(hourly_worker_time_stamp: time_stamp, hourly_worker_delta_time: delta_time, hourly_worker_monthly_time: monthly_time, hourly_worker_has_removed_30_min: has_removed_30_min)
-          format.html { redirect_to time_stamps_url, notice: t('flash.notice.updating_scan_event') }
+          format.html { redirect_to time_stamps_url(member_filter: params[:member_id]), notice: t('flash.notice.updating_scan_event') }
           format.json { render :show, status: :ok, location: @scan_event }
         else
           format.html { render :edit, alert: t('flash.alert.updating_scan_event') }
@@ -210,6 +210,15 @@ class ScanEventsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def scan_event_params
       params.require(:scan_event).permit(:member_id, :hourly_worker_time_stamp)
+    end
+
+    # a work month starts at the 26. and ends at the 25.
+    def beginning_of_work_month(ts)
+      if ts.day >= 26
+        ts.beginning_of_month + 26.days
+      else
+        ts.prev_month.beginning_of_month + 26.days
+      end
     end
 
 end

@@ -21,6 +21,7 @@
         - if scan_event.hourly_worker_out
           .admin-list-actions__link
             = form_for scan_event, role: 'form', class:'form' do |f|
+              = text_field_tag :member_id, params[:member_filter], type: "hidden"
               .field.form-group.hidden
                 .form-group-inline{style: 'width: 50%; margin-left: auto; margin-right: auto;'}
                   = f.datetime_select :hourly_worker_time_stamp
