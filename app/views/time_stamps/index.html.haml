@@ -4,9 +4,20 @@
 
 .row
   .col
-    = form_tag time_stamps_path, method: :get, class: "form" do
-      .field.form-group{style: 'width: 60%;'}
-        = select_tag :member_filter, options_for_select(Member.where(is_hourly_worker: true).order(:first_name).map{ |m| ["#{m.first_name} #{m.last_name[0]}.", m.id]}, params[:member_filter]), {prompt: 'Filter', class: 'form-control', id: 'select_hourly_worker'}
+    %form.form{"accept-charset": "UTF-8", action: "/time_stamps", method: "get"}
+      = text_field_tag :work_month_filter, @work_month_id, type: "hidden"
+      .field.form-group{style: "width: 60%;"}
+        %select#select_hourly_worker.form-control{name: "member_filter"}
+          %option{:value => ""} Member filter
+          = options_for_select(Member.where(is_hourly_worker: true).order(:first_name).map{ |m| ["#{m.first_name} #{m.last_name[0]}.", m.id]}, @member_id)
+  .col
+    - work_months_for_select = [["Jan (26.12 - 25.01)", 0],["Feb (26.01 - 25.02)", 1],["März (26.02 - 25.03)", 2],["Apr (26.03 - 25.04)", 3],["Mai (26.04 - 25.05)", 4],["Juni (26.05 - 25.06)", 5],["Juli (26.06 - 25.07)", 6],["Aug (26.07 - 25.08)", 7],["Sep (26.08 - 25.09)", 8],["Okt (26.09 - 25.10)", 9],["Nov (26.10 - 25.11)", 10],["Dez (26.11 - 25.12)", 11]]
+    %form.form{"accept-charset": "UTF-8", action: "/time_stamps", method: "get"}
+      = text_field_tag :member_filter, @member_id, type: "hidden"
+      .field.form-group{style: "width: 60%;"}
+        %select#select_work_month.form-control{name: "work_month_filter"}
+          %option{:value => ""} Month filter
+          = options_for_select(work_months_for_select, @work_month_id)
   .col
     %p= "Total scan_events count = #{@total_scan_events.count}"
   .col
@@ -32,15 +43,16 @@
   .admin-actions
     - if @scan_events.any?
       .admin-actions__link
-        = button_to time_stamps_export_path(member_filter: params[:member_filter]), method: :post, class:'btn btn-ghost btn-square' do
+        = button_to time_stamps_export_path(member_filter: @member_id, work_month_filter: @work_month_id), method: :post, class:'btn btn-ghost btn-square' do
           %span.material-icons.admin-actions__link__icon= 'assignment_return'
     .admin-actions__link
-      = link_to time_stamps_path(member_filter: params[:member_filter]), class:'btn btn-ghost btn-square' do
+      = link_to time_stamps_path(member_filter: @member_id, work_month_filter: @work_month_id), class:'btn btn-ghost btn-square' do
         %span.material-icons.admin-actions__link__icon= 'refresh'
-    - if params[:member_filter].present?
+    - if @member_id.present?
       .admin-actions__link
         = form_tag scan_events_path, method: :post, class: "form" do
-          = text_field_tag :member_id, params[:member_filter], type: "hidden"
+          = text_field_tag :member_id, @member_id, type: "hidden"
+          = text_field_tag :work_month_id, @work_month_id, type: "hidden"
           = button_tag(type: "submit", value: "manually added time stamp", class:'btn btn-ghost btn-square') do
             %span.material-icons.admin-actions__link__icon= 'add'
 
@@ -49,6 +61,9 @@
 :javascript
   document.addEventListener('turbolinks:load', function() {
     $('#select_hourly_worker').on("change", function() {
+      $(this).closest('form').submit();
+    });
+    $('#select_work_month').on("change", function() {
       $(this).closest('form').submit();
     });
   });
