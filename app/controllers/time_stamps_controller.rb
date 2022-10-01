@@ -49,12 +49,12 @@ private
 
   def beginning_of_work_month_from_id(work_month_id)
     beginning_of_selected_month = Time.now.beginning_of_year + work_month_id.to_i.months
-    beginning_of_selected_month - 1.month + 25.days
+    beginning_of_selected_month - 1.month + 25.days + 5.hours
   end
 
   def end_of_work_month_from_id(work_month_id)
     beginning_of_selected_month = Time.now.beginning_of_year + work_month_id.to_i.months
-    beginning_of_selected_month + 25.days - 1.second
+    beginning_of_selected_month + 25.days + 5.hours - 1.second
   end
 
 end

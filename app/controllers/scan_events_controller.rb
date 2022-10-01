@@ -50,7 +50,6 @@ class ScanEventsController < ApplicationController
           last_scan_events = ScanEvent.where(member_id: member.id).where.not(id: scan_event.id).where("hourly_worker_time_stamp <= ?", now)
           last_scan_event = last_scan_events.last
           if last_scan_event.present? && last_scan_event.hourly_worker_in
-            #blup: TODO -> edge case handling when hourly_worker_in is on the 25. and hourly_worker_out on the 26.
             delta_time = now.to_i - last_scan_event&.hourly_worker_time_stamp.to_i
             has_removed_30_min = false
             if delta_time > 5.hours.to_i
@@ -213,12 +212,12 @@ class ScanEventsController < ApplicationController
       params.require(:scan_event).permit(:member_id, :hourly_worker_time_stamp)
     end
 
-    # a work month starts at the 26. and ends at the 25.
+    # a work month starts at the 26. (05:00:00) and ends at the 26. (04:59:59)
     def beginning_of_work_month(ts)
-      if ts.day > 25
-        ts.beginning_of_month + 25.days
+      if ts.day > 25 && ts.hour >= 5
+        ts.beginning_of_month + 25.days + 5.hours
       else
-        ts.prev_month.beginning_of_month + 25.days
+        ts.prev_month.beginning_of_month + 25.days + 5.hours
       end
     end
 
