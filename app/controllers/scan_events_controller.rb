@@ -214,7 +214,7 @@ class ScanEventsController < ApplicationController
 
     # a work month starts at the 26. (05:00:00) and ends at the 26. (04:59:59)
     def beginning_of_work_month(ts)
-      if ts.day > 25 && ts.hour >= 5
+      if (ts - 5.hours).day > 25
         ts.beginning_of_month + 25.days + 5.hours
       else
         ts.prev_month.beginning_of_month + 25.days + 5.hours
