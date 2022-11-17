@@ -48,4 +48,5 @@ test:
 production:
   <<: *default
   database: erupt-iot_production
+  unsername: erupt_iot
   password: <%= ENV['ERUPT_IOT_DATABASE_PASSWORD'] %>
