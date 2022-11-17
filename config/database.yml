@@ -13,10 +13,10 @@ default: &default
   encoding: unicode
   pool: 5
   timeout: 5000
+  username: postgres
 
 development:
   <<: *default
-  username: postgres
   database: erupt-iot_development
 
 # Warning: The database defined as "test" will be erased and
@@ -24,7 +24,6 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  username: postgres
   database: erupt-iot_test
 
 # As with config/secrets.yml, you never want to store sensitive information,
@@ -49,5 +48,4 @@ test:
 production:
   <<: *default
   database: erupt-iot_production
-  unsername: erupt-iot
   password: <%= ENV['ERUPT_IOT_DATABASE_PASSWORD'] %>
