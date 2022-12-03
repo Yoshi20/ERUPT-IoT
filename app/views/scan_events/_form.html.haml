@@ -12,5 +12,21 @@
     .form-group-inline{style: 'width: 50%; margin-left: auto; margin-right: auto;'}
       = f.datetime_select :hourly_worker_time_stamp, { start_year: Time.zone.now.year, end_year: Date.today.year - 3 }, class: 'form-control'
 
+    .field.form-group
+      %strong= 'Hourly Worker Flags'
+      .row
+        .col.form-check
+          = f.check_box :hourly_worker_in, checked: @scan_event.hourly_worker_in, class:'form-check-input mr-2'
+          = f.label :hourly_worker_in, 'Clocked IN?', class:'form-check-label', style:'background:yellow;'
+        .col.form-check
+          = f.check_box :hourly_worker_out, checked: @scan_event.hourly_worker_out, class:'form-check-input mr-2'
+          = f.label :hourly_worker_out, 'Clocked OUT?', class:'form-check-label', style:'background:lightgreen;'
+        .col.form-check
+          = f.check_box :hourly_worker_was_automatically_clocked_out, checked: @scan_event.hourly_worker_was_automatically_clocked_out, class:'form-check-input mr-2'
+          = f.label :hourly_worker_was_automatically_clocked_out, 'Automatically clocked out?', class:'form-check-label', style:'background:red;'
+        .col.form-check
+          = f.check_box :hourly_worker_has_removed_30_min, checked: @scan_event.hourly_worker_has_removed_30_min, class:'form-check-input mr-2', disabled: true
+          = f.label :hourly_worker_has_removed_30_min, 'Removed 30min?', class:'form-check-label'
+
   .actions.form-group.text-center
     = f.submit class:'btn btn-ghost'

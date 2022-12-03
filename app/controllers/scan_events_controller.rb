@@ -155,8 +155,12 @@ class ScanEventsController < ApplicationController
     respond_to do |format|
       if scan_event_params["hourly_worker_time_stamp(5i)"].present?
         time_stamp = Time.new(scan_event_params['hourly_worker_time_stamp(1i)'], scan_event_params['hourly_worker_time_stamp(2i)'], scan_event_params['hourly_worker_time_stamp(3i)'],  scan_event_params['hourly_worker_time_stamp(4i)'],  scan_event_params['hourly_worker_time_stamp(5i)'], @scan_event.hourly_worker_time_stamp.sec)
+        clocked_in = (scan_event_params[:hourly_worker_in].present? ? (scan_event_params[:hourly_worker_in] == "1") : @scan_event.hourly_worker_in)
+        clocked_out = (scan_event_params[:hourly_worker_out].present? ? (scan_event_params[:hourly_worker_out] == "1") : @scan_event.hourly_worker_out)
+        was_automatically_clocked_out = (scan_event_params[:hourly_worker_was_automatically_clocked_out].present? ? (scan_event_params[:hourly_worker_was_automatically_clocked_out] == "1") : @scan_event.hourly_worker_was_automatically_clocked_out)
+        # has_removed_30_min = (scan_event_params[:hourly_worker_has_removed_30_min].present? ? (scan_event_params[:hourly_worker_has_removed_30_min] == "1") : @scan_event.hourly_worker_has_removed_30_min)
         has_removed_30_min = false
-        if @scan_event.hourly_worker_out
+        if clocked_out
           last_scan_events = ScanEvent.where(member_id: @scan_event.member.id).where.not(id: @scan_event.id).where("hourly_worker_time_stamp <= ?", time_stamp)
           last_scan_event = last_scan_events.where(hourly_worker_in: true).order(:hourly_worker_time_stamp).last
           delta_time = time_stamp.to_i - last_scan_event&.hourly_worker_time_stamp.to_i
@@ -167,8 +171,16 @@ class ScanEventsController < ApplicationController
           scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", beginning_of_work_month(time_stamp))
           monthly_time = delta_time + scan_event_this_month.sum(&:hourly_worker_delta_time)
         end
-        if @scan_event.update(hourly_worker_time_stamp: time_stamp, hourly_worker_delta_time: delta_time, hourly_worker_monthly_time: monthly_time, hourly_worker_has_removed_30_min: has_removed_30_min)
-          format.html { redirect_to time_stamps_url(member_filter: params[:member_id], work_month_filter: params[:work_month_id]), notice: t('flash.notice.updating_scan_event') }
+        if (clocked_in || clocked_out) && !(clocked_in && clocked_out) && @scan_event.update(
+          hourly_worker_time_stamp: time_stamp,
+          hourly_worker_delta_time: delta_time,
+          hourly_worker_monthly_time: monthly_time,
+          hourly_worker_has_removed_30_min: has_removed_30_min,
+          hourly_worker_in: clocked_in,
+          hourly_worker_out: clocked_out,
+          hourly_worker_was_automatically_clocked_out: was_automatically_clocked_out,
+        )
+          format.html { redirect_to time_stamps_url(member_filter: @scan_event.member.id, work_month_filter: params[:work_month_id]), notice: t('flash.notice.updating_scan_event') }
           format.json { render :show, status: :ok, location: @scan_event }
         else
           format.html { render :edit, alert: t('flash.alert.updating_scan_event') }
@@ -222,7 +234,7 @@ class ScanEventsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def scan_event_params
-      params.require(:scan_event).permit(:member_id, :hourly_worker_time_stamp)
+      params.require(:scan_event).permit(:member_id, :hourly_worker_time_stamp, :hourly_worker_in, :hourly_worker_out, :hourly_worker_has_removed_30_min, :hourly_worker_was_automatically_clocked_out)
     end
 
     # a work month starts at the 26. (05:00:00) and ends at the 26. (04:59:59)
