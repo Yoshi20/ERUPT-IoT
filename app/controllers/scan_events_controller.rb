@@ -205,7 +205,7 @@ class ScanEventsController < ApplicationController
     respond_to do |format|
       is_hourly_worker = @scan_event.hourly_worker_time_stamp.present?
       if @scan_event.destroy
-        format.html { redirect_to is_hourly_worker ? time_stamps_url : scan_events_url, notice: t('flash.notice.deleting_scan_event') }
+        format.html { redirect_to is_hourly_worker ? time_stamps_url(member_filter: params[:member_id], work_month_filter: params[:work_month_id]) : scan_events_url, notice: t('flash.notice.deleting_scan_event') }
         format.json { head :no_content }
       else
         format.html { render :show, alert: t('flash.alert.deleting_scan_event') }

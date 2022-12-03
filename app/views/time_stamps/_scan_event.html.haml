@@ -34,5 +34,7 @@
             %span.material-icons.admin-actions__link__icon= 'edit'
         .admin-list-actions__link
           = form_for scan_event, method: :delete, role: 'form', class:'form' do |f|
+            = text_field_tag :member_id, @member_id, type: "hidden"
+            = text_field_tag :work_month_id, @work_month_id, type: "hidden"
             = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
               %span.material-icons.admin-actions__link__icon= 'delete'
