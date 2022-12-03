@@ -1,27 +1,39 @@
-# README
+# ERUPT-IoT
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## DNS
 
-Things you may want to cover:
+http://apps.erupt.ch
 
-* Ruby version
+## Host
 
-* System dependencies
+Hetzner Server (Nürnberg)
+IPv4: 5.75.145.55
+IPv6: 2a01:4f8:1c1e:759d::/64
 
-* Configuration
+## Deployment
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
 ```
 mina deploy
 ```
 
-* ...
+## Console
+
+```
+ssh deployer@5.75.145.55
+cd /var/www/erupt-iot/current/
+bin/rails console
+```
+
+## Set ENVs
+
+```
+ssh deployer@5.75.145.55
+vim ~/.bashrc
+```
+
+## Full Restart
+
+```
+sudo service nginx stop
+sudo service nginx start
+```
