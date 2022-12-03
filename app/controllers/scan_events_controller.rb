@@ -58,6 +58,7 @@ class ScanEventsController < ApplicationController
             end
             scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", beginning_of_work_month(now))
             monthly_time = delta_time + scan_event_this_month.sum(&:hourly_worker_delta_time)
+            # clock out
             scan_event.update(
               hourly_worker_time_stamp: now,
               hourly_worker_out: true,
@@ -65,11 +66,23 @@ class ScanEventsController < ApplicationController
               hourly_worker_monthly_time: monthly_time,
               hourly_worker_has_removed_30_min: has_removed_30_min
             )
+            # delete the automatic clock out delayed job
+            Delayed::Job.find_by(queue: "scan_event_#{last_scan_event.id}")&.destroy
           else
+            # clock in
             scan_event.update(
               hourly_worker_time_stamp: now,
               hourly_worker_in: true,
               hourly_worker_monthly_time: last_scan_event&.hourly_worker_monthly_time
+            )
+            # start the automatic clock out delayed job
+            automatic_clock_out_in = 1.minutes #blup 12.hours
+            puts ScanEvent.delay(run_at: automatic_clock_out_in.from_now, queue: "scan_event_#{scan_event.id}").create(
+              member_id: member.id,
+              hourly_worker_time_stamp: now+automatic_clock_out_in,
+              hourly_worker_out: true,
+              hourly_worker_delta_time: automatic_clock_out_in.to_i,
+              hourly_worker_was_automatically_clocked_out: true,
             )
           end
         end

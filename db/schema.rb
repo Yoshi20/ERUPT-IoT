@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_07_141035) do
+ActiveRecord::Schema.define(version: 2022_12_03_165305) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,21 @@ ActiveRecord::Schema.define(version: 2022_08_07_141035) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["abo_type_id", "member_id"], name: "index_abo_types_members_on_abo_type_id_and_member_id"
+  end
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer "priority", default: 0, null: false
+    t.integer "attempts", default: 0, null: false
+    t.text "handler", null: false
+    t.text "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string "locked_by"
+    t.string "queue"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
   create_table "device_types", force: :cascade do |t|
@@ -111,6 +126,7 @@ ActiveRecord::Schema.define(version: 2022_08_07_141035) do
     t.bigint "hourly_worker_monthly_time"
     t.datetime "hourly_worker_time_stamp", precision: 6
     t.boolean "hourly_worker_has_removed_30_min", default: false
+    t.boolean "hourly_worker_was_automatically_clocked_out", default: false
   end
 
   create_table "users", force: :cascade do |t|

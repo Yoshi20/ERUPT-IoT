@@ -119,3 +119,7 @@ gem "select2-rails"
 
 # For autom. deployment
 gem 'mina'
+
+# See https://github.com/collectiveidea/delayed_job
+gem 'delayed_job_active_record'
+gem "daemons"

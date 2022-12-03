@@ -5,7 +5,6 @@ class TimeStampsController < ApplicationController
   # GET /time_stamps
   # GET /time_stamps.json
   def index
-    # raise params.inspect#blup
     @member_id = params[:member_filter]
     @work_month_id = params[:work_month_filter]
     @total_scan_events = ScanEvent.all.includes(:member).where(member: {is_hourly_worker: true}).where("hourly_worker_in IS true OR hourly_worker_out IS true")
