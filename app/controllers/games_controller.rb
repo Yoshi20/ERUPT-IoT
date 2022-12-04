@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
-  before_action :get_games
+  before_action :authenticate_user!, except: [:index_for_iframe]
+  before_action :get_games, only: [:index, :index_for_iframe]
   before_action { @section = 'games' }
 
   # GET /games
