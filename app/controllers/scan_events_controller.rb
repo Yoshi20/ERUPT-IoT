@@ -76,7 +76,7 @@ class ScanEventsController < ApplicationController
               hourly_worker_monthly_time: last_scan_event&.hourly_worker_monthly_time
             )
             # start the automatic clock out delayed job
-            automatic_clock_out_in = 1.minutes #blup 12.hours
+            automatic_clock_out_in = 12.hours
             puts ScanEvent.delay(run_at: automatic_clock_out_in.from_now, queue: "scan_event_#{scan_event.id}").create(
               member_id: member.id,
               hourly_worker_time_stamp: now+automatic_clock_out_in,
