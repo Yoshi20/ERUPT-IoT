@@ -40,7 +40,7 @@
         %li.nav-item{role: "presentation", class: (@section == 'games' ? 'active' : 'inactive')}
           = link_to 'Games', games_path, class: 'nav-link'
 
-        - if false#blup current_user.present? && current_user.admin?
+        - if current_user.present? && current_user.admin?
           %li.nav-item.nav-link.d-none.d-lg-block= '/'
 
           %li.nav-item.dropdown{role: "presentation", class: ((@section == 'orders') ? 'active' : 'inactive')}
