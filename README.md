@@ -37,3 +37,11 @@ vim ~/.bashrc
 sudo service nginx stop
 sudo service nginx start
 ```
+
+## delayed_jobs
+
+```
+bin/delayed_job start
+bin/delayed_job stop
+bin/delayed_job status
+```

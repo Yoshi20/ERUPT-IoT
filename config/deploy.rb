@@ -37,7 +37,7 @@ end
 task :setup do
   #command %{rvm install ruby-3.1.2}
   #command %{gem install bundler}
-  command %{rake jobs:work} # to handle the delayed_jobs
+  command %{RAILS_ENV=production /var/www/erupt-iot/current/bin/delayed_job start} # to handle the delayed_jobs
 end
 
 desc "Deploys the current version to the server."
