@@ -29,7 +29,7 @@ private
       # @programs << app if app['AppType'] == "Program"
       # @settings << app if app['AppType'] == "Setting"
     end
-    @games = @games.sort_by { |game| game["Name"] }
+    @games = @games.sort_by { |game| game["Rank"] }
   end
 
 end
