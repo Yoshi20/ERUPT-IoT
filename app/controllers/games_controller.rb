@@ -11,6 +11,11 @@ class GamesController < ApplicationController
     render "index", layout: "for_iframe"
   end
 
+  # GET /games_refresh
+  def refresh
+    Rails.cache.delete("ggleap_apps")
+    redirect_to games_path
+  end
 
 private
 

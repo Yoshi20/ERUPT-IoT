@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   get 'games' => 'games#index'
   get 'games_for_iframe' => 'games#index_for_iframe'
+  get 'games_refresh' => 'games#refresh'
 
   post 'lora_uplink' => 'uplinks#lora_uplink'
 

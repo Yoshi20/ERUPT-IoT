@@ -7,6 +7,9 @@
     .admin-actions__link
       = link_to games_for_iframe_path, method: :get, class: 'btn btn-sstm' do
         %span Fullscreen
+    .admin-actions__link
+      = link_to games_refresh_path, class:'btn btn-ghost btn-square' do
+        %span.material-icons.admin-actions__link__icon= 'refresh'
 
 .row
   - @games.each do |game|
