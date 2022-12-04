@@ -37,13 +37,17 @@ end
 task :setup do
   #command %{rvm install ruby-3.1.2}
   #command %{gem install bundler}
-  command %{RAILS_ENV=production /var/www/erupt-iot/current/bin/delayed_job start} # to handle the delayed_jobs
 end
 
 desc "Deploys the current version to the server."
 task :deploy do
   # uncomment this line to make sure you pushed your local branch to the remote origin
   # invoke :'git:ensure_pushed'
+
+  run(:local) do
+    command %{RAILS_ENV=production /var/www/erupt-iot/current/bin/delayed_job stop} # to stop the current delayed_jobs worker
+  end
+
   deploy do
     # Put things that will set up an empty directory into a fully set-up
     # instance of your project.
@@ -58,6 +62,7 @@ task :deploy do
       in_path(fetch(:current_path)) do
         command %{mkdir -p tmp/}
         command %{touch tmp/restart.txt}
+        command %{RAILS_ENV=production /var/www/erupt-iot/current/bin/delayed_job start} # to start the new delayed_jobs worker
       end
     end
   end
