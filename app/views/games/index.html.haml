@@ -1,0 +1,19 @@
+- if current_page?(action: 'index')
+  .row
+    .col
+      %h1.page__title= 'GAMING MENU'
+
+  .admin-actions
+    .admin-actions__link
+      = link_to games_for_iframe_path, method: :get, class: 'btn btn-sstm' do
+        %span Fullscreen
+
+.row
+  - @games.each do |game|
+    .col
+      .card{style: "width: 18rem; margin-left: auto; margin-right: auto;"}
+        %img.card-img-top{alt: game['Name'], src: game['Image600x900']}
+        - if game['AgeRating'].to_i > 0
+          %span{style: 'color: white; position: absolute; bottom: 0; left: 5px;'}= "Ab #{game['AgeRating']}"
+        - if game['UseLicensePool']
+          %span{style: 'color: white; position: absolute; bottom: 0; right: 5px;'}= 'Lizenziert'

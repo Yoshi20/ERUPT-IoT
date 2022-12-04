@@ -2,6 +2,9 @@ Rails.application.routes.draw do
 
   mount ActionCable.server => '/cable'
 
+  get 'games' => 'games#index'
+  get 'games_for_iframe' => 'games#index_for_iframe'
+
   post 'lora_uplink' => 'uplinks#lora_uplink'
 
   get 'membership' => 'membership#index'
