@@ -139,7 +139,7 @@ class ScanEventsController < ApplicationController
     respond_to do |format|
       if scan_event.present?
         if params[:member_id].present?
-          format.html { redirect_to time_stamps_url(member_filter: params[:member_id], work_month_filter: params[:work_month_id]), notice: t('flash.notice.creating_scan_event') }
+          format.html { redirect_to time_stamps_url(member_filter: params[:member_id], work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.creating_scan_event') }
         else
           format.html { render plain: "OK", status: :ok }
         end
@@ -183,7 +183,7 @@ class ScanEventsController < ApplicationController
           hourly_worker_out: clocked_out,
           hourly_worker_was_automatically_clocked_out: was_automatically_clocked_out,
         )
-          format.html { redirect_to time_stamps_url(member_filter: @scan_event.member.id, work_month_filter: params[:work_month_id]), notice: t('flash.notice.updating_scan_event') }
+          format.html { redirect_to time_stamps_url(member_filter: @scan_event.member.id, work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.updating_scan_event') }
           format.json { render :show, status: :ok, location: @scan_event }
         else
           format.html { render :edit, alert: t('flash.alert.updating_scan_event') }
@@ -223,7 +223,7 @@ class ScanEventsController < ApplicationController
       if @scan_event.destroy
         # also try to delete the automatic clock out delayed job
         Delayed::Job.find_by(queue: "scan_event_#{scan_event_id}")&.destroy
-        format.html { redirect_to is_hourly_worker ? time_stamps_url(member_filter: params[:member_id], work_month_filter: params[:work_month_id]) : scan_events_url, notice: t('flash.notice.deleting_scan_event') }
+        format.html { redirect_to is_hourly_worker ? time_stamps_url(member_filter: params[:member_id], work_month_filter: params[:work_month_id], year_filter: params[:year_id]) : scan_events_url, notice: t('flash.notice.deleting_scan_event') }
         format.json { head :no_content }
       else
         format.html { render :show, alert: t('flash.alert.deleting_scan_event') }

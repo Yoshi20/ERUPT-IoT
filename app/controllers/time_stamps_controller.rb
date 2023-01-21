@@ -7,11 +7,17 @@ class TimeStampsController < ApplicationController
   def index
     @member_id = params[:member_filter]
     @work_month_id = params[:work_month_filter]
+    @year_id = params[:year_filter] || 0
+    @members_for_select = Member.where(is_hourly_worker: true).order(:first_name).map{ |m| ["#{m.first_name} #{m.last_name[0]}.", m.id]}
     @total_scan_events = ScanEvent.all.includes(:member).where(member: {is_hourly_worker: true}).where("hourly_worker_in IS true OR hourly_worker_out IS true")
     @total_scan_events = @total_scan_events.where(member: {id: @member_id}) if @member_id.present?
-    @total_scan_events = @total_scan_events.where("hourly_worker_time_stamp >= ? AND hourly_worker_time_stamp <= ?", beginning_of_work_month_from_id(@work_month_id), end_of_work_month_from_id(@work_month_id)) if @work_month_id.present?
+    if @work_month_id.present?
+      @total_scan_events = @total_scan_events.where("hourly_worker_time_stamp >= ? AND hourly_worker_time_stamp <= ?", beginning_of_work_month_from_id(@work_month_id, @year_id), end_of_work_month_from_id(@work_month_id, @year_id))
+    else
+      @total_scan_events = @total_scan_events.where("hourly_worker_time_stamp >= ? AND hourly_worker_time_stamp <= ?", beginning_of_year_from_id(@year_id), end_of_year_from_id(@year_id))
+    end
     @scan_events = @total_scan_events.order(hourly_worker_time_stamp: :desc)
-    @scan_events = @scan_events.limit(30) unless @member_id.present? && @work_month_id.present?
+    @scan_events = @scan_events.limit(30) unless (@member_id.present? && @work_month_id.present?)
   end
 
   # POST /time_stamps/export
@@ -19,9 +25,14 @@ class TimeStampsController < ApplicationController
   def export
     @member_id = params[:member_filter]
     @work_month_id = params[:work_month_filter]
+    @year_id = params[:year_filter] || 0
     @scan_events = ScanEvent.all.includes(:member).where(member: {is_hourly_worker: true}).where("hourly_worker_in IS true OR hourly_worker_out IS true").order(hourly_worker_time_stamp: :desc)
     @scan_events = @scan_events.where(member: {id: @member_id}) if @member_id.present?
-    @scan_events = @scan_events.where("hourly_worker_time_stamp >= ? AND hourly_worker_time_stamp <= ?", beginning_of_work_month_from_id(@work_month_id), end_of_work_month_from_id(@work_month_id)) if @work_month_id.present?
+    if @work_month_id.present?
+      @scan_events = @scan_events.where("hourly_worker_time_stamp >= ? AND hourly_worker_time_stamp <= ?", beginning_of_work_month_from_id(@work_month_id, @year_id), end_of_work_month_from_id(@work_month_id, @year_id))
+    else
+      @scan_events = @scan_events.where("hourly_worker_time_stamp >= ? AND hourly_worker_time_stamp <= ?", beginning_of_year_from_id(@year_id), end_of_year_from_id(@year_id))
+    end
     csv_data = CSV.generate do |csv|
       @scan_events.each_with_index do |scan_event, i|
         wd = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][scan_event.hourly_worker_time_stamp.localtime.wday]
@@ -46,13 +57,21 @@ class TimeStampsController < ApplicationController
 
 private
 
-  def beginning_of_work_month_from_id(work_month_id)
-    beginning_of_selected_month = Time.now.beginning_of_year + work_month_id.to_i.months
+  def beginning_of_year_from_id(year_id)
+    Time.now.beginning_of_year - year_id.to_i.years
+  end
+
+  def end_of_year_from_id(year_id)
+    beginning_of_year_from_id(year_id) + 1.year - 1.second
+  end
+
+  def beginning_of_work_month_from_id(work_month_id, year_id)
+    beginning_of_selected_month = beginning_of_year_from_id(year_id) + work_month_id.to_i.months
     beginning_of_selected_month - 1.month + 25.days + 5.hours
   end
 
-  def end_of_work_month_from_id(work_month_id)
-    beginning_of_selected_month = Time.now.beginning_of_year + work_month_id.to_i.months
+  def end_of_work_month_from_id(work_month_id, year_id)
+    beginning_of_selected_month = beginning_of_year_from_id(year_id) + work_month_id.to_i.months
     beginning_of_selected_month + 25.days + 5.hours - 1.second
   end
 

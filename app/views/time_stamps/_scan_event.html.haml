@@ -23,6 +23,7 @@
             = form_for scan_event, role: 'form', class:'form' do |f|
               = text_field_tag :member_id, @member_id, type: "hidden"
               = text_field_tag :work_month_id, @work_month_id, type: "hidden"
+              = text_field_tag :year_id, @year_id, type: "hidden"
               .field.form-group.hidden
                 .form-group-inline{style: 'width: 50%; margin-left: auto; margin-right: auto;'}
                   = f.datetime_select :hourly_worker_time_stamp
@@ -36,5 +37,6 @@
           = form_for scan_event, method: :delete, role: 'form', class:'form' do |f|
             = text_field_tag :member_id, @member_id, type: "hidden"
             = text_field_tag :work_month_id, @work_month_id, type: "hidden"
+            = text_field_tag :year_id, @year_id, type: "hidden"
             = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
               %span.material-icons.admin-actions__link__icon= 'delete'
