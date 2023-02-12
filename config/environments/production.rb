@@ -42,8 +42,8 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
-  config.action_cable.url = 'ws://erupt-iot.herokuapp.com/cable'
-  config.action_cable.allowed_request_origins = [ 'http://erupt-iot.herokuapp.com', /http:\/\/erupt-iot.herokuapp.*/ ]
+  config.action_cable.url = 'ws://apps.erupt.ch/cable'
+  config.action_cable.allowed_request_origins = [ 'http://apps.erupt.ch', /http:\/\/apps.erupt.*/ ]
   config.action_cable.disable_request_forgery_protection = true #blup: risky?
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
@@ -66,7 +66,7 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   # ActionMailer Config
-  config.action_mailer.default_url_options = { :host => 'http://erupt-iot.herokuapp.com'}
+  config.action_mailer.default_url_options = { :host => 'http://apps.erupt.ch'}
   # config.action_mailer.perform_deliveries = false
   # config.action_mailer.delivery_method = :smtp
   # config.action_mailer.default :charset => "utf-8"
@@ -76,7 +76,7 @@ Rails.application.configure do
   ActionMailer::Base.smtp_settings = {
     address: 'smtp.sendgrid.net',
     port: 587, #or 25,
-    domain: 'heroku.com',
+    domain: 'erupt.ch',
     user_name: 'apikey',
     password: ENV['SENDGRID_API_KEY'],
     authentication: 'plain',
