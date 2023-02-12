@@ -9,6 +9,8 @@ class GamesController < ApplicationController
 
   # GET /games_for_iframe
   def index_for_iframe
+    response.headers["X-FRAME-OPTIONS"] = "ALLOWALL"  # prevent CORS issues
+    # response.headers["X-FRAME-OPTIONS"] = "ALLOW-FROM http://www.erupt.ch"
     render "index", layout: "for_iframe"
   end
 
