@@ -40,7 +40,7 @@ class ScanEventsController < ApplicationController
     scan_event = nil
     if member.present?
       last_scan_event = ScanEvent.where(member_id: member.id).order(:created_at).last
-      if last_scan_event.nil? || last_scan_event.created_at < Time.now - 30.seconds
+      if last_scan_event.nil? || last_scan_event.created_at < Time.now - 30.seconds || params[:member_id].present?
         member_abo_types = member.abo_types.map{|at| at.name}.join(' ')
         scan_event = ScanEvent.create(member_id: member.id, post_body: post_body, abo_types: member_abo_types, card_id: params[:UID])
         # hourly worker
@@ -52,7 +52,7 @@ class ScanEventsController < ApplicationController
           if last_scan_event.present? && last_scan_event.hourly_worker_in
             delta_time = now.to_i - last_scan_event&.hourly_worker_time_stamp.to_i
             has_removed_30_min = false
-            if delta_time > 5.hours.to_i
+            if delta_time > ScanEvent::REMOVE_30MIN_AFTER.hours.to_i
               delta_time = delta_time - 30.minutes.to_i
               has_removed_30_min = true
             end
@@ -164,7 +164,7 @@ class ScanEventsController < ApplicationController
           last_scan_events = ScanEvent.where(member_id: @scan_event.member.id).where.not(id: @scan_event.id).where("hourly_worker_time_stamp <= ?", time_stamp)
           last_scan_event = last_scan_events.where(hourly_worker_in: true).order(:hourly_worker_time_stamp).last
           delta_time = time_stamp.to_i - last_scan_event&.hourly_worker_time_stamp.to_i
-          if delta_time > 5.hours.to_i
+          if delta_time > ScanEvent::REMOVE_30MIN_AFTER.hours.to_i
             delta_time = delta_time - 30.minutes.to_i
             has_removed_30_min = true
           end
@@ -245,10 +245,10 @@ class ScanEventsController < ApplicationController
 
     # a work month starts at the 26. (05:00:00) and ends at the 26. (04:59:59)
     def beginning_of_work_month(ts)
-      if (ts - 5.hours).day > 25
-        ts.beginning_of_month + 25.days + 5.hours
+      if (ts - ScanEvent::REMOVE_30MIN_AFTER.hours).day > 25
+        ts.beginning_of_month + 25.days + ScanEvent::REMOVE_30MIN_AFTER.hours
       else
-        ts.prev_month.beginning_of_month + 25.days + 5.hours
+        ts.prev_month.beginning_of_month + 25.days + ScanEvent::REMOVE_30MIN_AFTER.hours
       end
     end
 
