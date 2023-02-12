@@ -123,3 +123,6 @@ gem 'mina'
 # See https://github.com/collectiveidea/delayed_job
 gem 'delayed_job_active_record'
 gem "daemons"
+
+# See https://github.com/cyu/rack-cors
+gem 'rack-cors'
