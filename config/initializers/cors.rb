@@ -7,7 +7,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   end
 
   allow do
-    origins 'http://apps.erupt.ch:80'
+    origins 'https://www.erupt.ch:443'
     resource '/games_for_iframe', headers: :any, methods: [:get]
     # resource '/feedbacks/extern', headers: :any, methods: [:get]
     # resource '/members/extern', headers: :any, methods: [:get]
