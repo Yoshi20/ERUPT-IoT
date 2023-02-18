@@ -280,9 +280,15 @@ mina deploy
 ```
 sudo cat /var/log/nginx/error.log
 
-# If passenger does not start due to libssl
+# If passenger does not start due to missing libssl
 wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.17_amd64.deb
 sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.17_amd64.deb
+```
+
+## (Restore DB backup)
+```
+scp /Users/jascha/Downloads/<db_backup> deployer@<IPv4>:/tmp/<db_backup>
+pg_restore --jobs 8 --no-privileges --no-owner --username=<app_psql_usr_name> --dbname <app_psql_db_name> /tmp/<db_backup>
 ```
 
 ## HTTPs
@@ -295,12 +301,16 @@ sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 
 sudo certbot certonly --nginx
+-> enter email
+-> Y & N
+-> enter domain name(s)
 
 # Sample Output:
 # Certificate is saved at: /etc/letsencrypt/live/<project_name>.ch/fullchain.pem
 # Key is saved at: /etc/letsencrypt/live/<project_name>.ch/privkey.pem
 
-
+sudo vim /etc/nginx/sites-available/<project_name>.conf
+add:
 # HTTPS Conf (and redirect from http to https)
 server {
     listen 80 default_server;
@@ -310,12 +320,12 @@ server {
 
 server {
   listen 443 ssl;
-  server_name <project_name>.ch
+  server_name <project_name>.ch;
   server_tokens off;
 	charset utf-8;
 
-  ssl_certificate /etc/letsencrypt/live/<project_name>.ch/fullchain.pem
-  ssl_certificate_key /etc/letsencrypt/live/<project_name>.ch/privkey.pem
+  ssl_certificate /etc/letsencrypt/live/<project_name>.ch/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/<project_name>.ch/privkey.pem;
 
   root /var/www/<project_name>/current/public;
 
@@ -335,4 +345,11 @@ server {
     gzip_static on;
   }
 }
+
+# Full Restart
+sudo service nginx stop
+sudo service nginx start
+
+# Test autorenewal
+sudo certbot renew --dry-run
 ```
