@@ -124,7 +124,7 @@ set :rvm_use_path, '/usr/share/rvm/scripts/rvm'
 set :application_name, '<project_name>'
 set :domain, '<IPv4>'
 set :deploy_to, '/var/www/<project_name>'
-set :repository, 'git@github.com:<user>/<project_name>.git'
+set :repository, 'git@github.com:<git_user>/<project_name>.git'
 set :branch, 'main'
 
 # Optional settings:
@@ -264,9 +264,21 @@ sudo service nginx start
 ## Set ENVs
 ```
 vim ~/.bashrc
-# Add at the top of the file:
+Add at the top of the file:
+# My global ENV variables
 export <PROJECT_NAME>_DATABASE_PASSWORD=<app_psql_pw>
-export ...
+export INFOMANIAK_EMAIL_USERNAME=postmaster@<project_name>.ch
+export INFOMANIAK_SMTP_LOGIN=postmaster@<project_name>.ch
+export INFOMANIAK_SMTP_PASSWORD=<smtp_pw>
+export INFOMANIAK_SMTP_PORT=587
+export INFOMANIAK_SMTP_SERVER=mail.infomaniak.com
+export LANG=de_CH.UTF-8
+export RACK_ENV=production
+export RAILS_ENV=production
+export RAILS_LOG_TO_STDOUT=enabled
+export RAILS_SERVE_STATIC_FILES=enabled
+export TZ=Europe/Zurich
+
 source ~/.bashrc
 ```
 
