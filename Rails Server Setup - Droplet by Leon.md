@@ -275,7 +275,6 @@ export INFOMANIAK_SMTP_SERVER=mail.infomaniak.com
 export LANG=de_CH.UTF-8
 export RACK_ENV=production
 export RAILS_ENV=production
-export RAILS_LOG_TO_STDOUT=enabled
 export RAILS_SERVE_STATIC_FILES=enabled
 export TZ=Europe/Zurich
 
