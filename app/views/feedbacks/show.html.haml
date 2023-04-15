@@ -19,35 +19,53 @@
   .row
     .col
       %p
-        %b= t('activerecord.attributes.feedback.location_rating') + ':'
-        = @feedback.location_rating
+        %b= t('activerecord.attributes.feedback.overall_rating') + ':'
+        = @feedback.overall_rating
       %p
-        %b= t('activerecord.attributes.feedback.location_good') + ':'
-        = @feedback.location_good
+        %b= t('activerecord.attributes.feedback.service_rating') + ':'
+        = @feedback.service_rating
       %p
-        %b= t('activerecord.attributes.feedback.location_bad') + ':'
-        = @feedback.location_bad
+        %b= t('activerecord.attributes.feedback.ambient_rating') + ':'
+        = @feedback.ambient_rating
       %p
-        %b= t('activerecord.attributes.feedback.location_missing') + ':'
-        = @feedback.location_missing
+        %b= t('activerecord.attributes.feedback.how_often_do_you_visit') + ':'
+        = @feedback.how_often_do_you_visit
       %p
-        %b= t('activerecord.attributes.feedback.location_will_recommend') + ':'
-        = @feedback.location_will_recommend
+        %b= t('activerecord.attributes.feedback.what_to_improve') + ':'
+        = @feedback.what_to_improve
       %p
-        %b= t('activerecord.attributes.feedback.event_rating') + ':'
-        = @feedback.event_rating
+        %b= t('activerecord.attributes.feedback.what_to_keep') + ':'
+        = @feedback.what_to_keep
       %p
-        %b= t('activerecord.attributes.feedback.event_good') + ':'
-        = @feedback.event_good
+        %b= t('activerecord.attributes.feedback.console_rating') + ':'
+        = @feedback.console_rating
       %p
-        %b= t('activerecord.attributes.feedback.event_bad') + ':'
-        = @feedback.event_bad
+        %b= t('activerecord.attributes.feedback.console_comment') + ':'
+        = @feedback.console_comment
       %p
-        %b= t('activerecord.attributes.feedback.event_missing') + ':'
-        = @feedback.event_missing
+        %b= t('activerecord.attributes.feedback.pc_rating') + ':'
+        = @feedback.pc_rating
       %p
-        %b= t('activerecord.attributes.feedback.event_will_recommend') + ':'
-        = @feedback.event_will_recommend
+        %b= t('activerecord.attributes.feedback.pc_comment') + ':'
+        = @feedback.pc_comment
+      %p
+        %b= t('activerecord.attributes.feedback.karaoke_rating') + ':'
+        = @feedback.karaoke_rating
+      %p
+        %b= t('activerecord.attributes.feedback.karaoke_comment') + ':'
+        = @feedback.karaoke_comment
+      %p
+        %b= t('activerecord.attributes.feedback.board_game_rating') + ':'
+        = @feedback.board_game_rating
+      %p
+        %b= t('activerecord.attributes.feedback.board_game_comment') + ':'
+        = @feedback.board_game_comment
+      %p
+        %b= t('activerecord.attributes.feedback.offer_rating') + ':'
+        = @feedback.offer_rating
+      %p
+        %b= t('activerecord.attributes.feedback.offer_comment') + ':'
+        = @feedback.offer_comment
       %p
         %b= t('activerecord.attributes.feedback.read') + ':'
         = @feedback.read

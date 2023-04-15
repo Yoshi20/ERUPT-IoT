@@ -6,9 +6,7 @@
   .col
     %p= "Total feedbacks count = #{Feedback.all.count}"
   .col
-    %p= "Average location rating = #{@location_rating_average}"
-  .col
-    %p= "Average event rating = #{@event_rating_average}"
+    %p= "Average location rating = #{@overall_rating_average}"
   .col
     %p
       = "External link:"
@@ -19,16 +17,12 @@
     %thead.table-header
       %tr
         %th.text-center= t('activerecord.attributes.feedback.read')
-        %th.text-center= "Location " + t('activerecord.attributes.feedback.rating')
-        %th= "Location " + t('activerecord.attributes.feedback.good')
-        %th= "Location " + t('activerecord.attributes.feedback.bad')
-        %th= t('activerecord.attributes.feedback.missing')
-        %th.text-center= "Location " + t('activerecord.attributes.feedback.will_recommend')
-        %th.text-center= "Event " + t('activerecord.attributes.feedback.rating')
-        %th= "Event " + t('activerecord.attributes.feedback.good')
-        %th= "Event " + t('activerecord.attributes.feedback.bad')
-        %th= t('activerecord.attributes.feedback.missing')
-        %th.text-center= "Event " + t('activerecord.attributes.feedback.will_recommend')
+        %th.text-center= t('activerecord.attributes.feedback.overall_rating')
+        %th.text-center= t('activerecord.attributes.feedback.service_rating')
+        %th.text-center= t('activerecord.attributes.feedback.ambient_rating')
+        %th= t('activerecord.attributes.feedback.how_often_do_you_visit')
+        %th= t('activerecord.attributes.feedback.what_to_improve')
+        %th= t('activerecord.attributes.feedback.what_to_keep')
         %th Created at
 
     %tbody.feedback-list-body.with-show
@@ -37,16 +31,12 @@
           %td.text-center
             - if feedback.read
               .material-icons= 'done'
-          %td.text-center= feedback.location_rating
-          %td= feedback.location_good
-          %td= feedback.location_bad
-          %td= feedback.location_missing
-          %td.text-center= feedback.location_will_recommend
-          %td.text-center= feedback.event_rating
-          %td= feedback.event_good
-          %td= feedback.event_bad
-          %td= feedback.event_missing
-          %td.text-center= feedback.event_will_recommend
+          %td.text-center= feedback.overall_rating
+          %td.text-center= feedback.service_rating
+          %td.text-center= feedback.ambient_rating
+          %td= feedback.how_often_do_you_visit
+          %td= feedback.what_to_improve
+          %td= feedback.what_to_keep
           %td= feedback.created_at.localtime.to_s(:custom_datetime)
 
           %td.admin-list-actions

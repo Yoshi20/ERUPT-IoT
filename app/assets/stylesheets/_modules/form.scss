@@ -1,3 +1,10 @@
+form {
+  input[type=radio] {
+    height: 100%;
+    width: 20px;
+  }
+}
+
 .form-control {
   background: $color-grey-light;
   border: none;
@@ -17,6 +24,7 @@
 }
 
 .form-group {
+  margin-bottom: 2rem;
   em {
     font-size: small;
   }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_03_165305) do
+ActiveRecord::Schema.define(version: 2023_04_15_112326) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,16 +66,22 @@ ActiveRecord::Schema.define(version: 2022_12_03_165305) do
   end
 
   create_table "feedbacks", force: :cascade do |t|
-    t.integer "location_rating", null: false
-    t.string "location_good"
-    t.string "location_bad"
-    t.string "location_missing"
-    t.boolean "location_will_recommend"
-    t.integer "event_rating", null: false
-    t.string "event_good"
-    t.string "event_bad"
-    t.string "event_missing"
-    t.boolean "event_will_recommend"
+    t.integer "overall_rating"
+    t.integer "service_rating"
+    t.integer "ambient_rating"
+    t.string "how_often_do_you_visit"
+    t.string "what_to_improve"
+    t.string "what_to_keep"
+    t.integer "console_rating"
+    t.string "console_comment"
+    t.integer "pc_rating"
+    t.string "pc_comment"
+    t.integer "karaoke_rating"
+    t.string "karaoke_comment"
+    t.integer "board_game_rating"
+    t.string "board_game_comment"
+    t.integer "offer_rating"
+    t.string "offer_comment"
     t.boolean "read", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

@@ -10,8 +10,7 @@ class FeedbacksController < ApplicationController
   # GET /feedbacks.json
   def index
     @feedbacks = Feedback.all.order(created_at: :desc)
-    @location_rating_average = @feedbacks.map(&:location_rating).sum.to_f/@feedbacks.count
-    @event_rating_average = @feedbacks.map(&:event_rating).sum.to_f/@feedbacks.count
+    @overall_rating_average = @feedbacks.map(&:overall_rating).sum.to_f/@feedbacks.count
   end
 
   # GET /feedbacks/1
@@ -104,10 +103,11 @@ class FeedbacksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def feedback_params
-      params.require(:feedback).permit(:location_rating, :location_good,
-        :location_bad, :location_missing, :location_will_recommend,
-        :event_rating, :event_good, :event_bad, :event_missing,
-        :event_will_recommend, :read)
+      params.require(:feedback).permit(:overall_rating, :service_rating,
+        :ambient_rating, :how_often_do_you_visit, :what_to_improve,
+        :what_to_keep, :console_rating, :console_comment, :pc_rating,
+        :pc_comment, :karaoke_rating, :karaoke_comment, :board_game_rating,
+        :board_game_comment, :offer_rating, :offer_comment, :read,)
     end
 
 end

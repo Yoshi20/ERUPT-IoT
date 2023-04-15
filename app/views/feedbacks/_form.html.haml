@@ -6,65 +6,127 @@
       %ul
         - @feedback.errors.full_messages.each do |message|
           %li= message
+  .field.form-group.text-center
+    %strong= f.label :overall_rating, t('activerecord.attributes.feedback.overall_rating')
+    %br
+    .row
+      .col
+        = '1'
+      - 5.times do |i|
+        .col
+          = f.radio_button :overall_rating, i, checked: params[:feedback].present? ? params[:feedback][:overall_rating] == i : @feedback.overall_rating == i
+      .col
+        = '5'
+  .field.form-group.text-center
+    %strong= f.label :service_rating, t('activerecord.attributes.feedback.service_rating')
+    %br
+    .row
+      .col
+        = '1'
+      - 5.times do |i|
+        .col
+          = f.radio_button :service_rating, i, checked: params[:feedback].present? ? params[:feedback][:service_rating] == i : @feedback.service_rating == i
+      .col
+        = '5'
+  .field.form-group.text-center
+    %strong= f.label :ambient_rating, t('activerecord.attributes.feedback.ambient_rating')
+    %br
+    .row
+      .col
+        = '1'
+      - 5.times do |i|
+        .col
+          = f.radio_button :ambient_rating, i, checked: params[:feedback].present? ? params[:feedback][:ambient_rating] == i : @feedback.ambient_rating == i
+      .col
+        = '5'
+  .field.form-group.text-center
+    %strong= f.label :how_often_do_you_visit, t('activerecord.attributes.feedback.how_often_do_you_visit')
+    = f.text_field :how_often_do_you_visit, class: 'form-control'
+  .field.form-group.text-center
+    %strong= f.label :what_to_improve, "#{t('activerecord.attributes.feedback.what_to_improve')}"
+    = f.text_field :what_to_improve, class: 'form-control'
+  .field.form-group.text-center
+    %strong= f.label :what_to_keep, "#{t('activerecord.attributes.feedback.what_to_keep')}"
+    = f.text_field :what_to_keep, class: 'form-control'
+  .field.form-group.text-center
+    %strong= f.label :console_rating, t('activerecord.attributes.feedback.console_rating')
+    %br
+    .row
+      .col
+        = '1'
+      - 5.times do |i|
+        .col
+          = f.radio_button :console_rating, i, checked: params[:feedback].present? ? params[:feedback][:console_rating] == i : @feedback.console_rating == i
+      .col
+        = '5'
+  .field.form-group.text-center
+    %strong= f.label :console_comment, "#{t('activerecord.attributes.feedback.console_comment')}"
+    = f.text_field :console_comment, class: 'form-control'
+  .field.form-group.text-center
+    %strong= f.label :pc_rating, t('activerecord.attributes.feedback.pc_rating')
+    %br
+    .row
+      .col
+        = '1'
+      - 5.times do |i|
+        .col
+          = f.radio_button :pc_rating, i, checked: params[:feedback].present? ? params[:feedback][:pc_rating] == i : @feedback.pc_rating == i
+      .col
+        = '5'
+  .field.form-group.text-center
+    %strong= f.label :pc_comment, "#{t('activerecord.attributes.feedback.pc_comment')}"
+    = f.text_field :pc_comment, class: 'form-control'
+  .field.form-group.text-center
+    %strong= f.label :karaoke_rating, t('activerecord.attributes.feedback.karaoke_rating')
+    %br
+    .row
+      .col
+        = '1'
+      - 5.times do |i|
+        .col
+          = f.radio_button :karaoke_rating, i, checked: params[:feedback].present? ? params[:feedback][:karaoke_rating] == i : @feedback.karaoke_rating == i
+      .col
+        = '5'
+  .field.form-group.text-center
+    %strong= f.label :karaoke_comment, "#{t('activerecord.attributes.feedback.karaoke_comment')}"
+    = f.text_field :karaoke_comment, class: 'form-control'
+  .field.form-group.text-center
+    %strong= f.label :board_game_rating, t('activerecord.attributes.feedback.board_game_rating')
+    %br
+    .row
+      .col
+        = '1'
+      - 5.times do |i|
+        .col
+          = f.radio_button :board_game_rating, i, checked: params[:feedback].present? ? params[:feedback][:board_game_rating] == i : @feedback.board_game_rating == i
+      .col
+        = '5'
+  .field.form-group.text-center
+    %strong= f.label :board_game_comment, "#{t('activerecord.attributes.feedback.board_game_comment')}"
+    = f.text_field :board_game_comment, class: 'form-control'
+  .field.form-group.text-center
+    %strong= f.label :offer_rating, t('activerecord.attributes.feedback.offer_rating')
+    %br
+    .row
+      .col
+        = '1'
+      - 5.times do |i|
+        .col
+          = f.radio_button :offer_rating, i, checked: params[:feedback].present? ? params[:feedback][:offer_rating] == i : @feedback.offer_rating == i
+      .col
+        = '5'
+  .field.form-group.text-center
+    %strong= f.label :offer_comment, "#{t('activerecord.attributes.feedback.offer_comment')}"
+    = f.text_field :offer_comment, class: 'form-control'
 
-  %h2= "Location"
-  .field.form-group
-    %strong= f.label :location_rating, "#{t('activerecord.attributes.feedback.rating')} *"
-    %br
-    .row
-      .col
-        = '1'
-      - 10.times do |i|
-        .col
-          = f.radio_button :location_rating, i, checked: params[:feedback].present? ? params[:feedback][:location_rating] == i : @feedback.location_rating == i
-      .col
-        = '10'
-  .field.form-group
-    %strong= f.label :location_good, "#{t('activerecord.attributes.feedback.good')}"
-    = f.text_field :location_good, class: 'form-control'
-  .field.form-group
-    %strong= f.label :location_bad, "#{t('activerecord.attributes.feedback.bad')}"
-    = f.text_field :location_bad, class: 'form-control'
-  .field.form-group
-    %strong= f.label :location_missing, "#{t('activerecord.attributes.feedback.missing')}"
-    = f.text_field :location_missing, class: 'form-control'
-  .form-group
-    .form-check
-      = f.check_box :location_will_recommend, checked: (params[:feedback].present? ? (params[:feedback][:location_will_recommend] == "1") : @feedback.location_will_recommend), class:'form-check-input mr-2'
-      = f.label :location_will_recommend, class:'form-check-label'
-  %br
-  %h2= "Event"
-  .field.form-group
-    %strong= f.label :event_rating, "#{t('activerecord.attributes.feedback.rating')} *"
-    %br
-    .row
-      .col
-        = '1'
-      - 10.times do |i|
-        .col
-          = f.radio_button :event_rating, i, checked: params[:feedback].present? ? params[:feedback][:event_rating] == i : @feedback.event_rating == i
-      .col
-        = '10'
-  .field.form-group
-    %strong= f.label :event_good, "#{t('activerecord.attributes.feedback.good')}"
-    = f.text_field :event_good, class: 'form-control'
-  .field.form-group
-    %strong= f.label :event_bad, "#{t('activerecord.attributes.feedback.bad')}"
-    = f.text_field :event_bad, class: 'form-control'
-  .field.form-group
-    %strong= f.label :event_missing, "#{t('activerecord.attributes.feedback.missing')}"
-    = f.text_field :event_missing, class: 'form-control'
-  .form-group
-    .form-check
-      = f.check_box :event_will_recommend, checked: (params[:feedback].present? ? (params[:feedback][:event_will_recommend] == "1") : @feedback.event_will_recommend), class:'form-check-input mr-2'
-      = f.label :event_will_recommend, class:'form-check-label'
+
   - if extern
     .form-group
       = recaptcha_tags align: "center"
 
-  - if current_user.present? and !@feedback.new_record?
+  - if current_user.present? && !@feedback.new_record?
     %hr
-    .field.form-group
+    .field.form-group.text-center
       %strong= "Admin section:"
     .form-group
       .form-check
