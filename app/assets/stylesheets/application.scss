@@ -52,9 +52,10 @@ main {
 
 .footer {
   flex-shrink: 0;
-  background-color: $color-white;
+  background-image: linear-gradient(90deg, $erupt-red 0%, $erupt-blue 100%);
   color: $color-white;
   text-align: center;
+  height: 50px;
 
   p {
     padding-top: 1.7rem;

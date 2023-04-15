@@ -176,6 +176,6 @@
 
   .actions.form-group.text-center
     - if extern
-      = f.submit t('feedbacks.submit_btn_extern'), class:'btn btn-ghost'
+      = f.submit t('feedbacks.submit_btn_extern'), class:'btn btn-ghost', id: 'feedback-button'
     - else
       = f.submit class:'btn btn-ghost'

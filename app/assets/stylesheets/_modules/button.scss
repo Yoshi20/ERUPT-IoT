@@ -39,3 +39,14 @@
     padding: 0.2rem;
   }
 }
+
+#feedback-button {
+  background: $color-white;
+  height: 45px;
+  border-radius: 50px;
+  &:hover {
+    background-image: linear-gradient(90deg, $erupt-red 0%, $erupt-blue 100%);
+
+    color: $color-white;
+  }
+}
