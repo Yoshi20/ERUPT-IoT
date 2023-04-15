@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   get 'feedbacks/extern/new' => 'feedbacks#new_extern'
   post 'feedbacks/extern' => 'feedbacks#create_extern'
   get 'feedbacks/extern/success' => 'feedbacks#success_extern'
+  post 'feedbacks/export' => 'feedbacks#export'
   resources :feedbacks
   resources :orders, only: [:index, :show, :update, :destroy]
   get 'orders_fullscreen' => 'orders#index_open'

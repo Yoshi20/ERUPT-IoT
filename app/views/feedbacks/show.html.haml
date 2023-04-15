@@ -69,3 +69,9 @@
       %p
         %b= t('activerecord.attributes.feedback.read') + ':'
         = @feedback.read
+        - if !@feedback.read
+          .admin-list-actions__link
+            = form_for @feedback, method: :patch, role: 'form', class:'form' do |f|
+              = f.check_box :read, checked: true, hidden: true
+              = button_tag(type: "submit", class:'btn btn-sstm') do
+                %span= "Als gelesen markieren"

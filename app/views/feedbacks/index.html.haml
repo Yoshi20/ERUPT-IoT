@@ -62,6 +62,10 @@
   -#     = link_to feedbacks_path, class:'btn btn-ghost btn-square' do
   -#       %span.material-icons.admin-actions__link__icon= 'refresh'
   .admin-actions
+    - if @feedbacks.any?
+      .admin-actions__link
+        = button_to feedbacks_export_path, method: :post, class:'btn btn-ghost btn-square' do
+          %span.material-icons.admin-actions__link__icon= 'assignment_return'
     .admin-actions__link
       = link_to feedbacks_path, class:'btn btn-ghost btn-square' do
         %span.material-icons.admin-actions__link__icon= 'refresh'

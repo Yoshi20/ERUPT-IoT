@@ -95,6 +95,41 @@ class FeedbacksController < ApplicationController
     end
   end
 
+  # POST /feedbacks/export
+  require 'csv'
+  def export
+    @feedbacks = Feedback.all.order(created_at: :desc)
+    csv_data = CSV.generate do |csv|
+      @feedbacks.each_with_index do |feedback, i|
+        wd = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][feedback.created_at.localtime.wday]
+        datetime = feedback.created_at.localtime.to_s(:custom_datetime)
+        feedback_hash = {
+          created_at: "#{wd}, #{datetime}",
+          read: feedback.read,
+          overall_rating: feedback.overall_rating,
+          service_rating: feedback.service_rating,
+          ambient_rating: feedback.ambient_rating,
+          how_often_do_you_visit: feedback.how_often_do_you_visit,
+          what_to_improve: feedback.what_to_improve,
+          what_to_keep: feedback.what_to_keep,
+          console_rating: feedback.console_rating,
+          console_comment: feedback.console_comment,
+          pc_rating: feedback.pc_rating,
+          pc_comment: feedback.pc_comment,
+          karaoke_rating: feedback.karaoke_rating,
+          karaoke_comment: feedback.karaoke_comment,
+          board_game_rating: feedback.board_game_rating,
+          board_game_comment: feedback.board_game_comment,
+          offer_rating: feedback.offer_rating,
+          offer_comment: feedback.offer_comment,
+        }
+        csv << feedback_hash.keys if i == 0
+        csv << feedback_hash.values
+      end
+    end
+    send_data(csv_data.gsub('""', ''), type: 'text/csv', filename: "feedback_#{Time.now.to_i}.csv")
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_feedback
