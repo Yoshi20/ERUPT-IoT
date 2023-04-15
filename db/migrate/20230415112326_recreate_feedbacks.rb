@@ -1,7 +1,7 @@
 class RecreateFeedbacks < ActiveRecord::Migration[6.1]
   def change
     create_table :feedbacks do |t|
-      t.integer :overall_rating
+      t.integer :overall_rating, null: false
       t.integer :service_rating
       t.integer :ambient_rating
       t.string :how_often_do_you_visit

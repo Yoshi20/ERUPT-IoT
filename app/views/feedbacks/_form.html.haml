@@ -2,7 +2,7 @@
   -# as: :post, url: post_path(@post), method: :patch, html: { class: "edit_post", id: "edit_post_45" } do |f| %>
   - if @feedback.errors.any?
     #error_explanation
-      %h2= pluralize(@feedback.errors.count, "error") + ' ' + t('feedbacks.prohibited')
+      -# %h2= pluralize(@feedback.errors.count, "error") + ' ' + t('feedbacks.prohibited')
       %ul
         - @feedback.errors.full_messages.each do |message|
           %li= message
@@ -14,7 +14,7 @@
         = '1'
       - 5.times do |i|
         .col
-          = f.radio_button :overall_rating, i, checked: params[:feedback].present? ? params[:feedback][:overall_rating] == i : @feedback.overall_rating == i
+          = f.radio_button :overall_rating, i, checked: params[:feedback].present? ? params[:feedback][:overall_rating] == i.to_s : @feedback.overall_rating == i
       .col
         = '5'
   .field.form-group.text-center
@@ -25,7 +25,7 @@
         = '1'
       - 5.times do |i|
         .col
-          = f.radio_button :service_rating, i, checked: params[:feedback].present? ? params[:feedback][:service_rating] == i : @feedback.service_rating == i
+          = f.radio_button :service_rating, i, checked: params[:feedback].present? ? params[:feedback][:service_rating] == i.to_s : @feedback.service_rating == i
       .col
         = '5'
   .field.form-group.text-center
@@ -36,89 +36,130 @@
         = '1'
       - 5.times do |i|
         .col
-          = f.radio_button :ambient_rating, i, checked: params[:feedback].present? ? params[:feedback][:ambient_rating] == i : @feedback.ambient_rating == i
+          = f.radio_button :ambient_rating, i, checked: params[:feedback].present? ? params[:feedback][:ambient_rating] == i.to_s : @feedback.ambient_rating == i
       .col
         = '5'
   .field.form-group.text-center
     %strong= f.label :how_often_do_you_visit, t('activerecord.attributes.feedback.how_often_do_you_visit')
-    = f.text_field :how_often_do_you_visit, class: 'form-control'
+    - visit_options = [[t('feedbacks.visit_option.option1'), t('feedbacks.visit_option.option1', locale: 'de')],[t('feedbacks.visit_option.option2'), t('feedbacks.visit_option.option2', locale: 'de')],[t('feedbacks.visit_option.option3'), t('feedbacks.visit_option.option3', locale: 'de')],[t('feedbacks.visit_option.option4'), t('feedbacks.visit_option.option4', locale: 'de')]]
+    = f.select :how_often_do_you_visit, options_for_select(visit_options, @feedback.how_often_do_you_visit), {include_blank: true}, class: 'form-control'
   .field.form-group.text-center
-    %strong= f.label :what_to_improve, "#{t('activerecord.attributes.feedback.what_to_improve')}"
+    %strong= f.label :what_to_improve, "#{t('activerecord.attributes.feedback.what_to_improve')} (optional)"
     = f.text_field :what_to_improve, class: 'form-control'
   .field.form-group.text-center
-    %strong= f.label :what_to_keep, "#{t('activerecord.attributes.feedback.what_to_keep')}"
+    %strong= f.label :what_to_keep, "#{t('activerecord.attributes.feedback.what_to_keep')} (optional)"
     = f.text_field :what_to_keep, class: 'form-control'
-  .field.form-group.text-center
-    %strong= f.label :console_rating, t('activerecord.attributes.feedback.console_rating')
-    %br
-    .row
-      .col
-        = '1'
-      - 5.times do |i|
-        .col
-          = f.radio_button :console_rating, i, checked: params[:feedback].present? ? params[:feedback][:console_rating] == i : @feedback.console_rating == i
-      .col
-        = '5'
-  .field.form-group.text-center
-    %strong= f.label :console_comment, "#{t('activerecord.attributes.feedback.console_comment')}"
-    = f.text_field :console_comment, class: 'form-control'
-  .field.form-group.text-center
-    %strong= f.label :pc_rating, t('activerecord.attributes.feedback.pc_rating')
-    %br
-    .row
-      .col
-        = '1'
-      - 5.times do |i|
-        .col
-          = f.radio_button :pc_rating, i, checked: params[:feedback].present? ? params[:feedback][:pc_rating] == i : @feedback.pc_rating == i
-      .col
-        = '5'
-  .field.form-group.text-center
-    %strong= f.label :pc_comment, "#{t('activerecord.attributes.feedback.pc_comment')}"
-    = f.text_field :pc_comment, class: 'form-control'
-  .field.form-group.text-center
-    %strong= f.label :karaoke_rating, t('activerecord.attributes.feedback.karaoke_rating')
-    %br
-    .row
-      .col
-        = '1'
-      - 5.times do |i|
-        .col
-          = f.radio_button :karaoke_rating, i, checked: params[:feedback].present? ? params[:feedback][:karaoke_rating] == i : @feedback.karaoke_rating == i
-      .col
-        = '5'
-  .field.form-group.text-center
-    %strong= f.label :karaoke_comment, "#{t('activerecord.attributes.feedback.karaoke_comment')}"
-    = f.text_field :karaoke_comment, class: 'form-control'
-  .field.form-group.text-center
-    %strong= f.label :board_game_rating, t('activerecord.attributes.feedback.board_game_rating')
-    %br
-    .row
-      .col
-        = '1'
-      - 5.times do |i|
-        .col
-          = f.radio_button :board_game_rating, i, checked: params[:feedback].present? ? params[:feedback][:board_game_rating] == i : @feedback.board_game_rating == i
-      .col
-        = '5'
-  .field.form-group.text-center
-    %strong= f.label :board_game_comment, "#{t('activerecord.attributes.feedback.board_game_comment')}"
-    = f.text_field :board_game_comment, class: 'form-control'
-  .field.form-group.text-center
-    %strong= f.label :offer_rating, t('activerecord.attributes.feedback.offer_rating')
-    %br
-    .row
-      .col
-        = '1'
-      - 5.times do |i|
-        .col
-          = f.radio_button :offer_rating, i, checked: params[:feedback].present? ? params[:feedback][:offer_rating] == i : @feedback.offer_rating == i
-      .col
-        = '5'
-  .field.form-group.text-center
-    %strong= f.label :offer_comment, "#{t('activerecord.attributes.feedback.offer_comment')}"
-    = f.text_field :offer_comment, class: 'form-control'
 
+
+
+  #accordion
+    .card.text-center
+      #headingOne.card-header
+        %h5.mb-0
+          %button.btn.btn-link.collapsed{"type" => "button", "aria-controls" => "collapseOne", "aria-expanded" => "true", "data-target" => "#collapseOne", "data-toggle" => "collapse"}
+            = t('feedbacks.rate_consoles')
+      #collapseOne.collapse{"aria-labelledby" => "headingOne", "data-parent" => "#accordion"}
+        .card-body
+          .field.form-group.text-center
+            %strong= f.label :console_rating, t('activerecord.attributes.feedback.console_rating')
+            %br
+            .row
+              .col
+                = '1'
+              - 5.times do |i|
+                .col
+                  = f.radio_button :console_rating, i, checked: params[:feedback].present? ? params[:feedback][:console_rating] == i.to_s : @feedback.console_rating == i
+              .col
+                = '5'
+          .field.form-group.text-center
+            %strong= f.label :console_comment, "#{t('activerecord.attributes.feedback.console_comment')} (optional)"
+            = f.text_field :console_comment, class: 'form-control'
+    .card.text-center
+      #headingTwo.card-header
+        %h5.mb-0
+          %button.btn.btn-link.collapsed{"type" => "button", "aria-controls" => "collapseTwo", "aria-expanded" => "false", "data-target" => "#collapseTwo", "data-toggle" => "collapse"}
+            = t('feedbacks.rate_pcs')
+      #collapseTwo.collapse{"aria-labelledby" => "headingTwo", "data-parent" => "#accordion"}
+        .card-body
+          .field.form-group.text-center
+            %strong= f.label :pc_rating, t('activerecord.attributes.feedback.pc_rating')
+            %br
+            .row
+              .col
+                = '1'
+              - 5.times do |i|
+                .col
+                  = f.radio_button :pc_rating, i, checked: params[:feedback].present? ? params[:feedback][:pc_rating] == i.to_s : @feedback.pc_rating == i
+              .col
+                = '5'
+          .field.form-group.text-center
+            %strong= f.label :pc_comment, "#{t('activerecord.attributes.feedback.pc_comment')} (optional)"
+            = f.text_field :pc_comment, class: 'form-control'
+    .card.text-center
+      #headingThree.card-header
+        %h5.mb-0
+          %button.btn.btn-link.collapsed{"type" => "button", "aria-controls" => "collapseThree", "aria-expanded" => "false", "data-target" => "#collapseThree", "data-toggle" => "collapse"}
+            = t('feedbacks.rate_karaoke')
+      #collapseThree.collapse{"aria-labelledby" => "headingThree", "data-parent" => "#accordion"}
+        .card-body
+          .field.form-group.text-center
+            %strong= f.label :karaoke_rating, t('activerecord.attributes.feedback.karaoke_rating')
+            %br
+            .row
+              .col
+                = '1'
+              - 5.times do |i|
+                .col
+                  = f.radio_button :karaoke_rating, i, checked: params[:feedback].present? ? params[:feedback][:karaoke_rating] == i.to_s : @feedback.karaoke_rating == i
+              .col
+                = '5'
+          .field.form-group.text-center
+            %strong= f.label :karaoke_comment, "#{t('activerecord.attributes.feedback.karaoke_comment')} (optional)"
+            = f.text_field :karaoke_comment, class: 'form-control'
+    .card.text-center
+      #headingFour.card-header
+        %h5.mb-0
+          %button.btn.btn-link.collapsed{"type" => "button", "aria-controls" => "collapseFour", "aria-expanded" => "false", "data-target" => "#collapseFour", "data-toggle" => "collapse"}
+            = t('feedbacks.rate_board_games')
+      #collapseFour.collapse{"aria-labelledby" => "headingFour", "data-parent" => "#accordion"}
+        .card-body
+          .field.form-group.text-center
+            %strong= f.label :board_game_rating, t('activerecord.attributes.feedback.board_game_rating')
+            %br
+            .row
+              .col
+                = '1'
+              - 5.times do |i|
+                .col
+                  = f.radio_button :board_game_rating, i, checked: params[:feedback].present? ? params[:feedback][:board_game_rating] == i.to_s : @feedback.board_game_rating == i
+              .col
+                = '5'
+          .field.form-group.text-center
+            %strong= f.label :board_game_comment, "#{t('activerecord.attributes.feedback.board_game_comment')} (optional)"
+            = f.text_field :board_game_comment, class: 'form-control'
+    .card.text-center
+      #headingFive.card-header
+        %h5.mb-0
+          %button.btn.btn-link.collapsed{"type" => "button", "aria-controls" => "collapseFive", "aria-expanded" => "false", "data-target" => "#collapseFive", "data-toggle" => "collapse"}
+            = t('feedbacks.rate_offer')
+      #collapseFive.collapse{"aria-labelledby" => "headingFive", "data-parent" => "#accordion"}
+        .card-body
+          .field.form-group.text-center
+            %strong= f.label :offer_rating, t('activerecord.attributes.feedback.offer_rating')
+            %br
+            .row
+              .col
+                = '1'
+              - 5.times do |i|
+                .col
+                  = f.radio_button :offer_rating, i, checked: params[:feedback].present? ? params[:feedback][:offer_rating] == i.to_s : @feedback.offer_rating == i
+              .col
+                = '5'
+          .field.form-group.text-center
+            %strong= f.label :offer_comment, "#{t('activerecord.attributes.feedback.offer_comment')} (optional)"
+            = f.text_field :offer_comment, class: 'form-control'
+
+  %br
 
   - if extern
     .form-group

@@ -7,8 +7,8 @@ de:
     attributes:
       feedback:
         overall_rating: "Gesamteindruck"
-        service_rating: "Service Bewertung"
-        ambient_rating: "Ambient Bewertung"
+        service_rating: "Service"
+        ambient_rating: "Ambient"
         how_often_do_you_visit: "Wie oft besuchst Du uns?"
         what_to_improve: "Was können wir verbessern?"
         what_to_keep: "Was muss unbedingt gleich bleiben?"
@@ -33,3 +33,13 @@ de:
     success_extern: "Feedback erfolgreich abgeschickt"
     success_extern_body: "Vielen dank für dein Feedback. Wir hoffen dich auch weiterhin bei uns begrüssen zu dürfen"
     success_extern_body2: "Diese Seite kann geschlossen werden."
+    visit_option:
+      option1: "1-2x pro Woche"
+      option2: "1-2x pro Monat"
+      option3: "1-2x pro Quartal"
+      option4: "weniger"
+    rate_consoles: "Hier Konsolen bewerten"
+    rate_pcs: "Hier PCs bewerten"
+    rate_karaoke: "Hier Karaoke bewerten"
+    rate_board_games: "Hier Brettspiele bewerten"
+    rate_offer: "Hier das Angebot bewerten"

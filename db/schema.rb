@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 2023_04_15_112326) do
   end
 
   create_table "feedbacks", force: :cascade do |t|
-    t.integer "overall_rating"
+    t.integer "overall_rating", null: false
     t.integer "service_rating"
     t.integer "ambient_rating"
     t.string "how_often_do_you_visit"

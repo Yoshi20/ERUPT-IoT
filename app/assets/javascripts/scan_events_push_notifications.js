@@ -8,6 +8,7 @@ pusher = function() {
     if (errorCtr <= 5) {
       setTimeout(function(){pusher()}, 100);
     }
+    return;
   }
   if (!beamStarted) {
     const beamsClient = new PusherPushNotifications.Client({
