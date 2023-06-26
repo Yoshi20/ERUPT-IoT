@@ -34,22 +34,36 @@ class TimeStampsController < ApplicationController
       @scan_events = @scan_events.where("hourly_worker_time_stamp >= ? AND hourly_worker_time_stamp <= ?", beginning_of_year_from_id(@year_id), end_of_year_from_id(@year_id))
     end
     csv_data = CSV.generate do |csv|
+      total_day_time_h = 0
+      total_removed_time_h = 0
+      total_delta_time_h = 0
+      max_monthly_time_h = 0
       @scan_events.each_with_index do |scan_event, i|
         wd = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][scan_event.hourly_worker_time_stamp.localtime.wday]
         datetime = scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime)
+        removed_time_h = scan_event.hourly_worker_has_removed_30_min ? 0.5 : nil
+        delta_time_h = scan_event.hourly_worker_out ? (scan_event.hourly_worker_delta_time.to_f/3600).round(2) : nil
+        monthly_time_h = scan_event.hourly_worker_out ? (scan_event.hourly_worker_monthly_time.to_f/3600).round(2) : nil
+        day_time_h = scan_event.hourly_worker_has_removed_30_min && delta_time_h.present? ? (delta_time_h+0.5) : delta_time_h
         scan_event_hash = {
           time_stamp: "#{wd}, #{datetime}",
           first_name: scan_event.member.first_name,
           last_name: scan_event.member.last_name,
           hour_in: scan_event.hourly_worker_in ? scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime_hour) : nil,
           hour_out: scan_event.hourly_worker_out ? scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime_hour) : nil,
-          delta_time_h: scan_event.hourly_worker_out ? (scan_event.hourly_worker_delta_time.to_f/3600).round(2) : nil,
-          monthly_time_h: scan_event.hourly_worker_out ? (scan_event.hourly_worker_monthly_time.to_f/3600).round(2) : nil,
-          removed_time_h: scan_event.hourly_worker_has_removed_30_min ? 0.5 : nil,
+          day_time_h: day_time_h,
+          removed_time_h: removed_time_h,
+          delta_time_h: delta_time_h,
+          monthly_time_h: monthly_time_h,
         }
         csv << scan_event_hash.keys if i == 0
         csv << scan_event_hash.values
+        total_day_time_h = total_day_time_h + day_time_h.to_f
+        total_removed_time_h = total_removed_time_h + removed_time_h.to_f
+        total_delta_time_h = total_delta_time_h + delta_time_h.to_f
+        max_monthly_time_h = monthly_time_h.to_f if monthly_time_h.to_f > max_monthly_time_h
       end
+      csv << ["Total", nil, nil, nil, nil, total_day_time_h, total_removed_time_h, total_delta_time_h, max_monthly_time_h]
     end
     hourly_worker_name = @member_id.present? ? "#{Member.find(@member_id).first_name}s" : "hourly_worker"
     send_data(csv_data.gsub('""', ''), type: 'text/csv', filename: "#{hourly_worker_name}_time_stamps_#{Time.now.to_i}.csv")
