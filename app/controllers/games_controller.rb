@@ -26,9 +26,15 @@ private
     ggleap_apps = Request::ggleap_apps(jwt)
     @games = []
     ggleap_apps.each do |app|
-      @games << app if app['AppType'] == "Game"
-      # @programs << app if app['AppType'] == "Program"
-      # @settings << app if app['AppType'] == "Setting"
+      if params['pc_group_uuid'].present?
+        @games << app if app['AppType'] == "Game" && params['pc_group_uuid'].in?(app['EnabledPcGroups'])
+        # PC games:       /games?pc_group_uuid=da13c17c-9a03-4922-ae17-cb5820246c47
+        # Console games:  /games?pc_group_uuid=7f362b3b-5cf0-43d4-90ff-50911eddbee1
+      else
+        @games << app if app['AppType'] == "Game"
+        # @programs << app if app['AppType'] == "Program"
+        # @settings << app if app['AppType'] == "Setting"
+      end
     end
     @games = @games.sort_by { |game| game["Rank"] }
   end

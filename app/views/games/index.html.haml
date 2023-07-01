@@ -1,11 +1,21 @@
 - if current_page?(action: 'index')
   .row
     .col
+      = link_to games_path(pc_group_uuid: "da13c17c-9a03-4922-ae17-cb5820246c47"), method: :get, class: "btn #{params['pc_group_uuid'] == "da13c17c-9a03-4922-ae17-cb5820246c47" ? 'btn-sstm' : 'btn-ghost'}", style: 'margin-right: 0.5rem;' do
+        %span PC games
+      = link_to games_path(pc_group_uuid: "7f362b3b-5cf0-43d4-90ff-50911eddbee1"), method: :get, class: "btn #{params['pc_group_uuid'] == "7f362b3b-5cf0-43d4-90ff-50911eddbee1" ? 'btn-sstm' : 'btn-ghost'}", style: 'margin-right: 0.5rem;' do
+        %span Console games
+    .col
       %h1.page__title= 'GAMING MENU'
+    .col
+
+  .row
+    .col
+      %p= "Total games count = #{@games.count}"
 
   .admin-actions
     .admin-actions__link
-      = link_to games_for_iframe_path, method: :get, class: 'btn btn-sstm' do
+      = link_to games_for_iframe_path(pc_group_uuid: params['pc_group_uuid']), method: :get, class: 'btn btn-sstm' do
         %span Fullscreen
     .admin-actions__link
       = link_to games_refresh_path, class:'btn btn-ghost btn-square' do
