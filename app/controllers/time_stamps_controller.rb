@@ -81,12 +81,12 @@ private
 
   def beginning_of_work_month_from_id(work_month_id, year_id)
     beginning_of_selected_month = beginning_of_year_from_id(year_id) + work_month_id.to_i.months
-    beginning_of_selected_month - 1.month + 25.days + ScanEvent::REMOVE_30MIN_AFTER.hours
+    beginning_of_selected_month - 1.month + 24.days + 6.hours
   end
 
   def end_of_work_month_from_id(work_month_id, year_id)
     beginning_of_selected_month = beginning_of_year_from_id(year_id) + work_month_id.to_i.months
-    beginning_of_selected_month + 25.days + ScanEvent::REMOVE_30MIN_AFTER.hours - 1.second
+    beginning_of_selected_month + 24.days + 6.hours - 1.second
   end
 
 end

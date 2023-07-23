@@ -243,12 +243,12 @@ class ScanEventsController < ApplicationController
       params.require(:scan_event).permit(:member_id, :hourly_worker_time_stamp, :hourly_worker_in, :hourly_worker_out, :hourly_worker_has_removed_30_min, :hourly_worker_was_automatically_clocked_out)
     end
 
-    # a work month starts at the 26. (05:00:00) and ends at the 26. (04:59:59)
+    # a work month starts at the 25. (06:00:00) and ends at the 25. (05:59:59)
     def beginning_of_work_month(ts)
-      if (ts - ScanEvent::REMOVE_30MIN_AFTER.hours).day > 25
-        ts.beginning_of_month + 25.days + ScanEvent::REMOVE_30MIN_AFTER.hours
+      if (ts - 6.hours).day > 25
+        ts.beginning_of_month + 24.days + 6.hours
       else
-        ts.prev_month.beginning_of_month + 25.days + ScanEvent::REMOVE_30MIN_AFTER.hours
+        ts.prev_month.beginning_of_month + 24.days + 6.hours
       end
     end
 
