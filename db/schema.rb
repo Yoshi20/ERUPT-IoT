@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_15_112326) do
+ActiveRecord::Schema.define(version: 2024_05_10_071117) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,6 +63,8 @@ ActiveRecord::Schema.define(version: 2023_04_15_112326) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "device_type_id"
     t.bigint "user_id"
+    t.index ["device_type_id"], name: "index_devices_on_device_type_id"
+    t.index ["user_id"], name: "index_devices_on_user_id"
   end
 
   create_table "feedbacks", force: :cascade do |t|
@@ -117,6 +119,7 @@ ActiveRecord::Schema.define(version: 2023_04_15_112326) do
     t.bigint "device_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["device_id"], name: "index_orders_on_device_id"
   end
 
   create_table "scan_events", force: :cascade do |t|
@@ -133,6 +136,7 @@ ActiveRecord::Schema.define(version: 2023_04_15_112326) do
     t.datetime "hourly_worker_time_stamp", precision: 6
     t.boolean "hourly_worker_has_removed_30_min", default: false
     t.boolean "hourly_worker_was_automatically_clocked_out", default: false
+    t.index ["member_id"], name: "index_scan_events_on_member_id"
   end
 
   create_table "users", force: :cascade do |t|

@@ -27,7 +27,7 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    if current_user.admin? or current_user == @user
+    if current_user.admin? || current_user.id == @user.id
       @user.destroy
       flash[:notice] = t('flash.notice.deleting_user')
     else

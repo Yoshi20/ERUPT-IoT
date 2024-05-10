@@ -47,8 +47,8 @@ class TimeStampsController < ApplicationController
         day_time_h = scan_event.hourly_worker_has_removed_30_min && delta_time_h.present? ? (delta_time_h+0.5) : delta_time_h
         scan_event_hash = {
           time_stamp: "#{wd}, #{datetime}",
-          first_name: scan_event.member.first_name,
-          last_name: scan_event.member.last_name,
+          first_name: scan_event.member_first_name,
+          last_name: scan_event.member_last_name,
           hour_in: scan_event.hourly_worker_in ? scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime_hour) : nil,
           hour_out: scan_event.hourly_worker_out ? scan_event.hourly_worker_time_stamp.localtime.to_s(:custom_datetime_hour) : nil,
           day_time_h: day_time_h,

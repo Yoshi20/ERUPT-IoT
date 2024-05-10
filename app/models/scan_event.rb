@@ -1,6 +1,8 @@
 class ScanEvent < ApplicationRecord
   belongs_to :member, optional: true
 
+  delegate :first_name, :last_name, to: :member, prefix: true
+
   scope :no_member, -> { where(member_id: nil) }
 
   REMOVE_30MIN_AFTER = 8
