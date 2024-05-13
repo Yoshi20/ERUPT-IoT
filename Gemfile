@@ -94,7 +94,7 @@ gem "nokogiri", ">= 1.11.0.rc4"
 gem 'exception_notification'
 
 # See https://github.com/svenfuchs/rails-i18n
-gem 'rails-i18n', '~> 6.0.0' # For 6.0.0 or higher
+gem 'rails-i18n', '~> 7.0.9' # For 6.0.0 or higher
 
 # See https://github.com/tigrish/devise-i18n
 gem 'devise-i18n'
