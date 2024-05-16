@@ -5,8 +5,6 @@ class ScanEvent < ApplicationRecord
 
   scope :no_member, -> { where(member_id: nil) }
 
-  REMOVE_30MIN_AFTER = 8
-
   def has_member?
     self.member_id.present?
   end

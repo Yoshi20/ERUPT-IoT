@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_10_071117) do
+ActiveRecord::Schema.define(version: 2024_05_16_075820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,6 +139,28 @@ ActiveRecord::Schema.define(version: 2024_05_10_071117) do
     t.index ["member_id"], name: "index_scan_events_on_member_id"
   end
 
+  create_table "time_stamps", force: :cascade do |t|
+    t.datetime "value"
+    t.boolean "is_in", default: false
+    t.boolean "is_out", default: false
+    t.bigint "sick_time"
+    t.bigint "paid_leave_time"
+    t.bigint "extra_time"
+    t.bigint "delta_time"
+    t.bigint "monthly_time"
+    t.bigint "removed_break_time", default: 0
+    t.bigint "added_night_time", default: 0
+    t.boolean "was_automatically_clocked_out", default: false
+    t.boolean "was_manually_edited", default: false
+    t.boolean "was_manually_validated", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "scan_event_id"
+    t.bigint "user_id"
+    t.index ["scan_event_id"], name: "index_time_stamps_on_scan_event_id"
+    t.index ["user_id"], name: "index_time_stamps_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -171,4 +193,6 @@ ActiveRecord::Schema.define(version: 2024_05_10_071117) do
   add_foreign_key "devices", "users"
   add_foreign_key "orders", "devices"
   add_foreign_key "scan_events", "members"
+  add_foreign_key "time_stamps", "scan_events"
+  add_foreign_key "time_stamps", "users"
 end
