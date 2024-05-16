@@ -337,7 +337,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap (>= 1.4.4)
-  bootstrap (~> 4.3.1)
+  bootstrap (< 5.0)
   brakeman
   byebug
   capybara (>= 3.26)
