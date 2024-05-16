@@ -46,10 +46,7 @@ class ScanEventsController < ApplicationController
         # hourly worker
         user = member&.user
         if member.is_hourly_worker || user&.is_hourly_worker
-
-          puts 'blup'
-          puts user.inspect
-          user.handle_time_stamp(scan_event.id) if user.present?
+          user.handle_new_time_stamp!(scan_event.id) if user.present?
 
           # blup
           # find last scan_event
@@ -165,6 +162,7 @@ class ScanEventsController < ApplicationController
   def update
     respond_to do |format|
       if scan_event_params["hourly_worker_time_stamp(5i)"].present?
+        # blup
         time_stamp = Time.new(scan_event_params['hourly_worker_time_stamp(1i)'], scan_event_params['hourly_worker_time_stamp(2i)'], scan_event_params['hourly_worker_time_stamp(3i)'],  scan_event_params['hourly_worker_time_stamp(4i)'],  scan_event_params['hourly_worker_time_stamp(5i)'], @scan_event.hourly_worker_time_stamp.sec)
         clocked_in = (scan_event_params[:hourly_worker_in].present? ? (scan_event_params[:hourly_worker_in] == "1") : @scan_event.hourly_worker_in)
         clocked_out = (scan_event_params[:hourly_worker_out].present? ? (scan_event_params[:hourly_worker_out] == "1") : @scan_event.hourly_worker_out)
@@ -230,7 +228,7 @@ class ScanEventsController < ApplicationController
   def destroy
     respond_to do |format|
       scan_event_id = @scan_event.id
-      is_hourly_worker = @scan_event.hourly_worker_time_stamp.present?
+      is_hourly_worker = @scan_event.hourly_worker_time_stamp.present? # blup
       if @scan_event.destroy
         # also try to delete the automatic clock out delayed job
         Delayed::Job.find_by(queue: "scan_event_#{scan_event_id}")&.destroy

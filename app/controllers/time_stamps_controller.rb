@@ -1,5 +1,6 @@
 class TimeStampsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_time_stamp, only: [:edit, :update, :destroy]
   before_action { @section = 'time_stamps' }
 
   # GET /time_stamps
@@ -43,67 +44,24 @@ class TimeStampsController < ApplicationController
   # PATCH/PUT /time_stamps/1
   # PATCH/PUT /time_stamps/1.json
   def update
-    # blup
-    # respond_to do |format|
-    #   if scan_event_params["hourly_worker_time_stamp(5i)"].present?
-    #     time_stamp = Time.new(scan_event_params['hourly_worker_time_stamp(1i)'], scan_event_params['hourly_worker_time_stamp(2i)'], scan_event_params['hourly_worker_time_stamp(3i)'],  scan_event_params['hourly_worker_time_stamp(4i)'],  scan_event_params['hourly_worker_time_stamp(5i)'], @scan_event.hourly_worker_time_stamp.sec)
-    #     clocked_in = (scan_event_params[:hourly_worker_in].present? ? (scan_event_params[:hourly_worker_in] == "1") : @scan_event.hourly_worker_in)
-    #     clocked_out = (scan_event_params[:hourly_worker_out].present? ? (scan_event_params[:hourly_worker_out] == "1") : @scan_event.hourly_worker_out)
-    #     was_automatically_clocked_out = (scan_event_params[:hourly_worker_was_automatically_clocked_out].present? ? (scan_event_params[:hourly_worker_was_automatically_clocked_out] == "1") : @scan_event.hourly_worker_was_automatically_clocked_out)
-    #     # has_removed_30_min = (scan_event_params[:hourly_worker_has_removed_30_min].present? ? (scan_event_params[:hourly_worker_has_removed_30_min] == "1") : @scan_event.hourly_worker_has_removed_30_min)
-    #     has_removed_30_min = false
-    #     if clocked_out
-    #       last_scan_events = ScanEvent.where(member_id: @scan_event.member.id).where.not(id: @scan_event.id).where("hourly_worker_time_stamp <= ?", time_stamp)
-    #       last_scan_event = last_scan_events.where(hourly_worker_in: true).order(:hourly_worker_time_stamp).last
-    #       delta_time = time_stamp.to_i - last_scan_event&.hourly_worker_time_stamp.to_i
-    #       if delta_time > TimeStamp::REMOVE_30MIN_AFTER.hours.to_i
-    #         delta_time = delta_time - 30.minutes.to_i
-    #         has_removed_30_min = true
-    #       end
-    #       scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", beginning_of_work_month(time_stamp))
-    #       monthly_time = delta_time + scan_event_this_month.sum(&:hourly_worker_delta_time)
-    #       # delete the automatic clock out delayed job
-    #       Delayed::Job.find_by(queue: "scan_event_#{last_scan_event.id}")&.destroy
-    #       Delayed::Job.find_by(queue: "scan_event_#{@scan_event.id}")&.destroy
-    #     end
-    #     if (clocked_in || clocked_out) && !(clocked_in && clocked_out) && @scan_event.update(
-    #       hourly_worker_time_stamp: time_stamp,
-    #       hourly_worker_delta_time: delta_time,
-    #       hourly_worker_monthly_time: monthly_time,
-    #       hourly_worker_has_removed_30_min: has_removed_30_min,
-    #       hourly_worker_in: clocked_in,
-    #       hourly_worker_out: clocked_out,
-    #       hourly_worker_was_automatically_clocked_out: was_automatically_clocked_out,
-    #     )
-    #       format.html { redirect_to time_stamps_url(member_filter: @scan_event.member.id, work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.updating_scan_event') }
-    #       format.json { render :show, status: :ok, location: @scan_event }
-    #     else
-    #       format.html { render :edit, alert: t('flash.alert.updating_scan_event') }
-    #       format.json { render json: @scan_event.errors, status: :unprocessable_entity }
-    #     end
-    #   elsif @scan_event.card_id.present?
-    #     member = Member.find(scan_event_params[:member_id]) if scan_event_params[:member_id].present?
-    #     if member.present? && member.update(card_id: @scan_event.card_id)
-    #       if @scan_event.update(member_id: scan_event_params[:member_id])
-    #         # update also all scan_events with the same card_id
-    #         ScanEvent.where(card_id: @scan_event.card_id).each do |se|
-    #           se.update(member_id: scan_event_params[:member_id]);
-    #         end
-    #         format.html { redirect_to scan_events_url, notice: t('flash.notice.updating_scan_event') }
-    #         format.json { render :show, status: :ok, location: @scan_event }
-    #       else
-    #         format.html { render :show, alert: t('flash.alert.updating_scan_event') }
-    #         format.json { render json: @scan_event.errors, status: :unprocessable_entity }
-    #       end
-    #     else
-    #       format.html { render :show, alert: t('flash.alert.updating_member') }
-    #       format.json { render json: member.errors, status: :unprocessable_entity }
-    #     end
-    #   else
-    #     format.html { render :show, alert: t('flash.alert.no_card_id') }
-    #     format.json { render json: { alert: t('flash.alert.no_card_id') }, status: :unprocessable_entity }
-    #   end
-    # end
+    respond_to do |format|
+      @time_stamp.value = Time.new(time_stamp_params['value(1i)'], time_stamp_params['value(2i)'], time_stamp_params['value(3i)'],  time_stamp_params['value(4i)'],  time_stamp_params['value(5i)'], @time_stamp.value.sec)
+      @time_stamp.is_in = (time_stamp_params[:is_in].present? ? (time_stamp_params[:is_in] == "1") : @time_stamp.is_in)
+      @time_stamp.is_out = (time_stamp_params[:is_out].present? ? (time_stamp_params[:is_out] == "1") : @time_stamp.is_out)
+      @time_stamp.was_automatically_clocked_out = (time_stamp_params[:was_automatically_clocked_out].present? ? (time_stamp_params[:was_automatically_clocked_out] == "1") : @time_stamp.was_automatically_clocked_out)
+      if @time_stamp.is_out && !@time_stamp.is_in
+        @time_stamp.clock_out
+      elsif @time_stamp.is_in && !@time_stamp.is_out
+        @time_stamp.clock_in
+      end
+      if @time_stamp.save
+        format.html { redirect_to time_stamps_url(user_filter: @time_stamp.user.id, work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.updating_time_stamp') }
+        format.json { render :show, status: :ok, location: @time_stamp }
+      else
+        format.html { render :edit, alert: t('flash.alert.updating_time_stamp') }
+        format.json { render json: @time_stamp.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # DELETE /time_stamps/1
@@ -128,6 +86,7 @@ class TimeStampsController < ApplicationController
   # POST /time_stamps/export
   require 'csv'
   def export
+    # blup
     @member_id = params[:member_filter]
     @work_month_id = params[:work_month_filter]
     @year_id = params[:year_filter] || 0
@@ -175,6 +134,21 @@ class TimeStampsController < ApplicationController
   end
 
 private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_time_stamp
+    @time_stamp = TimeStamp.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def time_stamp_params
+    params.require(:time_stamp).permit(
+      :value, :is_in, :is_out, :sick_time, :paid_leave_time, :extra_time,
+      :delta_time, :monthly_time, :removed_break_time, :added_night_time,
+      :was_automatically_clocked_out, :was_manually_edited,
+      :was_manually_validated, :scan_event_id, :user_id,
+    )
+  end
 
   def beginning_of_year_from_id(year_id)
     Time.now.beginning_of_year - year_id.to_i.years
