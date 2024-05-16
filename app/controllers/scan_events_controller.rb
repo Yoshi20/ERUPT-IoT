@@ -44,7 +44,14 @@ class ScanEventsController < ApplicationController
         member_abo_types = member.abo_types.map{|at| at.name}.join(' ')
         scan_event = ScanEvent.create(member_id: member.id, post_body: post_body, abo_types: member_abo_types, card_id: params[:UID])
         # hourly worker
-        if member.is_hourly_worker
+        user = member&.user
+        if member.is_hourly_worker || user&.is_hourly_worker
+
+          puts 'blup'
+          puts user.inspect
+          user.handle_time_stamp(scan_event.id) if user.present?
+
+          # blup
           # find last scan_event
           now = Time.now
           last_scan_events = ScanEvent.where(member_id: member.id).where.not(id: scan_event.id).where("hourly_worker_time_stamp <= ?", now)
@@ -85,6 +92,10 @@ class ScanEventsController < ApplicationController
               hourly_worker_was_automatically_clocked_out: true,
             )
           end
+
+
+
+
         end
         # get data from ggLeap if present
         if member.ggleap_uuid.present?

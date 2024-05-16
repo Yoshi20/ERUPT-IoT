@@ -1,4 +1,5 @@
 class Member < ApplicationRecord
+  has_one :user
   has_many :abo_types_members
   has_many :abo_types, through: :abo_types_members
   has_many :scan_events, dependent: :destroy

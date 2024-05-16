@@ -28,7 +28,7 @@ class CreateTimeStamps < ActiveRecord::Migration[6.1]
       time_stamps = []
       ScanEvent.includes(:member).where.not(hourly_worker_time_stamp: nil).each do |se|
         member = se.member
-        user = User.find_by(email: member.email)
+        user = User.find_by(member_id: member.id) || User.find_by(email: member.email)
         if user.nil?
           user = User.create!(
             email: member.email,
@@ -36,7 +36,7 @@ class CreateTimeStamps < ActiveRecord::Migration[6.1]
             password: "123456", # must be updated by the user afterwards
           )
         end
-        user.update!(is_hourly_worker: true) unless user.is_hourly_worker
+        user.update!(is_hourly_worker: true, member_id: member.id)
         time_stamps << {
           value: se.hourly_worker_time_stamp,
           is_in: se.hourly_worker_in,

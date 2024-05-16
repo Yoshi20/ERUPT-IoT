@@ -179,7 +179,9 @@ ActiveRecord::Schema.define(version: 2024_05_16_075820) do
     t.string "full_name"
     t.string "mobile_number"
     t.boolean "is_hourly_worker", default: false
+    t.bigint "member_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["member_id"], name: "index_users_on_member_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
@@ -196,4 +198,5 @@ ActiveRecord::Schema.define(version: 2024_05_16_075820) do
   add_foreign_key "scan_events", "members"
   add_foreign_key "time_stamps", "scan_events"
   add_foreign_key "time_stamps", "users"
+  add_foreign_key "users", "members"
 end
