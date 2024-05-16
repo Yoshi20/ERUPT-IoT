@@ -32,16 +32,15 @@
         %select#select_year.form-control{name: "year_filter"}
           = options_for_select(years_for_select, @year_id)
   .col
-    %p= "Total scan_events count = #{@total_scan_events.count}"
-  .col
-    %p.text-center= "Yellow => IN / Green => OUT"
+    %p= "Total time_stamp count = #{@total_time_stamps.count}"
 
 .time_stamp-list
   %table.table.table-hover
     %thead.table-header
       %tr
+        %th.text-center Type
         %th Timestamp
-        %th= t('activerecord.attributes.user.username')
+        %th.text-center= t('activerecord.attributes.user.username')
         %th.text-center= "IN"
         %th.text-center= "OUT"
         %th.text-center= "Δt [h]"
@@ -51,80 +50,22 @@
       - @time_stamps.each do |time_stamp|
         = render partial: 'time_stamps/time_stamp', locals: {time_stamp: time_stamp}
 
-
-
-
-
-
-.row
-  .col
-    %form.form{"accept-charset": "UTF-8", action: "/time_stamps", method: "get"}
-      = text_field_tag :work_month_filter, @work_month_id, type: "hidden"
-      = text_field_tag :year_filter, @year_id, type: "hidden"
-      .field.form-group{style: "width: 60%;"}
-        %select#select_hourly_worker.form-control{name: "member_filter"}
-          %option{:value => ""} Member filter
-          = options_for_select(@members_for_select, @member_id)
-  .col
-    - work_months_for_select = [["Jan (25.12 - 24.01)", 0],["Feb (25.01 - 24.02)", 1],["März (25.02 - 24.03)", 2],["Apr (25.03 - 24.04)", 3],["Mai (25.04 - 24.05)", 4],["Juni (25.05 - 24.06)", 5],["Juli (25.06 - 24.07)", 6],["Aug (25.07 - 24.08)", 7],["Sep (25.08 - 24.09)", 8],["Okt (25.09 - 24.10)", 9],["Nov (25.10 - 24.11)", 10],["Dez (25.11 - 24.12)", 11]]
-    %form.form{"accept-charset": "UTF-8", action: "/time_stamps", method: "get"}
-      = text_field_tag :member_filter, @member_id, type: "hidden"
-      = text_field_tag :year_filter, @year_id, type: "hidden"
-      .field.form-group{style: "width: 60%;"}
-        %select#select_work_month.form-control{name: "work_month_filter"}
-          %option{:value => ""} Month filter
-          = options_for_select(work_months_for_select, @work_month_id)
-  .col
-    - years_for_select = []
-    - current_year = Time.now.year
-    - (current_year-2022+1).times do |i|
-      - years_for_select << [(current_year-i).to_s, i]
-    %form.form{"accept-charset": "UTF-8", action: "/time_stamps", method: "get"}
-      = text_field_tag :member_filter, @member_id, type: "hidden"
-      = text_field_tag :work_month_filter, @work_month_id, type: "hidden"
-      .field.form-group{style: "width: 60px;"}
-        %select#select_year.form-control{name: "year_filter"}
-          = options_for_select(years_for_select, @year_id)
-  .col
-    %p= "Total scan_events count = #{@total_scan_events.count}"
-  .col
-    %p.text-center= "Yellow => IN / Green => OUT"
-
-.scan_event-list
-  %table.table.table-hover
-    %thead.table-header
-      %tr
-        %th Timestamp
-        %th= t('activerecord.attributes.member.first_name')
-        %th= t('activerecord.attributes.member.last_name')
-        %th.text-center= "IN"
-        %th.text-center= "OUT"
-        %th.text-center= "Δt [h]"
-        %th.text-center= "Monthly Δt [h]"
-
-    %tbody.scan_event-list-body#time_stamps
-      - @scan_events.each do |scan_event|
-        = render partial: 'time_stamps/scan_event', locals: {scan_event: scan_event} if scan_event.member.present?
-
-
   .admin-actions
-    - if @scan_events.any?
+    - if @time_stamps.any?
       .admin-actions__link
-        = button_to time_stamps_export_path(member_filter: @member_id, work_month_filter: @work_month_id, year_filter: @year_id), method: :post, class:'btn btn-ghost btn-square' do
+        = button_to time_stamps_export_path(user_filter: @user_id, work_month_filter: @work_month_id, year_filter: @year_id), method: :post, class:'btn btn-ghost btn-square' do
           %span.material-icons.admin-actions__link__icon= 'assignment_return'
     .admin-actions__link
-      = link_to time_stamps_path(member_filter: @member_id, work_month_filter: @work_month_id, year_filter: @year_id), class:'btn btn-ghost btn-square' do
+      = link_to time_stamps_path(user_filter: @user_id, work_month_filter: @work_month_id, year_filter: @year_id), class:'btn btn-ghost btn-square' do
         %span.material-icons.admin-actions__link__icon= 'refresh'
-    - if @member_id.present?
+    - if @user_id.present?
       .admin-actions__link
-        = form_tag scan_events_path, method: :post, class: "form" do
-          = text_field_tag :member_id, @member_id, type: "hidden"
+        = form_tag time_stamps_path, method: :post, class: "form" do
+          = text_field_tag :user_id, @user_id, type: "hidden"
           = text_field_tag :work_month_id, @work_month_id, type: "hidden"
           = text_field_tag :year_id, @year_id, type: "hidden"
           = button_tag(type: "submit", value: "manually added time stamp", class:'btn btn-ghost btn-square') do
             %span.material-icons.admin-actions__link__icon= 'add'
-
-
 
 :javascript
   document.addEventListener('turbolinks:load', function() {

@@ -41,6 +41,20 @@ class TimeStampsController < ApplicationController
   def edit
   end
 
+  # POST /scan_events
+  # POST /scan_events.json
+  def create
+    user = User.find(params[:user_id]) if params[:user_id].present?
+    respond_to do |format|
+      begin
+        user.handle_new_time_stamp!(nil) if user.present?
+        format.html { redirect_to time_stamps_url(user_filter: params[:user_id], work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.creating_time_stamp') }
+      rescue
+        format.html { head :unprocessable_entity }
+      end
+    end
+  end
+
   # PATCH/PUT /time_stamps/1
   # PATCH/PUT /time_stamps/1.json
   def update
@@ -67,20 +81,18 @@ class TimeStampsController < ApplicationController
   # DELETE /time_stamps/1
   # DELETE /time_stamps/1.json
   def destroy
-    # blup
-    # respond_to do |format|
-    #   scan_event_id = @scan_event.id
-    #   is_hourly_worker = @scan_event.hourly_worker_time_stamp.present?
-    #   if @scan_event.destroy
-    #     # also try to delete the automatic clock out delayed job
-    #     Delayed::Job.find_by(queue: "scan_event_#{scan_event_id}")&.destroy
-    #     format.html { redirect_to is_hourly_worker ? time_stamps_url(member_filter: params[:member_id], work_month_filter: params[:work_month_id], year_filter: params[:year_id]) : scan_events_url, notice: t('flash.notice.deleting_scan_event') }
-    #     format.json { head :no_content }
-    #   else
-    #     format.html { render :show, alert: t('flash.alert.deleting_scan_event') }
-    #     format.json { render json: @scan_event.errors, status: :unprocessable_entity }
-    #   end
-    # end
+    respond_to do |format|
+      time_stamp_id = @time_stamp.id
+      if @time_stamp.destroy
+        # also try to delete the automatic clock out delayed job
+        Delayed::Job.find_by(queue: "time_stamp_#{time_stamp_id}")&.destroy
+        format.html { redirect_to time_stamps_url(user_filter: params[:user_id], work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.deleting_time_stamp') }
+        format.json { head :no_content }
+      else
+        format.html { render :show, alert: t('flash.alert.deleting_time_stamp') }
+        format.json { render json: @time_stamp.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # POST /time_stamps/export

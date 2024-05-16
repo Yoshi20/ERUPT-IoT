@@ -1,17 +1,19 @@
 - if time_stamp.present? && time_stamp.value.present?
   %tr.time_stamp{'data-id': time_stamp.id, 'data-component'=>'time_stamp', style: "background-color: #{time_stamp.was_automatically_clocked_out ? 'red' : (time_stamp.is_in ? 'yellow' : 'lightgreen')};"}
+    %td.text-center= time_stamp.type
     - wd = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][time_stamp.value.localtime.wday]
     - datetime = time_stamp.value.localtime.to_s(:custom_datetime)
     %td= "#{wd}, #{datetime}"
     - user = time_stamp.user
-    %td= user.username
+    %td.text-center= user.username
     %td.text-center= time_stamp.is_in ? time_stamp.value.localtime.to_s(:custom_datetime_hour) : ""
     %td.text-center= time_stamp.is_out ? time_stamp.value.localtime.to_s(:custom_datetime_hour) : ""
     - delta_time_string = ""
     - if time_stamp.delta_time.present?
-      - delta_time = (time_stamp.delta_time.to_f/3600)
-      - delta_time_string = "<strong>#{delta_time.round(2)}</strong>".html_safe
-      - delta_time_string = (delta_time_string + " (#{(delta_time+time_stamp.removed_break_time).round(2)} - #{time_stamp.removed_break_time.round(2)})").html_safe if time_stamp.removed_break_time > 0
+      - delta_time_h = (time_stamp.delta_time.to_f/3600)
+      - delta_time_string = "<strong>#{delta_time_h.round(2)}</strong>".html_safe
+      - removed_time_h = time_stamp.removed_break_time.to_f/3600 if time_stamp.removed_break_time > 0
+      - delta_time_string = (delta_time_string + " (#{(delta_time_h+removed_time_h).round(2)} - #{removed_time_h.round(2)})").html_safe if removed_time_h.present?
     %td.text-center= delta_time_string
     %td.text-center= (time_stamp.monthly_time.present? && time_stamp.is_out) ? (time_stamp.monthly_time.to_f/3600).round(2) : ""
 

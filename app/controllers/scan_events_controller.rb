@@ -20,10 +20,14 @@ class ScanEventsController < ApplicationController
   end
 
   def show
-    is_hourly_worker = @scan_event.hourly_worker_in || @scan_event.hourly_worker_out
     respond_to do |format|
       format.html {render 'show'}
-      format.js {render partial: is_hourly_worker ? 'time_stamps/scan_event' : 'scan_events/scan_event', locals: {scan_event: @scan_event, layout: false}}
+      time_stamp = @scan_event.time_stamp
+      if time_stamp.present?
+        format.js {render partial: 'time_stamps/time_stamp', locals: {time_stamp: time_stamp, layout: false}}
+      else
+        format.js {render partial: 'scan_events/scan_event', locals: {scan_event: @scan_event, layout: false}}
+      end
     end
   end
 

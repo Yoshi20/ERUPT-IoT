@@ -6,6 +6,26 @@ class TimeStamp < ApplicationRecord
   REMOVE_30MIN_AFTER = 7
   REMOVE_60MIN_AFTER = 9
 
+  def type
+    if self.sick_time.to_i > 0
+      "SICK"
+    elsif self.paid_leave_time.to_i > 0
+      "HOLIDAY"
+    elsif self.was_automatically_clocked_out
+      "OUT (AUTO)"
+    elsif self.is_out && self.was_manually_edited
+      "OUT (MANUALLY)"
+    elsif self.is_out
+      "OUT"
+    elsif self.is_in && self.was_manually_edited
+      "IN (MANUALLY)"
+    elsif self.is_in
+      "IN"
+    else
+      "?"
+    end
+  end
+
   def new?
     self.created_at > 5.minute.ago
   end
