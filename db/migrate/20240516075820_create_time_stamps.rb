@@ -36,6 +36,7 @@ class CreateTimeStamps < ActiveRecord::Migration[6.1]
             password: "123456", # must be updated by the user afterwards
           )
         end
+        user.update!(is_hourly_worker: true) unless user.is_hourly_worker
         time_stamps << {
           value: se.hourly_worker_time_stamp,
           is_in: se.hourly_worker_in,

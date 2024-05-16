@@ -1,0 +1,41 @@
+- if time_stamp.present? && time_stamp.value.present?
+  %tr.time_stamp{'data-id': time_stamp.id, 'data-component'=>'time_stamp', style: "background-color: #{time_stamp.was_automatically_clocked_out ? 'red' : (time_stamp.is_in ? 'yellow' : 'lightgreen')};"}
+    - wd = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][time_stamp.value.localtime.wday]
+    - datetime = time_stamp.value.localtime.to_s(:custom_datetime)
+    %td= "#{wd}, #{datetime}"
+    - user = time_stamp.user
+    %td= user.username
+    %td.text-center= time_stamp.is_in ? time_stamp.value.localtime.to_s(:custom_datetime_hour) : ""
+    %td.text-center= time_stamp.is_out ? time_stamp.value.localtime.to_s(:custom_datetime_hour) : ""
+    - delta_time_string = ""
+    - if time_stamp.delta_time.present?
+      - delta_time = (time_stamp.delta_time.to_f/3600)
+      - delta_time_string = "<strong>#{delta_time.round(2)}</strong>".html_safe
+      - delta_time_string = (delta_time_string + " (#{(delta_time+time_stamp.removed_break_time).round(2)} - #{time_stamp.removed_break_time.round(2)})").html_safe if time_stamp.removed_break_time > 0
+    %td.text-center= delta_time_string
+    %td.text-center= (time_stamp.monthly_time.present? && time_stamp.is_out) ? (time_stamp.monthly_time.to_f/3600).round(2) : ""
+
+    - if current_user.present? && current_user.admin?
+      %td.admin-list-actions
+        - if time_stamp.is_out
+          .admin-list-actions__link
+            = form_for time_stamp, role: 'form', class:'form' do |f|
+              = text_field_tag :user_id, @user_id, type: "hidden"
+              = text_field_tag :work_month_id, @work_month_id, type: "hidden"
+              = text_field_tag :year_id, @year_id, type: "hidden"
+              .field.form-group.hidden
+                .form-group-inline{style: 'width: 50%; margin-left: auto; margin-right: auto;'}
+                  = f.datetime_select :value
+              .actions.form-group.text-center
+                = f.button class:'btn btn-sstm btn-square' do
+                  %span.material-icons.admin-actions__link__icon= 'refresh'
+        .admin-list-actions__link
+          = link_to edit_time_stamp_path(time_stamp), class: 'btn btn-sstm btn-square' do
+            %span.material-icons.admin-actions__link__icon= 'edit'
+        .admin-list-actions__link
+          = form_for time_stamp, method: :delete, role: 'form', class:'form' do |f|
+            = text_field_tag :user_id, @user_id, type: "hidden"
+            = text_field_tag :work_month_id, @work_month_id, type: "hidden"
+            = text_field_tag :year_id, @year_id, type: "hidden"
+            = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
+              %span.material-icons.admin-actions__link__icon= 'delete'

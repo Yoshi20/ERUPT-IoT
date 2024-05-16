@@ -1,0 +1,32 @@
+= form_for @time_stamp, role: 'form', class:'form' do |f|
+  - if @time_stamp.errors.any?
+    #error_explanation
+      %h2= pluralize(@time_stamp.errors.count, "error") + ' ' + t('time_stamps.prohibited')
+      %ul
+        - @time_stamp.errors.full_messages.each do |message|
+          %li= message
+
+  .field.form-group
+    %strong= f.label :value, t('activerecord.attributes.time_stamp.value')
+    %em= '(dd.mm.yyyy - hh:mm)'
+    .form-group-inline{style: 'width: 50%; margin-left: auto; margin-right: auto;'}
+      = f.datetime_select :value, { start_year: Time.zone.now.year, end_year: Date.today.year - 3 }, class: 'form-control'
+
+    .field.form-group
+      %strong= 'Hourly Worker Flags'
+      .row
+        .col.form-check
+          = f.check_box :is_in, checked: @time_stamp.is_in, class:'form-check-input mr-2'
+          = f.label :is_in, 'Clocked IN?', class:'form-check-label', style:'background:yellow;'
+        .col.form-check
+          = f.check_box :is_out, checked: @time_stamp.is_out, class:'form-check-input mr-2'
+          = f.label :is_out, 'Clocked OUT?', class:'form-check-label', style:'background:lightgreen;'
+        .col.form-check
+          = f.check_box :was_automatically_clocked_out, checked: @time_stamp.was_automatically_clocked_out, class:'form-check-input mr-2'
+          = f.label :was_automatically_clocked_out, 'Automatically clocked out?', class:'form-check-label', style:'background:red;'
+        -# .col.form-check
+        -#   = f.check_box :hourly_worker_has_removed_30_min, checked: @time_stamp.hourly_worker_has_removed_30_min, class:'form-check-input mr-2', disabled: true
+        -#   = f.label :hourly_worker_has_removed_30_min, 'Removed 30min?', class:'form-check-label'
+
+  .actions.form-group.text-center
+    = f.submit class:'btn btn-ghost'

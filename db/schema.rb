@@ -178,6 +178,7 @@ ActiveRecord::Schema.define(version: 2024_05_16_075820) do
     t.boolean "is_admin"
     t.string "full_name"
     t.string "mobile_number"
+    t.boolean "is_hourly_worker", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
