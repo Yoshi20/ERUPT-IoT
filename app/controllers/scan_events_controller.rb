@@ -49,54 +49,8 @@ class ScanEventsController < ApplicationController
         scan_event = ScanEvent.create(member_id: member.id, post_body: post_body, abo_types: member_abo_types, card_id: params[:UID])
         # hourly worker
         user = member&.user
-        if member.is_hourly_worker || user&.is_hourly_worker
-          user.handle_new_time_stamp!(scan_event.id) if user.present?
-
-          # blup
-          # find last scan_event
-          now = Time.now
-          last_scan_events = ScanEvent.where(member_id: member.id).where.not(id: scan_event.id).where("hourly_worker_time_stamp <= ?", now)
-          last_scan_event = last_scan_events.last
-          if last_scan_event.present? && last_scan_event.hourly_worker_in
-            delta_time = now.to_i - last_scan_event&.hourly_worker_time_stamp.to_i
-            has_removed_30_min = false
-            if delta_time > TimeStamp::REMOVE_30MIN_AFTER.hours.to_i
-              delta_time = delta_time - 30.minutes.to_i
-              has_removed_30_min = true
-            end
-            scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", beginning_of_work_month(now))
-            monthly_time = delta_time + scan_event_this_month.sum(&:hourly_worker_delta_time)
-            # clock out
-            scan_event.update(
-              hourly_worker_time_stamp: now,
-              hourly_worker_out: true,
-              hourly_worker_delta_time: delta_time,
-              hourly_worker_monthly_time: monthly_time,
-              hourly_worker_has_removed_30_min: has_removed_30_min
-            )
-            # delete the automatic clock out delayed job
-            Delayed::Job.find_by(queue: "scan_event_#{last_scan_event.id}")&.destroy
-          else
-            # clock in
-            scan_event.update(
-              hourly_worker_time_stamp: now,
-              hourly_worker_in: true,
-              hourly_worker_monthly_time: last_scan_event&.hourly_worker_monthly_time
-            )
-            # start the automatic clock out delayed job
-            automatic_clock_out_in = 12.hours
-            puts ScanEvent.delay(run_at: automatic_clock_out_in.from_now, queue: "scan_event_#{scan_event.id}").create(
-              member_id: member.id,
-              hourly_worker_time_stamp: now+automatic_clock_out_in,
-              hourly_worker_out: true,
-              hourly_worker_delta_time: automatic_clock_out_in.to_i,
-              hourly_worker_was_automatically_clocked_out: true,
-            )
-          end
-
-
-
-
+        if user.present? && user.is_hourly_worker
+          user.handle_new_time_stamp!(scan_event.id)
         end
         # get data from ggLeap if present
         if member.ggleap_uuid.present?
@@ -165,44 +119,7 @@ class ScanEventsController < ApplicationController
   # PATCH/PUT /scan_events/1.json
   def update
     respond_to do |format|
-      if scan_event_params["hourly_worker_time_stamp(5i)"].present?
-        # blup
-        time_stamp = Time.new(scan_event_params['hourly_worker_time_stamp(1i)'], scan_event_params['hourly_worker_time_stamp(2i)'], scan_event_params['hourly_worker_time_stamp(3i)'],  scan_event_params['hourly_worker_time_stamp(4i)'],  scan_event_params['hourly_worker_time_stamp(5i)'], @scan_event.hourly_worker_time_stamp.sec)
-        clocked_in = (scan_event_params[:hourly_worker_in].present? ? (scan_event_params[:hourly_worker_in] == "1") : @scan_event.hourly_worker_in)
-        clocked_out = (scan_event_params[:hourly_worker_out].present? ? (scan_event_params[:hourly_worker_out] == "1") : @scan_event.hourly_worker_out)
-        was_automatically_clocked_out = (scan_event_params[:hourly_worker_was_automatically_clocked_out].present? ? (scan_event_params[:hourly_worker_was_automatically_clocked_out] == "1") : @scan_event.hourly_worker_was_automatically_clocked_out)
-        # has_removed_30_min = (scan_event_params[:hourly_worker_has_removed_30_min].present? ? (scan_event_params[:hourly_worker_has_removed_30_min] == "1") : @scan_event.hourly_worker_has_removed_30_min)
-        has_removed_30_min = false
-        if clocked_out
-          last_scan_events = ScanEvent.where(member_id: @scan_event.member.id).where.not(id: @scan_event.id).where("hourly_worker_time_stamp <= ?", time_stamp)
-          last_scan_event = last_scan_events.where(hourly_worker_in: true).order(:hourly_worker_time_stamp).last
-          delta_time = time_stamp.to_i - last_scan_event&.hourly_worker_time_stamp.to_i
-          if delta_time > TimeStamp::REMOVE_30MIN_AFTER.hours.to_i
-            delta_time = delta_time - 30.minutes.to_i
-            has_removed_30_min = true
-          end
-          scan_event_this_month = last_scan_events.where(hourly_worker_out: true).where("hourly_worker_time_stamp >= ?", beginning_of_work_month(time_stamp))
-          monthly_time = delta_time + scan_event_this_month.sum(&:hourly_worker_delta_time)
-          # delete the automatic clock out delayed job
-          Delayed::Job.find_by(queue: "scan_event_#{last_scan_event.id}")&.destroy
-          Delayed::Job.find_by(queue: "scan_event_#{@scan_event.id}")&.destroy
-        end
-        if (clocked_in || clocked_out) && !(clocked_in && clocked_out) && @scan_event.update(
-          hourly_worker_time_stamp: time_stamp,
-          hourly_worker_delta_time: delta_time,
-          hourly_worker_monthly_time: monthly_time,
-          hourly_worker_has_removed_30_min: has_removed_30_min,
-          hourly_worker_in: clocked_in,
-          hourly_worker_out: clocked_out,
-          hourly_worker_was_automatically_clocked_out: was_automatically_clocked_out,
-        )
-          format.html { redirect_to time_stamps_url(member_filter: @scan_event.member.id, work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.updating_scan_event') }
-          format.json { render :show, status: :ok, location: @scan_event }
-        else
-          format.html { render :edit, alert: t('flash.alert.updating_scan_event') }
-          format.json { render json: @scan_event.errors, status: :unprocessable_entity }
-        end
-      elsif @scan_event.card_id.present?
+      if @scan_event.card_id.present?
         member = Member.find(scan_event_params[:member_id]) if scan_event_params[:member_id].present?
         if member.present? && member.update(card_id: @scan_event.card_id)
           if @scan_event.update(member_id: scan_event_params[:member_id])
@@ -231,12 +148,8 @@ class ScanEventsController < ApplicationController
   # DELETE /scan_events/1.json
   def destroy
     respond_to do |format|
-      scan_event_id = @scan_event.id
-      is_hourly_worker = @scan_event.hourly_worker_time_stamp.present? # blup
       if @scan_event.destroy
-        # also try to delete the automatic clock out delayed job
-        Delayed::Job.find_by(queue: "scan_event_#{scan_event_id}")&.destroy
-        format.html { redirect_to is_hourly_worker ? time_stamps_url(member_filter: params[:member_id], work_month_filter: params[:work_month_id], year_filter: params[:year_id]) : scan_events_url, notice: t('flash.notice.deleting_scan_event') }
+        format.html { redirect_to scan_events_url, notice: t('flash.notice.deleting_scan_event') }
         format.json { head :no_content }
       else
         format.html { render :show, alert: t('flash.alert.deleting_scan_event') }
@@ -253,16 +166,7 @@ class ScanEventsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def scan_event_params
-      params.require(:scan_event).permit(:member_id, :hourly_worker_time_stamp, :hourly_worker_in, :hourly_worker_out, :hourly_worker_has_removed_30_min, :hourly_worker_was_automatically_clocked_out)
-    end
-
-    # a work month starts at the 25. (06:00:00) and ends at the 25. (05:59:59)
-    def beginning_of_work_month(ts)
-      if (ts - 6.hours).day > 25
-        ts.beginning_of_month + 24.days + 6.hours
-      else
-        ts.prev_month.beginning_of_month + 24.days + 6.hours
-      end
+      params.require(:scan_event).permit(:member_id)
     end
 
 end

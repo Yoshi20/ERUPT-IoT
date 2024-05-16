@@ -1,6 +1,6 @@
 class ScanEvent < ApplicationRecord
   belongs_to :member, optional: true
-  has_one :time_stamp
+  has_one :time_stamp, dependent: :nullify
 
   delegate :first_name, :last_name, to: :member, prefix: true
 

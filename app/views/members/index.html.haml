@@ -63,7 +63,7 @@
           %td= member.abo_types.map(&:name).join(', ')
           -# %td= member.wants_newsletter_emails
           -# %td= member.wants_event_emails
-          %td.text-center= member.magma_coins
+          %td.text-center= member.magma_coins.to_f.round(2)
           %td.text-center= member.scan_events.count
           %td= member.comment
           %td.text-center

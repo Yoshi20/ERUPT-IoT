@@ -70,7 +70,7 @@
         = @member.ggleap_uuid
       %p
         %b= t('activerecord.attributes.member.magma_coins') + ':'
-        = @member.magma_coins
+        = @member.magma_coins.to_f.round(2)
       %p
         %b= t('activerecord.attributes.member.number_of_scans') + ':'
         = @member.scan_events.count

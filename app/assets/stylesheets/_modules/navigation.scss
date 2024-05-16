@@ -24,6 +24,8 @@
     }
   }
   .navbar-toggler {
+    position: absolute;
+    right: 1rem;
     .navbar-toggler-icon {
       width: 2rem;
       height: 2rem;
@@ -125,6 +127,14 @@
     vertical-align: unset;
     &:hover {
       border-bottom: 1px solid white;
+    }
+  }
+
+  #navbarSupportedContent {
+    @media screen and (max-width: 992px) {
+      background-image: linear-gradient(90deg, $erupt-blue 0%, $erupt-red 100%);
+      margin: 300px -1rem 0 -1rem;
+      padding-left: 1rem;
     }
   }
 }

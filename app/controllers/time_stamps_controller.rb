@@ -6,22 +6,6 @@ class TimeStampsController < ApplicationController
   # GET /time_stamps
   # GET /time_stamps.json
   def index
-    @member_id = params[:member_filter]
-    @work_month_id = params[:work_month_filter]
-    @year_id = params[:year_filter] || 0
-    @members_for_select = Member.where(is_hourly_worker: true).order(:first_name).map{ |m| ["#{m.first_name} #{m.last_name[0]}.", m.id]}
-    @total_scan_events = ScanEvent.all.includes(:member).where(member: {is_hourly_worker: true}).where("hourly_worker_in IS true OR hourly_worker_out IS true")
-    @total_scan_events = @total_scan_events.where(member: {id: @member_id}) if @member_id.present?
-    if @work_month_id.present?
-      @total_scan_events = @total_scan_events.where("hourly_worker_time_stamp >= ? AND hourly_worker_time_stamp <= ?", beginning_of_work_month_from_id(@work_month_id, @year_id), end_of_work_month_from_id(@work_month_id, @year_id))
-    else
-      @total_scan_events = @total_scan_events.where("hourly_worker_time_stamp >= ? AND hourly_worker_time_stamp <= ?", beginning_of_year_from_id(@year_id), end_of_year_from_id(@year_id))
-    end
-    @scan_events = @total_scan_events.order(hourly_worker_time_stamp: :desc)
-    @scan_events = @scan_events.limit(30) unless (@member_id.present? && @work_month_id.present?)
-
-
-    # blup
     @user_id = params[:user_filter]
     @work_month_id = params[:work_month_filter]
     @year_id = params[:year_filter] || 0
@@ -97,8 +81,7 @@ class TimeStampsController < ApplicationController
 
   # POST /time_stamps/export
   require 'csv'
-  def export
-    # blup
+  def export # blup: TODO
     @member_id = params[:member_filter]
     @work_month_id = params[:work_month_filter]
     @year_id = params[:year_filter] || 0

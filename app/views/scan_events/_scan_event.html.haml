@@ -1,4 +1,4 @@
-- if scan_event.present? && !scan_event.hourly_worker_time_stamp.present?
+- if scan_event.present?
   %tr{'data-id': scan_event.id, 'data-component'=>'scan_event', style: "background-color: #{scan_event.new? ? 'aqua' : ''};"}
     %td= scan_event.created_at.localtime.to_s(:custom_datetime)
     - member = scan_event.member
@@ -13,7 +13,7 @@
     -# %td= member&.wants_newsletter_emails
     -# %td= member&.wants_event_emails
     -# %td= member&.card_id
-    %td.text-center= member&.magma_coins
+    %td.text-center= member&.magma_coins.to_f.round(2)
     -# %td= member&.expiration_date.localtime.to_s(:custom_datetime)
     -# %td= member&.comment
 
