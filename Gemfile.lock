@@ -95,6 +95,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.2.3)
+    connection_pool (2.4.1)
     crass (1.0.6)
     csv (3.3.0)
     daemons (1.4.1)
@@ -256,7 +257,10 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     recaptcha (5.16.0)
-    redis (4.8.1)
+    redis (5.2.0)
+      redis-client (>= 0.22.0)
+    redis-client (0.22.1)
+      connection_pool
     regexp_parser (2.9.0)
     responders (3.1.1)
       actionpack (>= 5.2)
@@ -365,7 +369,7 @@ DEPENDENCIES
   rails-i18n (~> 7.0.9)
   rails_12factor
   recaptcha
-  redis (~> 4.0)
+  redis (~> 5.2)
   sass-rails (>= 6)
   select2-rails
   selenium-webdriver
