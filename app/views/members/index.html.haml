@@ -51,7 +51,7 @@
             - if member.ggleap_uuid.present?
               .material-icons= 'done'
           %td.text-center
-            - if member.is_hourly_worker.present?
+            - if member.is_hourly_worker || member.user&.is_hourly_worker
               .material-icons= 'done'
           %td= member.first_name
           %td= member.last_name

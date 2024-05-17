@@ -60,10 +60,14 @@ class TimeStamp < ApplicationRecord
     last_time_stamps = TimeStamp.where(user_id: self.user_id).where.not(id: self.id).where("value <= ?", self.value)
     # calculate delta_time
     last_time_stamp_in = last_time_stamps.where(is_in: true).order(:value).last # can be nil?
-    delta_time = self.value.to_i - last_time_stamp_in&.value.to_i
+    last_value_in = last_time_stamp_in&.value
+    delta_time = self.value.to_i - last_value_in.to_i
     # handle removed_break_time & update delta_time
     removed_break_time = TimeStamp::break_time_to_remove(delta_time)
     delta_time = delta_time - removed_break_time
+    # handle added_night_time & update delta_time
+    added_night_time = TimeStamp::night_time_to_add(last_value_in, self.value)
+    delta_time = delta_time + added_night_time
     # calculate monthly_time
     time_stamps_this_month = last_time_stamps.where(is_out: true).where("value >= ?", TimeStamp::beginning_of_work_month(self.value))
     monthly_time = delta_time + time_stamps_this_month&.sum(&:delta_time).to_i
@@ -73,7 +77,7 @@ class TimeStamp < ApplicationRecord
     self.delta_time = delta_time
     self.monthly_time = monthly_time
     self.removed_break_time = removed_break_time
-    self.added_night_time = 0 # TODO
+    self.added_night_time = added_night_time
     # delete the automatic clock out delayed job
     Delayed::Job.find_by(queue: "time_stamp_#{last_time_stamp_in.id}")&.destroy if last_time_stamp_in.present?
     Delayed::Job.find_by(queue: "time_stamp_#{self.id}")&.destroy
@@ -98,6 +102,25 @@ class TimeStamp < ApplicationRecord
     else
       0
     end
+  end
+
+  # add 10% to the time when between 00:00 and 07:00
+  def self::night_time_to_add(value_in, value_out)
+    time_to_add = 0
+    start_of_night_time = value_out.beginning_of_day  # 00:00
+    end_of_night_time = start_of_night_time + 7.hours # 07:00
+    # first check if value_out is within the relevant night time
+    if value_out > start_of_night_time && value_out <= end_of_night_time
+      # set start_time depending on whether clock_in was before or after start_of_night_time
+      start_time = value_in < start_of_night_time ? start_of_night_time : value_in
+      relevant_delta = value_out.to_i - start_time.to_i
+      time_to_add = relevant_delta * 10 / 100 # 10%
+    # also check if value_in is within the relevant night time (even through value_out aint)
+    elsif value_in > start_of_night_time && value_in <= end_of_night_time
+      relevant_delta = end_of_night_time.to_i - value_in.to_i
+      time_to_add = relevant_delta * 10 / 100 # 10%
+    end
+    return time_to_add
   end
 
 end

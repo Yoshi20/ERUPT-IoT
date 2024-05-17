@@ -11,7 +11,7 @@ class MembersController < ApplicationController
   # GET /members
   # GET /members.json
   def index
-    @members = Member.all.includes(:abo_types, :scan_events)
+    @members = Member.all.includes(:abo_types, :scan_events, :user)
     # handle search parameter
     if params[:search].present?
       begin
