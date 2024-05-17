@@ -80,3 +80,21 @@
       %p
         %b= t('activerecord.attributes.member.locked') + ':'
         = @member.locked
+
+  .row
+    .col.text-center
+      %br
+      %h2= "Create hourly worker user"
+      -# = form_for create_user_from_member_path(@member) do |f|
+      = form_for(@member, url: create_user_from_member_path(@member), html: { method: :post }) do |f|
+        .actions.form-group.text-center
+          = f.submit "Create user", class:'btn btn-ghost'
+      %p
+        %b= "Email:"
+        = @member.email
+        %br
+        %b= "Username:"
+        = @member.first_name
+        %br
+        %b= "Password:"
+        = "123456"

@@ -6,11 +6,11 @@ class TimeStampsController < ApplicationController
   # GET /time_stamps
   # GET /time_stamps.json
   def index
-    @user_id = params[:user_filter]
+    @user_id = current_user.is_admin? ? params[:user_filter] : current_user.id
     @work_month_id = params[:work_month_filter]
     @year_id = params[:year_filter] || 0
     @users_for_select = User.where(is_hourly_worker: true).order(:username).map{ |m| [m.username, m.id]}
-    @total_time_stamps = TimeStamp.all.includes(:user).where(user: {is_hourly_worker: true}).where("is_in IS true OR is_out IS true")
+    @total_time_stamps = TimeStamp.all.includes(:user)
     @total_time_stamps = @total_time_stamps.where(user: {id: @user_id}) if @user_id.present?
     if @work_month_id.present?
       @total_time_stamps = @total_time_stamps.where("value >= ? AND value <= ?", beginning_of_work_month_from_id(@work_month_id, @year_id), end_of_work_month_from_id(@work_month_id, @year_id))
@@ -51,6 +51,14 @@ class TimeStampsController < ApplicationController
         @time_stamp.clock_out
       elsif @time_stamp.is_in && !@time_stamp.is_out
         @time_stamp.clock_in
+      end
+      #blup: TODO -> still update delta & monthly even when not is_in or is_out
+      was_manually_edited = (@time_stamp.changed? && params[:edit_time_stamp].present? && !current_user.is_admin)
+      if was_manually_edited
+        @time_stamp.was_manually_edited = true
+        @time_stamp.was_manually_validated = false
+      else
+        @time_stamp.was_manually_validated = (time_stamp_params[:was_manually_validated].present? ? (time_stamp_params[:was_manually_validated] == "1") : @time_stamp.was_manually_validated)
       end
       if @time_stamp.save
         format.html { redirect_to time_stamps_url(user_filter: @time_stamp.user.id, work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.updating_time_stamp') }

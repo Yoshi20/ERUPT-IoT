@@ -1,6 +1,6 @@
 -# Std view
 .container
-  %a.navbar-brand{href: membership_path}
+  %a.navbar-brand{href: root_path}
     = image_tag('logo.jpg', height: '50px', width: '50px')
     %span.d-none.d-sm-block.d-lg-none.d-xl-block
       = 'ERUPT'
@@ -12,20 +12,20 @@
   .collapse.navbar-collapse#navbarSupportedContent
     %ul.navbar-nav.navbar-main.ml-auto
       - if user_signed_in?
+        - if current_user.present? && current_user.admin?
+          %li.nav-item.dropdown{role: "presentation", class: ((@section == 'membership' || @section == 'members' || @section == 'scan_events') ? 'active' : 'inactive')}
+            %a.nav-link.dropdown-toggle#navbarDropdown{href:"#", role:"button", 'data-toggle'=>'dropdown', 'aria-haspopup'=>'true', 'aria-expanded'=>'false'}
+              = t('membership.title')
+              .d-none.d-lg-block{style: "height: 24px;"}
+                %span.material-icons{style: "font-size: 16px; margin-top: 5px;"}= 'keyboard_arrow_down'
+              .d-lg-none.d-block{style: "height: 24px;"}
+                %span.material-icons{style: "margin-left: 5px;"}= 'keyboard_arrow_down'
+            .dropdown-menu{'aria-labelledby': 'navbarDropdown'}
+              = link_to t('membership.manual.title_short'), membership_path, class: 'dropdown-item'
+              = link_to t('members.title'), members_path, class: 'dropdown-item'
+              = link_to t('scan_events.title'), scan_events_path, class: 'dropdown-item'
 
-        %li.nav-item.dropdown{role: "presentation", class: ((@section == 'membership' || @section == 'members' || @section == 'scan_events') ? 'active' : 'inactive')}
-          %a.nav-link.dropdown-toggle#navbarDropdown{href:"#", role:"button", 'data-toggle'=>'dropdown', 'aria-haspopup'=>'true', 'aria-expanded'=>'false'}
-            = t('membership.title')
-            .d-none.d-lg-block{style: "height: 24px;"}
-              %span.material-icons{style: "font-size: 16px; margin-top: 5px;"}= 'keyboard_arrow_down'
-            .d-lg-none.d-block{style: "height: 24px;"}
-              %span.material-icons{style: "margin-left: 5px;"}= 'keyboard_arrow_down'
-          .dropdown-menu{'aria-labelledby': 'navbarDropdown'}
-            = link_to t('membership.manual.title_short'), membership_path, class: 'dropdown-item'
-            = link_to t('members.title'), members_path, class: 'dropdown-item'
-            = link_to t('scan_events.title'), scan_events_path, class: 'dropdown-item'
-
-        %li.nav-item.nav-link.d-none.d-lg-block= '/'
+          %li.nav-item.nav-link.d-none.d-lg-block= '/'
 
         %li.nav-item{role: "presentation", class: (@section == 'time_stamps' ? 'active' : 'inactive')}
           = link_to t('time_stamps.title'), time_stamps_path, class: 'nav-link'

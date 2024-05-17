@@ -3,14 +3,15 @@
     %h1.page__title= t('time_stamps.title2')
 
 .row
-  .col
-    %form.form{"accept-charset": "UTF-8", action: "/time_stamps", method: "get"}
-      = text_field_tag :work_month_filter, @work_month_id, type: "hidden"
-      = text_field_tag :year_filter, @year_id, type: "hidden"
-      .field.form-group{style: "width: 60%;"}
-        %select#select_hourly_worker.form-control{name: "user_filter"}
-          %option{:value => ""} User filter
-          = options_for_select(@users_for_select, @user_id)
+  - if current_user.present? && current_user.admin?
+    .col
+      %form.form{"accept-charset": "UTF-8", action: "/time_stamps", method: "get"}
+        = text_field_tag :work_month_filter, @work_month_id, type: "hidden"
+        = text_field_tag :year_filter, @year_id, type: "hidden"
+        .field.form-group{style: "width: 60%;"}
+          %select#select_hourly_worker.form-control{name: "user_filter"}
+            %option{:value => ""} User filter
+            = options_for_select(@users_for_select, @user_id)
   .col
     - work_months_for_select = [["Jan (25.12 - 24.01)", 0],["Feb (25.01 - 24.02)", 1],["März (25.02 - 24.03)", 2],["Apr (25.03 - 24.04)", 3],["Mai (25.04 - 24.05)", 4],["Juni (25.05 - 24.06)", 5],["Juli (25.06 - 24.07)", 6],["Aug (25.07 - 24.08)", 7],["Sep (25.08 - 24.09)", 8],["Okt (25.09 - 24.10)", 9],["Nov (25.10 - 24.11)", 10],["Dez (25.11 - 24.12)", 11]]
     %form.form{"accept-charset": "UTF-8", action: "/time_stamps", method: "get"}
@@ -40,18 +41,21 @@
       %tr
         %th.text-center Type
         %th Timestamp
-        %th.text-center= t('activerecord.attributes.user.username')
+        - if current_user.is_admin
+          %th.text-center= t('activerecord.attributes.user.username')
         %th.text-center= "IN"
         %th.text-center= "OUT"
         %th.text-center= "Δt [h]"
         %th.text-center= "Monthly Δt [h]"
+        - if current_user.is_admin
+          %th.text-center= "Edited?"
 
     %tbody.time_stamp-list-body#time_stamps
       - @time_stamps.each do |time_stamp|
         = render partial: 'time_stamps/time_stamp', locals: {time_stamp: time_stamp}
 
   .admin-actions
-    - if @time_stamps.any?
+    - if @time_stamps.any? && current_user.is_admin?
       .admin-actions__link
         = button_to time_stamps_export_path(user_filter: @user_id, work_month_filter: @work_month_id, year_filter: @year_id), method: :post, class:'btn btn-ghost btn-square' do
           %span.material-icons.admin-actions__link__icon= 'assignment_return'

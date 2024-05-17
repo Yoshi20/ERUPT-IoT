@@ -13,6 +13,22 @@ class Member < ApplicationRecord
     (!self.card_id.present?) && self.created_at.today?
   end
 
+  def name
+    "#{self.first_name} #{self.last_name}".strip
+  end
+
+  def name_short
+    if self.first_name.present? && self.last_name.present?
+      "#{self.first_name} #{self.last_name[0]}."
+    elsif self.first_name.present? && !self.last_name.present?
+      self.first_name
+    elsif !self.first_name.present? && self.last_name.present?
+      self.last_name
+    else
+      ""
+    end
+  end
+
   def self.search(search)
     if search
       sanitizedSearch = ActiveRecord::Base.sanitize_sql_like(search)

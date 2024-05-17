@@ -12,21 +12,30 @@
     .form-group-inline{style: 'width: 50%; margin-left: auto; margin-right: auto;'}
       = f.datetime_select :value, { start_year: Time.zone.now.year, end_year: Date.today.year - 3 }, class: 'form-control'
 
+  .field.form-group
+    %strong= 'Hourly Worker Flags'
+    .row
+      .col.form-check
+        = f.check_box :is_in, checked: @time_stamp.is_in, class:'form-check-input mr-2'
+        = f.label :is_in, 'Clocked IN?', class:'form-check-label', style:'background:yellow;'
+      .col.form-check
+        = f.check_box :is_out, checked: @time_stamp.is_out, class:'form-check-input mr-2'
+        = f.label :is_out, 'Clocked OUT?', class:'form-check-label', style:'background:lightgreen;'
+      .col.form-check
+        = f.check_box :was_automatically_clocked_out, checked: @time_stamp.was_automatically_clocked_out, class:'form-check-input mr-2'
+        = f.label :was_automatically_clocked_out, 'Automatically clocked out?', class:'form-check-label', style:'background:red;'
+  - if current_user.is_admin
     .field.form-group
-      %strong= 'Hourly Worker Flags'
+      %strong= 'Admin actions'
       .row
         .col.form-check
-          = f.check_box :is_in, checked: @time_stamp.is_in, class:'form-check-input mr-2'
-          = f.label :is_in, 'Clocked IN?', class:'form-check-label', style:'background:yellow;'
+          = f.check_box :was_manually_edited, checked: @time_stamp.was_manually_edited, class:'form-check-input mr-2', disabled: true
+          = f.label :was_manually_edited, 'Manually edited?', class:'form-check-label', style:'background:red;'
+      .row
         .col.form-check
-          = f.check_box :is_out, checked: @time_stamp.is_out, class:'form-check-input mr-2'
-          = f.label :is_out, 'Clocked OUT?', class:'form-check-label', style:'background:lightgreen;'
-        .col.form-check
-          = f.check_box :was_automatically_clocked_out, checked: @time_stamp.was_automatically_clocked_out, class:'form-check-input mr-2'
-          = f.label :was_automatically_clocked_out, 'Automatically clocked out?', class:'form-check-label', style:'background:red;'
-        -# .col.form-check
-        -#   = f.check_box :hourly_worker_has_removed_30_min, checked: @time_stamp.hourly_worker_has_removed_30_min, class:'form-check-input mr-2', disabled: true
-        -#   = f.label :hourly_worker_has_removed_30_min, 'Removed 30min?', class:'form-check-label'
+          = f.check_box :was_manually_validated, checked: @time_stamp.was_manually_validated, class:'form-check-input mr-2'
+          = f.label :was_manually_validated, 'Manually validated?', class:'form-check-label', style:'background:red;'
 
   .actions.form-group.text-center
+    = hidden_field_tag :edit_time_stamp, true
     = f.submit class:'btn btn-ghost'

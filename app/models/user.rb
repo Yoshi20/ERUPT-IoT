@@ -58,6 +58,7 @@ class User < ApplicationRecord
       time_stamp = TimeStamp.new(value: now, scan_event_id: scan_event_id, user_id: self.id)
       time_stamp.clock_in
       time_stamp.save!
+      time_stamp.start_auto_clock_out
     end
   end
 

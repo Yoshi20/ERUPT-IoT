@@ -5,7 +5,7 @@ class MembersController < ApplicationController
   require 'will_paginate/array'
 
   before_action :authenticate_user!, except: [:new_extern, :create_extern, :success_extern]
-  before_action :set_member, only: [:show, :edit, :update, :destroy]
+  before_action :set_member, only: [:show, :edit, :update, :destroy, :create_user_from_member]
   before_action { @section = 'members' }
 
   # GET /members
@@ -105,6 +105,34 @@ class MembersController < ApplicationController
       else
         format.html { render :new_extern, layout: "application_extern", alert: t('flash.alert.creating_member') }
         format.json { render json: @member.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # POST /members/:id/create_user_from_member
+  def create_user_from_member
+    user = @member.user
+    respond_to do |format|
+      if user.present?
+        format.html { redirect_to users_path, alert: "Member already has an user!" }
+        format.json { render :show, status: :created, location: user }
+      else
+        user = User.new(
+          email: @member.email,
+          username: @member.first_name,
+          full_name: @member.name,
+          mobile_number: @member.mobile_number,
+          password: "123456", # must be updated by the user afterwards
+          is_hourly_worker: true,
+          member_id: @member.id
+        )
+        if user.save
+          format.html { redirect_to users_path, notice: t('flash.notice.creating_member') }
+          format.json { render :show, status: :created, location: @member }
+        else
+          format.html { render :new_extern, alert: t('flash.alert.creating_member') }
+          format.json { render json: @member.errors, status: :unprocessable_entity }
+        end
       end
     end
   end

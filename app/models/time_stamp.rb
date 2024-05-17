@@ -13,12 +13,8 @@ class TimeStamp < ApplicationRecord
       "HOLIDAY"
     elsif self.was_automatically_clocked_out
       "OUT (AUTO)"
-    elsif self.is_out && self.was_manually_edited
-      "OUT (MANUALLY)"
     elsif self.is_out
       "OUT"
-    elsif self.is_in && self.was_manually_edited
-      "IN (MANUALLY)"
     elsif self.is_in
       "IN"
     else
@@ -31,7 +27,7 @@ class TimeStamp < ApplicationRecord
   end
 
   def clock_in
-    last_time_stamps = TimeStamp.where(user_id: self.user_id).where.not(scan_event_id: self.scan_event_id).where("value <= ?", self.value)
+    last_time_stamps = TimeStamp.where(user_id: self.user_id).where.not(id: self.id).where("value <= ?", self.value)
     # find monthly_time
     last_time_stamp_out = last_time_stamps.where(is_out: true).order(:value).last # can be nil
     monthly_time = last_time_stamp_out&.monthly_time
@@ -42,6 +38,9 @@ class TimeStamp < ApplicationRecord
     self.monthly_time = monthly_time
     self.removed_break_time = 0
     self.added_night_time = 0
+  end
+
+  def start_auto_clock_out
     # start the automatic clock out delayed job
     automatic_clock_out_in = 12.hours
     puts TimeStamp.delay(run_at: automatic_clock_out_in.from_now, queue: "time_stamp_#{self.id}").create(
@@ -57,17 +56,17 @@ class TimeStamp < ApplicationRecord
     )
   end
 
-  def clock_out # Note: value, user_id & scan_event_id must be set beforehand
-    last_time_stamps = TimeStamp.where(user_id: self.user_id).where.not(scan_event_id: self.scan_event_id).where("value <= ?", self.value)
+  def clock_out # Note: user_id & value must be set beforehand
+    last_time_stamps = TimeStamp.where(user_id: self.user_id).where.not(id: self.id).where("value <= ?", self.value)
     # calculate delta_time
-    last_time_stamp_in = last_time_stamps.where(is_in: true).order(:value).last # can be nil
+    last_time_stamp_in = last_time_stamps.where(is_in: true).order(:value).last # can be nil?
     delta_time = self.value.to_i - last_time_stamp_in&.value.to_i
     # handle removed_break_time & update delta_time
     removed_break_time = TimeStamp::break_time_to_remove(delta_time)
     delta_time = delta_time - removed_break_time
     # calculate monthly_time
     time_stamps_this_month = last_time_stamps.where(is_out: true).where("value >= ?", TimeStamp::beginning_of_work_month(self.value))
-    monthly_time = delta_time + time_stamps_this_month.sum(&:delta_time)
+    monthly_time = delta_time + time_stamps_this_month&.sum(&:delta_time).to_i
     # set object params
     self.is_in = false
     self.is_out = true
@@ -76,7 +75,7 @@ class TimeStamp < ApplicationRecord
     self.removed_break_time = removed_break_time
     self.added_night_time = 0 # TODO
     # delete the automatic clock out delayed job
-    Delayed::Job.find_by(queue: "time_stamp_#{last_time_stamp_in.id}")&.destroy
+    Delayed::Job.find_by(queue: "time_stamp_#{last_time_stamp_in.id}")&.destroy if last_time_stamp_in.present?
     Delayed::Job.find_by(queue: "time_stamp_#{self.id}")&.destroy
   end
 
