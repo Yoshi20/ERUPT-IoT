@@ -7,9 +7,9 @@ class TimeStamp < ApplicationRecord
   REMOVE_60MIN_AFTER = 9
 
   def type
-    if self.sick_time.to_i > 0
+    if self.has_sick_time?
       "SICK"
-    elsif self.paid_leave_time.to_i > 0
+    elsif self.has_paid_leave_time?
       "HOLIDAY"
     elsif self.was_automatically_clocked_out
       "OUT (AUTO)"
@@ -23,9 +23,9 @@ class TimeStamp < ApplicationRecord
   end
 
   def type_color
-    if self.sick_time.to_i > 0
+    if self.has_sick_time?
       "burlywood"
-    elsif self.paid_leave_time.to_i > 0
+    elsif self.has_paid_leave_time?
       "deepskyblue"
     elsif self.was_automatically_clocked_out
       "red"
@@ -40,6 +40,14 @@ class TimeStamp < ApplicationRecord
 
   def new?
     self.created_at > 5.minute.ago
+  end
+
+  def has_sick_time?
+    self.sick_time.to_i > 0
+  end
+
+  def has_paid_leave_time?
+    self.paid_leave_time.to_i > 0
   end
 
   def clock_in

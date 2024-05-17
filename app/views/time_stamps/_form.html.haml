@@ -6,7 +6,7 @@
         - @time_stamp.errors.full_messages.each do |message|
           %li= message
 
-  - if @time_stamp.new_record? || @time_stamp.sick_time.to_i > 0 || @time_stamp.paid_leave_time.to_i > 0
+  - if @time_stamp.new_record? || @time_stamp.has_sick_time? || @time_stamp.has_paid_leave_time?
     -# absence time_stamp
     .field.form-group
       %strong= f.label :value, "Abwesenheit"
@@ -19,11 +19,11 @@
         .col
           .form-check
             = label_tag :absence_type_sick, class: 'form-check-label' do
-              = radio_button_tag :absence_type, 'sick', @time_stamp.sick_time.to_i > 0, class: 'form-check-input'
+              = radio_button_tag :absence_type, 'sick', @time_stamp.has_sick_time?, class: 'form-check-input'
               = 'Krank'
           .form-check
             = label_tag :absence_type_paid_leave, class: 'form-check-label' do
-              = radio_button_tag :absence_type, 'paid_leave', @time_stamp.paid_leave_time.to_i > 0, class: 'form-check-input'
+              = radio_button_tag :absence_type, 'paid_leave', @time_stamp.has_paid_leave_time?, class: 'form-check-input'
               = 'Ferien'
     .field.form-group
       %strong= "Dauer"

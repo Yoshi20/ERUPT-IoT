@@ -13,8 +13,8 @@
     - if time_stamp.delta_time.present?
       - delta_time_h = (time_stamp.delta_time.to_f/3600)
       - delta_time_string = "<strong>#{delta_time_h.round(2)}</strong>".html_safe
-      - removed_time_h = time_stamp.removed_break_time.to_f/3600 if time_stamp.removed_break_time > 0
-      - added_time_h = time_stamp.added_night_time.to_f/3600 if time_stamp.added_night_time > 0
+      - removed_time_h = time_stamp.removed_break_time.to_f/3600 if time_stamp.removed_break_time.to_i > 0
+      - added_time_h = time_stamp.added_night_time.to_f/3600 if time_stamp.added_night_time.to_i > 0
       - if removed_time_h.present? && added_time_h.present?
         - delta_time_string = (delta_time_string + " (#{(delta_time_h+removed_time_h-added_time_h).round(2)} - #{removed_time_h.round(2)} + #{added_time_h.round(2)})").html_safe
       - elsif removed_time_h.present?
