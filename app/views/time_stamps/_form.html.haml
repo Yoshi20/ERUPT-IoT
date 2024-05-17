@@ -1,4 +1,4 @@
-= form_for @time_stamp, role: 'form', class:'form' do |f|
+= form_for @time_stamp, role: 'form', class: 'form' do |f|
   - if @time_stamp.errors.any?
     #error_explanation
       %h2= pluralize(@time_stamp.errors.count, "error") + ' ' + t('time_stamps.prohibited')
@@ -6,36 +6,75 @@
         - @time_stamp.errors.full_messages.each do |message|
           %li= message
 
-  .field.form-group
-    %strong= f.label :value, t('activerecord.attributes.time_stamp.value')
-    %em= '(dd.mm.yyyy - hh:mm)'
-    .form-group-inline{style: 'width: 50%; margin-left: auto; margin-right: auto;'}
-      = f.datetime_select :value, { start_year: Time.zone.now.year, end_year: Date.today.year - 3 }, class: 'form-control'
-
-  .field.form-group
-    %strong= 'Hourly Worker Flags'
-    .row
-      .col.form-check
-        = f.check_box :is_in, checked: @time_stamp.is_in, class:'form-check-input mr-2'
-        = f.label :is_in, 'Clocked IN?', class:'form-check-label', style:'background:yellow;'
-      .col.form-check
-        = f.check_box :is_out, checked: @time_stamp.is_out, class:'form-check-input mr-2'
-        = f.label :is_out, 'Clocked OUT?', class:'form-check-label', style:'background:lightgreen;'
-      .col.form-check
-        = f.check_box :was_automatically_clocked_out, checked: @time_stamp.was_automatically_clocked_out, class:'form-check-input mr-2'
-        = f.label :was_automatically_clocked_out, 'Automatically clocked out?', class:'form-check-label', style:'background:red;'
-  - if current_user.is_admin
+  - if @time_stamp.new_record? || @time_stamp.sick_time.to_i > 0 || @time_stamp.paid_leave_time.to_i > 0
+    -# absence time_stamp
     .field.form-group
-      %strong= 'Admin actions'
+      %strong= f.label :value, "Abwesenheit"
+      %em= '(dd.mm.yyyy - hh:mm)'
+      .form-group-inline{style: 'justify-content: center; gap: 0.5rem;'}
+        = f.date_select :value, { start_year: Time.zone.now.year, end_year: Date.today.year - 3 }, class: 'form-control'
+    .field.form-group
+      %strong= "Grund"
+      .row
+        .col
+          .form-check
+            = label_tag :absence_type_sick, class: 'form-check-label' do
+              = radio_button_tag :absence_type, 'sick', @time_stamp.sick_time.to_i > 0, class: 'form-check-input'
+              = 'Krank'
+          .form-check
+            = label_tag :absence_type_paid_leave, class: 'form-check-label' do
+              = radio_button_tag :absence_type, 'paid_leave', @time_stamp.paid_leave_time.to_i > 0, class: 'form-check-input'
+              = 'Ferien'
+    .field.form-group
+      %strong= "Dauer"
+      .row
+        .col
+          .form-check
+            = label_tag :absence_dur_half_day, class: 'form-check-label' do
+              = radio_button_tag :absence_dur, 'half_day', @time_stamp.delta_time == 4.hours.to_i, class: 'form-check-input'
+              = 'Halbtag'
+          .form-check
+            = label_tag :absence_dur_day, class: 'form-check-label' do
+              = radio_button_tag :absence_dur, 'day', @time_stamp.delta_time == 8.hours.to_i, class: 'form-check-input'
+              = 'Ganztag'
+          .form-check
+            = label_tag :absence_dur_week, class: 'form-check-label' do
+              = radio_button_tag :absence_dur, 'week', @time_stamp.delta_time == 7.days.to_i, class: 'form-check-input'
+              = 'Woche'
+
+  - else
+    -# classic time_stamp
+    .field.form-group
+      %strong= f.label :value, t('activerecord.attributes.time_stamp.value')
+      %em= '(dd.mm.yyyy - hh:mm)'
+      .form-group-inline{style: 'justify-content: center; gap: 0.5rem;'}
+        = f.datetime_select :value, { start_year: Time.zone.now.year, end_year: Date.today.year - 3 }, class: 'form-control'
+
+    .field.form-group
+      %strong= 'Hourly Worker Flags'
       .row
         .col.form-check
-          = f.check_box :was_manually_edited, checked: @time_stamp.was_manually_edited, class:'form-check-input mr-2', disabled: true
-          = f.label :was_manually_edited, 'Manually edited?', class:'form-check-label', style:'background:red;'
-      .row
+          = f.check_box :is_in, checked: @time_stamp.is_in, class: 'form-check-input mr-2'
+          = f.label :is_in, 'Clocked IN?', class: 'form-check-label', style: 'background:yellow;'
         .col.form-check
-          = f.check_box :was_manually_validated, checked: @time_stamp.was_manually_validated, class:'form-check-input mr-2'
-          = f.label :was_manually_validated, 'Manually validated?', class:'form-check-label', style:'background:red;'
+          = f.check_box :is_out, checked: @time_stamp.is_out, class: 'form-check-input mr-2'
+          = f.label :is_out, 'Clocked OUT?', class: 'form-check-label', style: 'background:lightgreen;'
+        .col.form-check
+          = f.check_box :was_automatically_clocked_out, checked: @time_stamp.was_automatically_clocked_out, class: 'form-check-input mr-2'
+          = f.label :was_automatically_clocked_out, 'Automatically clocked out?', class: 'form-check-label', style: 'background:red;'
+    - if current_user.is_admin
+      .field.form-group
+        %strong= 'Admin actions'
+        .row
+          .col.form-check
+            = f.check_box :was_manually_edited, checked: @time_stamp.was_manually_edited, class: 'form-check-input mr-2', disabled: true
+            = f.label :was_manually_edited, 'Manually edited?', class: 'form-check-label', style: 'background:red;'
+        .row
+          .col.form-check
+            = f.check_box :was_manually_validated, checked: @time_stamp.was_manually_validated, class: 'form-check-input mr-2'
+            = f.label :was_manually_validated, 'Manually validated?', class: 'form-check-label', style: 'background:red;'
 
   .actions.form-group.text-center
     = hidden_field_tag :edit_time_stamp, true
-    = f.submit class:'btn btn-ghost'
+    = f.hidden_field :user_id
+    = f.submit class: 'btn btn-ghost'

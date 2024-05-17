@@ -22,6 +22,22 @@ class TimeStamp < ApplicationRecord
     end
   end
 
+  def type_color
+    if self.sick_time.to_i > 0
+      "burlywood"
+    elsif self.paid_leave_time.to_i > 0
+      "deepskyblue"
+    elsif self.was_automatically_clocked_out
+      "red"
+    elsif self.is_out
+      "lightgreen"
+    elsif self.is_in
+      "yellow"
+    else
+      "red"
+    end
+  end
+
   def new?
     self.created_at > 5.minute.ago
   end
@@ -123,4 +139,12 @@ class TimeStamp < ApplicationRecord
     return time_to_add
   end
 
+  def self.absence_time_for(absence_dur)
+    case absence_dur
+      when "half_day" then 4.hours.to_i
+      when "day" then 8.hours.to_i
+      when "week" then 7.days.to_i
+      else 0
+    end
+  end
 end

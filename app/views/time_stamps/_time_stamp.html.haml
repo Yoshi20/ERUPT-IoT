@@ -1,5 +1,5 @@
 - if time_stamp.present? && time_stamp.value.present?
-  %tr.time_stamp{'data-id': time_stamp.id, 'data-component'=>'time_stamp', style: "background-color: #{time_stamp.was_automatically_clocked_out ? 'red' : (time_stamp.is_in ? 'yellow' : 'lightgreen')};"}
+  %tr.time_stamp{'data-id': time_stamp.id, 'data-component'=>'time_stamp', style: "background-color: #{time_stamp.type_color};"}
     %td.text-center= time_stamp.type
     - wd = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][time_stamp.value.localtime.wday]
     - datetime = time_stamp.value.localtime.to_s(:custom_datetime)
@@ -41,7 +41,7 @@
               = text_field_tag :work_month_id, @work_month_id, type: "hidden"
               = text_field_tag :year_id, @year_id, type: "hidden"
               .field.form-group.hidden
-                .form-group-inline{style: 'width: 50%; margin-left: auto; margin-right: auto;'}
+                .form-group-inline{style: 'justify-content: center; gap: 0.5rem;'}
                   = f.datetime_select :value
               .actions.form-group.text-center
                 = f.button class:'btn btn-sstm btn-square' do
@@ -54,7 +54,7 @@
               = text_field_tag :work_month_id, @work_month_id, type: "hidden"
               = text_field_tag :year_id, @year_id, type: "hidden"
               .field.form-group.hidden
-                .form-group-inline{style: 'width: 50%; margin-left: auto; margin-right: auto;'}
+                .form-group-inline{style: 'justify-content: center; gap: 0.5rem;'}
                   = f.datetime_select :value
               .col.form-check.hidden
                 = f.check_box :was_manually_validated, checked: true, class:'form-check-input mr-2'

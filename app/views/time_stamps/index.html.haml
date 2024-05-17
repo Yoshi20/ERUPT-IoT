@@ -71,6 +71,11 @@
           = button_tag(type: "submit", value: "manually added time stamp", class:'btn btn-ghost btn-square') do
             %span.material-icons.admin-actions__link__icon= 'add'
 
+- if @user_id.present?
+  .row
+    .col.text-center
+      = link_to "Abwesenheit erfassen", new_time_stamp_path(user_id: @user_id), class: 'btn btn-sstm'
+
 :javascript
   document.addEventListener('turbolinks:load', function() {
     $('#select_hourly_worker').on("change", function() {

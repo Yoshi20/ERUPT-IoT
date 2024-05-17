@@ -21,6 +21,11 @@ class TimeStampsController < ApplicationController
     @time_stamps = @time_stamps.limit(30) unless (@user_id.present? && @work_month_id.present?)
   end
 
+  # GET /time_stamps/new
+  def new
+    @time_stamp = TimeStamp.new(user_id: params[:user_id])
+  end
+
   # GET /time_stamps/1/edit
   def edit
   end
@@ -28,13 +33,41 @@ class TimeStampsController < ApplicationController
   # POST /scan_events
   # POST /scan_events.json
   def create
-    user = User.find(params[:user_id]) if params[:user_id].present?
-    respond_to do |format|
-      begin
-        user.handle_new_time_stamp!(nil) if user.present?
-        format.html { redirect_to time_stamps_url(user_filter: params[:user_id], work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.creating_time_stamp') }
-      rescue
-        format.html { head :unprocessable_entity }
+    # click on "+"-Button to clock in or out
+    if params[:user_id].present?
+      user = User.find(params[:user_id])
+      respond_to do |format|
+        begin
+          user.handle_new_time_stamp!(nil) if user.present?
+          format.html { redirect_to time_stamps_url(user_filter: params[:user_id], work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.creating_time_stamp') }
+        rescue
+          format.html { head :unprocessable_entity }
+        end
+      end
+    # click on "submit" in /time_stamps/new
+    else
+      unless params["absence_dur"].present? && params["absence_type"].present?
+        respond_to do |format|
+          format.html { redirect_to new_time_stamp_path(user_id: time_stamp_params[:user_id]), alert: t('flash.alert.creating_time_stamp') }
+        end
+        return
+      end
+
+      absence_time = TimeStamp::absence_time_for(params["absence_dur"])
+      @time_stamp = TimeStamp.new(
+        value: Time.new(time_stamp_params['value(1i)'], time_stamp_params['value(2i)'], time_stamp_params['value(3i)'],  time_stamp_params['value(4i)'],  time_stamp_params['value(5i)']),
+        sick_time: params["absence_type"] == "sick" ? absence_time : 0,
+        paid_leave_time: params["absence_type"] == "paid_leave" ? absence_time : 0,
+        delta_time: absence_time,
+        monthly_time: 0, #blup
+        user_id: time_stamp_params[:user_id] || current_user.id,
+      )
+      respond_to do |format|
+        if @time_stamp.save
+          format.html { redirect_to time_stamps_url(user_filter: @time_stamp.user_id, work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.creating_time_stamp') }
+        else
+          format.html { head :unprocessable_entity }
+        end
       end
     end
   end
@@ -60,8 +93,16 @@ class TimeStampsController < ApplicationController
       else
         @time_stamp.was_manually_validated = (time_stamp_params[:was_manually_validated].present? ? (time_stamp_params[:was_manually_validated] == "1") : @time_stamp.was_manually_validated)
       end
+      # handle absence
+      if params["absence_dur"].present? || params["absence_type"].present?
+        absence_time = TimeStamp::absence_time_for(params["absence_dur"])
+        @time_stamp.sick_time = params["absence_type"] == "sick" ? absence_time : @time_stamp.sick_time
+        @time_stamp.paid_leave_time = params["absence_type"] == "sick" ? absence_time : @time_stamp.paid_leave_time
+        @time_stamp.delta_time = absence_time
+        @time_stamp.monthly_time = 0 #blup
+      end
       if @time_stamp.save
-        format.html { redirect_to time_stamps_url(user_filter: @time_stamp.user.id, work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.updating_time_stamp') }
+        format.html { redirect_to time_stamps_url(user_filter: @time_stamp.user_id, work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.updating_time_stamp') }
         format.json { render :show, status: :ok, location: @time_stamp }
       else
         format.html { render :edit, alert: t('flash.alert.updating_time_stamp') }
