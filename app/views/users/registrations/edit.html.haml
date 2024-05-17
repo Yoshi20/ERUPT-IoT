@@ -30,16 +30,17 @@
       .form-group
         = f.label :password_confirmation, t('users.new_password_conf')
         = f.password_field :password_confirmation, autocomplete: "off", class: 'form-control'
+      %hr
       .form-group{style: 'margin-top: 2rem;'}
         = f.label :current_password, t('users.current_password')
         %i= t('users.enter_current_password')
         = f.password_field :current_password, autocomplete: "off", class: 'form-control'
       .actions.text-center
         = f.submit t('update'), class: 'btn btn-ghost'
-%hr
-.row
-  .col
-    %h2= t('users.delete_my_account')
-    %p
-      = t('users.unhappy')
-      = button_to t('users.delete_account'), user_registration_path, data: { confirm: t('confirm') }, method: :delete, class: 'btn btn-sstm'
+-# %hr
+-# .row
+-#   .col
+-#     %h2= t('users.delete_my_account')
+-#     %p
+-#       = t('users.unhappy')
+-#       = button_to t('users.delete_account'), user_registration_path, data: { confirm: t('confirm') }, method: :delete, class: 'btn btn-sstm'

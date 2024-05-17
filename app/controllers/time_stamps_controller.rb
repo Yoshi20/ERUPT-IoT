@@ -61,6 +61,7 @@ class TimeStampsController < ApplicationController
         delta_time: absence_time,
         monthly_time: 0, #blup
         user_id: time_stamp_params[:user_id] || current_user.id,
+        was_manually_edited: (params[:edit_time_stamp].present? && !current_user.is_admin),
       )
       respond_to do |format|
         if @time_stamp.save
@@ -86,13 +87,6 @@ class TimeStampsController < ApplicationController
         @time_stamp.clock_in
       end
       #blup: TODO -> still update delta & monthly even when not is_in or is_out
-      was_manually_edited = (@time_stamp.changed? && params[:edit_time_stamp].present? && !current_user.is_admin)
-      if was_manually_edited
-        @time_stamp.was_manually_edited = true
-        @time_stamp.was_manually_validated = false
-      else
-        @time_stamp.was_manually_validated = (time_stamp_params[:was_manually_validated].present? ? (time_stamp_params[:was_manually_validated] == "1") : @time_stamp.was_manually_validated)
-      end
       # handle absence
       if params["absence_dur"].present? || params["absence_type"].present?
         absence_time = TimeStamp::absence_time_for(params["absence_dur"])
@@ -100,6 +94,14 @@ class TimeStampsController < ApplicationController
         @time_stamp.paid_leave_time = params["absence_type"] == "sick" ? absence_time : @time_stamp.paid_leave_time
         @time_stamp.delta_time = absence_time
         @time_stamp.monthly_time = 0 #blup
+      end
+      # handle was_manually_edited
+      was_manually_edited = (@time_stamp.changed? && params[:edit_time_stamp].present? && !current_user.is_admin)
+      if was_manually_edited
+        @time_stamp.was_manually_edited = true
+        @time_stamp.was_manually_validated = false
+      else
+        @time_stamp.was_manually_validated = (time_stamp_params[:was_manually_validated].present? ? (time_stamp_params[:was_manually_validated] == "1") : @time_stamp.was_manually_validated)
       end
       if @time_stamp.save
         format.html { redirect_to time_stamps_url(user_filter: @time_stamp.user_id, work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.updating_time_stamp') }

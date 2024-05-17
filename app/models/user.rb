@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   belongs_to :member, optional: true
   has_many :devices
-  has_many :time_stamps
+  has_many :time_stamps, dependent: :destroy
 
   before_validation :strip_whitespace
 
