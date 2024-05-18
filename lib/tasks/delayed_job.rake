@@ -6,9 +6,9 @@ namespace :delayed_job do
   task status: :environment do # rake delayed_job:status
     resp = `RAILS_ENV=production /var/www/erupt-iot/current/bin/delayed_job status`
     # resp = `bin/delayed_job status`
-    # resp = "" -> when nothing is running
+    # resp = "" or "delayed_job: no instances running" -> when nothing is running
     # resp = "delayed_job: running [pid 79573]" -> when a job is running
-    if resp.include?("running")
+    if resp.include?("running [pid")
       HTTParty.get('https://api.honeybadger.io/v1/check_in/yaI483') # check-in
     else
       resp = `RAILS_ENV=production /var/www/erupt-iot/current/bin/delayed_job start` # start new instance
