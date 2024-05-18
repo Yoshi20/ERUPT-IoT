@@ -8,7 +8,7 @@ set :application_name, 'erupt-iot'
 set :domain, '5.75.145.55'
 set :deploy_to, '/var/www/erupt-iot'
 set :repository, 'git@github.com:Yoshi20/ERUPT-IoT.git'
-set :branch, 'main'
+set :branch, 'prod'
 
 # Optional settings:
 set :user, 'deployer'          # Username in the server to SSH to.
