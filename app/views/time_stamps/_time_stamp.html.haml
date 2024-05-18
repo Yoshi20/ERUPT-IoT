@@ -22,7 +22,7 @@
       - elsif added_time_h.present?
         - delta_time_string = (delta_time_string + " (#{(delta_time_h-added_time_h).round(2)} + #{added_time_h.round(2)})").html_safe
     %td.text-center= delta_time_string
-    %td.text-center= (time_stamp.monthly_time.present? && time_stamp.is_out) ? (time_stamp.monthly_time.to_f/3600).round(2) : ""
+    %td.text-center= (time_stamp.monthly_time.present? && (time_stamp.is_out || time_stamp.has_sick_time? || time_stamp.has_paid_leave_time?)) ? (time_stamp.monthly_time.to_f/3600).round(2) : ""
     - if current_user.is_admin
       %td.text-center
         - if time_stamp.was_manually_edited
@@ -34,7 +34,7 @@
     - if current_user.present?
       %td.admin-list-actions
         -# update
-        - if time_stamp.is_out
+        - if time_stamp.is_out || time_stamp.has_sick_time? || time_stamp.has_paid_leave_time?
           .admin-list-actions__link
             = form_for time_stamp, role: 'form', class:'form' do |f|
               = text_field_tag :user_id, @user_id, type: "hidden"

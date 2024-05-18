@@ -107,6 +107,29 @@ class TimeStamp < ApplicationRecord
     Delayed::Job.find_by(queue: "time_stamp_#{self.id}")&.destroy
   end
 
+  def clock_absence(params)
+    # calculate monthly_time
+    last_time_stamps = TimeStamp.where(user_id: self.user_id).where.not(id: self.id).where("value <= ?", self.value)
+    time_stamps_this_month = last_time_stamps.where(is_out: true).where("value >= ?", TimeStamp::beginning_of_work_month(self.value))
+    monthly_time = delta_time + time_stamps_this_month&.sum(&:delta_time).to_i
+    if params["absence_dur"].present? || params["absence_type"].present?
+      # get absence_time
+      absence_time = TimeStamp::absence_time_for(params["absence_dur"])
+      # set object params
+      self.is_in = false
+      self.is_out = false
+      self.sick_time = params["absence_type"] == "sick" ? absence_time : self.sick_time
+      self.paid_leave_time = params["absence_type"] == "paid_leave" ? absence_time : self.paid_leave_time
+      self.delta_time = absence_time
+      self.monthly_time = monthly_time
+      self.removed_break_time = 0
+      self.added_night_time = 0
+    else
+      # just update monthly_time
+      self.monthly_time = monthly_time
+    end
+  end
+
   # a work month starts at the 25. (06:00:00) and ends at the 25. (05:59:59)
   def self::beginning_of_work_month(ts)
     if (ts - 6.hours).day > 25

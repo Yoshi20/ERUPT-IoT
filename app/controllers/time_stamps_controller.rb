@@ -52,17 +52,12 @@ class TimeStampsController < ApplicationController
         end
         return
       end
-
-      absence_time = TimeStamp::absence_time_for(params["absence_dur"])
       @time_stamp = TimeStamp.new(
         value: Time.new(time_stamp_params['value(1i)'], time_stamp_params['value(2i)'], time_stamp_params['value(3i)'],  time_stamp_params['value(4i)'],  time_stamp_params['value(5i)']),
-        sick_time: params["absence_type"] == "sick" ? absence_time : 0,
-        paid_leave_time: params["absence_type"] == "paid_leave" ? absence_time : 0,
-        delta_time: absence_time,
-        monthly_time: 0, #blup
         user_id: time_stamp_params[:user_id] || current_user.id,
         was_manually_edited: (params[:edit_time_stamp].present? && !current_user.is_admin),
       )
+      @time_stamp.clock_absence(params)
       respond_to do |format|
         if @time_stamp.save
           format.html { redirect_to time_stamps_url(user_filter: @time_stamp.user_id, work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.creating_time_stamp') }
@@ -85,15 +80,8 @@ class TimeStampsController < ApplicationController
         @time_stamp.clock_out
       elsif @time_stamp.is_in && !@time_stamp.is_out
         @time_stamp.clock_in
-      end
-      #blup: TODO -> still update delta & monthly even when not is_in or is_out
-      # handle absence
-      if params["absence_dur"].present? || params["absence_type"].present?
-        absence_time = TimeStamp::absence_time_for(params["absence_dur"])
-        @time_stamp.sick_time = params["absence_type"] == "sick" ? absence_time : @time_stamp.sick_time
-        @time_stamp.paid_leave_time = params["absence_type"] == "sick" ? absence_time : @time_stamp.paid_leave_time
-        @time_stamp.delta_time = absence_time
-        @time_stamp.monthly_time = 0 #blup
+      else
+        @time_stamp.clock_absence(params)
       end
       # handle was_manually_edited
       was_manually_edited = (@time_stamp.changed? && params[:edit_time_stamp].present? && !current_user.is_admin)
