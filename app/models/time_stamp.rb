@@ -2,14 +2,16 @@ class TimeStamp < ApplicationRecord
   belongs_to :scan_event, optional: true
   belongs_to :user
 
+  scope :with_monthly_time, -> { where('is_out IS true OR is_sick IS true OR is_paid_leave IS true') }
+
   REMOVE_15MIN_AFTER = 5.5
   REMOVE_30MIN_AFTER = 7
   REMOVE_60MIN_AFTER = 9
 
   def type
-    if self.has_sick_time?
+    if self.is_sick
       "SICK"
-    elsif self.has_paid_leave_time?
+    elsif self.is_paid_leave
       "HOLIDAY"
     elsif self.was_automatically_clocked_out
       "OUT (AUTO)"
@@ -23,9 +25,9 @@ class TimeStamp < ApplicationRecord
   end
 
   def type_color
-    if self.has_sick_time?
+    if self.is_sick
       "burlywood"
-    elsif self.has_paid_leave_time?
+    elsif self.is_paid_leave
       "deepskyblue"
     elsif self.was_automatically_clocked_out
       "red"
@@ -42,26 +44,25 @@ class TimeStamp < ApplicationRecord
     self.created_at > 5.minute.ago
   end
 
-  def has_sick_time?
-    self.sick_time.to_i > 0
+  def has_monthly_time?
+    (self.is_out || self.is_sick || self.is_paid_leave)
   end
 
-  def has_paid_leave_time?
-    self.paid_leave_time.to_i > 0
+  def set_monthly_time # Note: user_id & value must be set beforehand
+    last_time_stamps = TimeStamp.where(user_id: self.user_id).where.not(id: self.id).where("value < ?", self.value)
+    time_stamps_this_month = last_time_stamps.with_monthly_time.where("value >= ?", TimeStamp::beginning_of_work_month(self.value))
+    self.monthly_time = self.delta_time.to_i + time_stamps_this_month&.sum(&:delta_time).to_i
   end
 
   def clock_in
-    last_time_stamps = TimeStamp.where(user_id: self.user_id).where.not(id: self.id).where("value <= ?", self.value)
-    # find monthly_time
-    last_time_stamp_out = last_time_stamps.where(is_out: true).order(:value).last # can be nil
-    monthly_time = last_time_stamp_out&.monthly_time
-    # set object params
     self.is_in = true
     self.is_out = false
+    self.is_sick = false
+    self.is_paid_leave = false
     self.delta_time = nil
-    self.monthly_time = monthly_time
     self.removed_break_time = 0
     self.added_night_time = 0
+    self.set_monthly_time()
   end
 
   def start_auto_clock_out
@@ -71,6 +72,8 @@ class TimeStamp < ApplicationRecord
       value: (self.value + automatic_clock_out_in),
       is_in: false,
       is_out: true,
+      is_sick: false,
+      is_paid_leave: false,
       delta_time: automatic_clock_out_in.to_i,
       # removed_break_time: 0,
       # added_night_time: 0,
@@ -81,7 +84,7 @@ class TimeStamp < ApplicationRecord
   end
 
   def clock_out # Note: user_id & value must be set beforehand
-    last_time_stamps = TimeStamp.where(user_id: self.user_id).where.not(id: self.id).where("value <= ?", self.value)
+    last_time_stamps = TimeStamp.where(user_id: self.user_id).where.not(id: self.id).where("value < ?", self.value)
     # calculate delta_time
     last_time_stamp_in = last_time_stamps.where(is_in: true).order(:value).last # can be nil?
     last_value_in = last_time_stamp_in&.value
@@ -92,42 +95,34 @@ class TimeStamp < ApplicationRecord
     # handle added_night_time & update delta_time
     added_night_time = TimeStamp::night_time_to_add(last_value_in, self.value)
     delta_time = delta_time + added_night_time
-    # calculate monthly_time
-    time_stamps_this_month = last_time_stamps.where(is_out: true).where("value >= ?", TimeStamp::beginning_of_work_month(self.value))
-    monthly_time = delta_time + time_stamps_this_month&.sum(&:delta_time).to_i
     # set object params
     self.is_in = false
     self.is_out = true
+    self.is_sick = false
+    self.is_paid_leave = false
     self.delta_time = delta_time
-    self.monthly_time = monthly_time
     self.removed_break_time = removed_break_time
     self.added_night_time = added_night_time
+    self.set_monthly_time()
     # delete the automatic clock out delayed job
     Delayed::Job.find_by(queue: "time_stamp_#{last_time_stamp_in.id}")&.destroy if last_time_stamp_in.present?
     Delayed::Job.find_by(queue: "time_stamp_#{self.id}")&.destroy
   end
 
   def clock_absence(params)
-    # calculate monthly_time
-    last_time_stamps = TimeStamp.where(user_id: self.user_id).where.not(id: self.id).where("value <= ?", self.value)
-    time_stamps_this_month = last_time_stamps.where(is_out: true).where("value >= ?", TimeStamp::beginning_of_work_month(self.value))
-    monthly_time = delta_time + time_stamps_this_month&.sum(&:delta_time).to_i
+    delta_time = params["absence_dur"].present? ? TimeStamp::absence_time_for(params["absence_dur"]) : self.delta_time
     if params["absence_dur"].present? || params["absence_type"].present?
-      # get absence_time
-      absence_time = TimeStamp::absence_time_for(params["absence_dur"])
       # set object params
       self.is_in = false
       self.is_out = false
-      self.sick_time = params["absence_type"] == "sick" ? absence_time : self.sick_time
-      self.paid_leave_time = params["absence_type"] == "paid_leave" ? absence_time : self.paid_leave_time
-      self.delta_time = absence_time
-      self.monthly_time = monthly_time
+      self.is_sick = params["absence_type"] == "sick" ? true : self.is_sick
+      self.is_paid_leave = params["absence_type"] == "paid_leave" ? true : self.is_paid_leave
+      self.delta_time = delta_time
       self.removed_break_time = 0
       self.added_night_time = 0
-    else
-      # just update monthly_time
-      self.monthly_time = monthly_time
     end
+    # in any case set monthly_time
+    self.set_monthly_time()
   end
 
   # a work month starts at the 25. (06:00:00) and ends at the 25. (05:59:59)

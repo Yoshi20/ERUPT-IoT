@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_16_075820) do
+ActiveRecord::Schema.define(version: 2024_05_18_073701) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -143,8 +143,6 @@ ActiveRecord::Schema.define(version: 2024_05_16_075820) do
     t.datetime "value"
     t.boolean "is_in", default: false
     t.boolean "is_out", default: false
-    t.bigint "sick_time"
-    t.bigint "paid_leave_time"
     t.bigint "extra_time"
     t.bigint "delta_time"
     t.bigint "monthly_time"
@@ -157,6 +155,8 @@ ActiveRecord::Schema.define(version: 2024_05_16_075820) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "scan_event_id"
     t.bigint "user_id"
+    t.boolean "is_sick", default: false
+    t.boolean "is_paid_leave", default: false
     t.index ["scan_event_id"], name: "index_time_stamps_on_scan_event_id"
     t.index ["user_id"], name: "index_time_stamps_on_user_id"
   end

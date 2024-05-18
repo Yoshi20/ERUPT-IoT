@@ -146,11 +146,11 @@ class TimeStampsController < ApplicationController
         datetime = ts.value.localtime.to_s(:custom_datetime)
         removed_time_h = (ts.removed_break_time.to_f/3600).round(2)
         added_night_h = (ts.added_night_time.to_f/3600).round(2)
-        delta_time_h = (ts.is_out || ts.has_sick_time? || ts.has_paid_leave_time?) ? (ts.delta_time.to_f/3600).round(2) : nil
-        monthly_time_h = (ts.is_out || ts.has_sick_time? || ts.has_paid_leave_time?) ? (ts.monthly_time.to_f/3600).round(2) : nil
+        delta_time_h = ts.has_monthly_time? ? (ts.delta_time.to_f/3600).round(2) : nil
+        monthly_time_h = ts.has_monthly_time? ? (ts.monthly_time.to_f/3600).round(2) : nil
         day_time_h = ((ts.delta_time.to_i + ts.removed_break_time.to_i - ts.added_night_time.to_i).to_f/3600).round(2)
-        day_sick_h = (ts.sick_time.to_f/3600).round(2)
-        day_paid_leave_h = (ts.paid_leave_time.to_f/3600).round(2)
+        day_sick_h = ts.is_sick ? delta_time_h : 0
+        day_paid_leave_h = ts.is_paid_leave ? delta_time_h : 0
         day_extra_h = (ts.extra_time.to_f/3600).round(2)
         time_stamp_hash = {
           time_stamp: "#{wd}, #{datetime}",
@@ -163,7 +163,7 @@ class TimeStampsController < ApplicationController
           added_night_h: added_night_h,
           day_sick_h: day_sick_h,
           day_paid_leave_h: day_paid_leave_h,
-          day_extra_h: day_extra_h,
+          day_extra_h: day_extra_h, #blup: TODO
           delta_time_h: delta_time_h,
           monthly_time_h: monthly_time_h,
         }
@@ -194,7 +194,7 @@ private
   # Only allow a list of trusted parameters through.
   def time_stamp_params
     params.require(:time_stamp).permit(
-      :value, :is_in, :is_out, :sick_time, :paid_leave_time, :extra_time,
+      :value, :is_in, :is_out, :is_sick, :is_paid_leave, :extra_time,
       :delta_time, :monthly_time, :removed_break_time, :added_night_time,
       :was_automatically_clocked_out, :was_manually_edited,
       :was_manually_validated, :scan_event_id, :user_id,
