@@ -83,7 +83,7 @@ class TimeStamp < ApplicationRecord
   def start_auto_clock_out
     # start the automatic clock out delayed job
     automatic_clock_out_in = 12.hours
-    puts TimeStamp.delay(run_at: automatic_clock_out_in.from_now, queue: "time_stamp_#{self.id}").create(
+    TimeStamp.delay(run_at: automatic_clock_out_in.from_now, queue: "time_stamp_#{self.id}").create(
       value: (self.value + automatic_clock_out_in),
       is_in: false,
       is_out: true,
@@ -96,6 +96,12 @@ class TimeStamp < ApplicationRecord
       scan_event_id: self.scan_event_id,
       user_id: self.user_id,
     )
+    if Rails.env.production?
+      # Run delayed_job:status task in another process
+      Process.fork {
+        `bin/rake delayed_job:status`
+      }
+    end
   end
 
   def clock_out # Note: user_id & value must be set beforehand
