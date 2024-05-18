@@ -60,6 +60,7 @@ class TimeStampsController < ApplicationController
       @time_stamp.clock_absence(params)
       respond_to do |format|
         if @time_stamp.save
+          @time_stamp.update_all_other_time_stamps_this_month
           format.html { redirect_to time_stamps_url(user_filter: @time_stamp.user_id, work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.creating_time_stamp') }
         else
           format.html { head :unprocessable_entity }
@@ -71,27 +72,28 @@ class TimeStampsController < ApplicationController
   # PATCH/PUT /time_stamps/1
   # PATCH/PUT /time_stamps/1.json
   def update
+    @time_stamp.value = Time.new(time_stamp_params['value(1i)'], time_stamp_params['value(2i)'], time_stamp_params['value(3i)'],  time_stamp_params['value(4i)'],  time_stamp_params['value(5i)'], @time_stamp.value.sec)
+    @time_stamp.is_in = (time_stamp_params[:is_in].present? ? (time_stamp_params[:is_in] == "1") : @time_stamp.is_in)
+    @time_stamp.is_out = (time_stamp_params[:is_out].present? ? (time_stamp_params[:is_out] == "1") : @time_stamp.is_out)
+    @time_stamp.was_automatically_clocked_out = (time_stamp_params[:was_automatically_clocked_out].present? ? (time_stamp_params[:was_automatically_clocked_out] == "1") : @time_stamp.was_automatically_clocked_out)
+    if @time_stamp.is_out && !@time_stamp.is_in
+      @time_stamp.clock_out
+    elsif @time_stamp.is_in && !@time_stamp.is_out
+      @time_stamp.clock_in
+    else
+      @time_stamp.clock_absence(params)
+    end
+    # handle was_manually_edited
+    was_manually_edited = (@time_stamp.changed? && params[:edit_time_stamp].present? && !current_user.is_admin)
+    if was_manually_edited
+      @time_stamp.was_manually_edited = true
+      @time_stamp.was_manually_validated = false
+    else
+      @time_stamp.was_manually_validated = (time_stamp_params[:was_manually_validated].present? ? (time_stamp_params[:was_manually_validated] == "1") : @time_stamp.was_manually_validated)
+    end
     respond_to do |format|
-      @time_stamp.value = Time.new(time_stamp_params['value(1i)'], time_stamp_params['value(2i)'], time_stamp_params['value(3i)'],  time_stamp_params['value(4i)'],  time_stamp_params['value(5i)'], @time_stamp.value.sec)
-      @time_stamp.is_in = (time_stamp_params[:is_in].present? ? (time_stamp_params[:is_in] == "1") : @time_stamp.is_in)
-      @time_stamp.is_out = (time_stamp_params[:is_out].present? ? (time_stamp_params[:is_out] == "1") : @time_stamp.is_out)
-      @time_stamp.was_automatically_clocked_out = (time_stamp_params[:was_automatically_clocked_out].present? ? (time_stamp_params[:was_automatically_clocked_out] == "1") : @time_stamp.was_automatically_clocked_out)
-      if @time_stamp.is_out && !@time_stamp.is_in
-        @time_stamp.clock_out
-      elsif @time_stamp.is_in && !@time_stamp.is_out
-        @time_stamp.clock_in
-      else
-        @time_stamp.clock_absence(params)
-      end
-      # handle was_manually_edited
-      was_manually_edited = (@time_stamp.changed? && params[:edit_time_stamp].present? && !current_user.is_admin)
-      if was_manually_edited
-        @time_stamp.was_manually_edited = true
-        @time_stamp.was_manually_validated = false
-      else
-        @time_stamp.was_manually_validated = (time_stamp_params[:was_manually_validated].present? ? (time_stamp_params[:was_manually_validated] == "1") : @time_stamp.was_manually_validated)
-      end
       if @time_stamp.save
+        @time_stamp.update_all_other_time_stamps_this_month
         format.html { redirect_to time_stamps_url(user_filter: @time_stamp.user_id, work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.updating_time_stamp') }
         format.json { render :show, status: :ok, location: @time_stamp }
       else
@@ -106,7 +108,9 @@ class TimeStampsController < ApplicationController
   def destroy
     respond_to do |format|
       time_stamp_id = @time_stamp.id
+      temp_time_stamp = @time_stamp.dup
       if @time_stamp.destroy
+        temp_time_stamp.update_all_other_time_stamps_this_month
         # also try to delete the automatic clock out delayed job
         Delayed::Job.find_by(queue: "time_stamp_#{time_stamp_id}")&.destroy
         format.html { redirect_to time_stamps_url(user_filter: params[:user_id], work_month_filter: params[:work_month_id], year_filter: params[:year_id]), notice: t('flash.notice.deleting_time_stamp') }

@@ -33,19 +33,19 @@
 
     - if current_user.present?
       %td.admin-list-actions
-        -# update
-        - if time_stamp.has_monthly_time?
-          .admin-list-actions__link
-            = form_for time_stamp, role: 'form', class:'form' do |f|
-              = text_field_tag :user_id, @user_id, type: "hidden"
-              = text_field_tag :work_month_id, @work_month_id, type: "hidden"
-              = text_field_tag :year_id, @year_id, type: "hidden"
-              .field.form-group.hidden
-                .form-group-inline{style: 'justify-content: center; gap: 0.5rem;'}
-                  = f.datetime_select :value
-              .actions.form-group.text-center
-                = f.button class:'btn btn-sstm btn-square' do
-                  %span.material-icons.admin-actions__link__icon= 'refresh'
+        -# -# update
+        -# - if time_stamp.has_monthly_time?
+        -#   .admin-list-actions__link
+        -#     = form_for time_stamp, role: 'form', class:'form' do |f|
+        -#       = text_field_tag :user_id, @user_id, type: "hidden"
+        -#       = text_field_tag :work_month_id, @work_month_id, type: "hidden"
+        -#       = text_field_tag :year_id, @year_id, type: "hidden"
+        -#       .field.form-group.hidden
+        -#         .form-group-inline{style: 'justify-content: center; gap: 0.5rem;'}
+        -#           = f.datetime_select :value
+        -#       .actions.form-group.text-center
+        -#         = f.button class:'btn btn-sstm btn-square' do
+        -#           %span.material-icons.admin-actions__link__icon= 'refresh'
         -# manually validate
         - if current_user.admin? && time_stamp.was_manually_edited && !time_stamp.was_manually_validated
           .admin-list-actions__link

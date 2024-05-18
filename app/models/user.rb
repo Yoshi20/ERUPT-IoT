@@ -53,6 +53,7 @@ class User < ApplicationRecord
       time_stamp = TimeStamp.new(value: now, scan_event_id: scan_event_id, user_id: self.id)
       time_stamp.clock_out
       time_stamp.save!
+      time_stamp.update_all_other_time_stamps_this_month
     else
       # clock in ---------------------------------------------------------------
       time_stamp = TimeStamp.new(value: now, scan_event_id: scan_event_id, user_id: self.id)

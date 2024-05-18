@@ -54,6 +54,21 @@ class TimeStamp < ApplicationRecord
     self.monthly_time = self.delta_time.to_i + time_stamps_this_month&.sum(&:delta_time).to_i
   end
 
+  def update_all_other_time_stamps_this_month
+    other_time_stamps = TimeStamp.where(user_id: self.user_id).where.not(id: self.id)
+    other_time_stamps_this_month = other_time_stamps.with_monthly_time.where("value >= ?", TimeStamp::beginning_of_work_month(self.value))
+    other_time_stamps_this_month.each do |ts|
+      if ts.is_out && !ts.is_in
+        ts.clock_out
+      elsif ts.is_in && !ts.is_out
+        ts.clock_in
+      else
+        ts.clock_absence(nil)
+      end
+      ts.save
+    end
+  end
+
   def clock_in
     self.is_in = true
     self.is_out = false
@@ -110,8 +125,8 @@ class TimeStamp < ApplicationRecord
   end
 
   def clock_absence(params)
-    delta_time = params["absence_dur"].present? ? TimeStamp::absence_time_for(params["absence_dur"]) : self.delta_time
-    if params["absence_dur"].present? || params["absence_type"].present?
+    if params.present? && (params["absence_dur"].present? || params["absence_type"].present?)
+      delta_time = params["absence_dur"].present? ? TimeStamp::absence_time_for(params["absence_dur"]) : self.delta_time
       # set object params
       self.is_in = false
       self.is_out = false
