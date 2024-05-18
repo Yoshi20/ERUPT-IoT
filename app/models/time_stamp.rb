@@ -148,10 +148,10 @@ class TimeStamp < ApplicationRecord
 
   # a work month starts at the 25. (06:00:00) and ends at the 25. (05:59:59)
   def self::beginning_of_work_month(ts)
-    if (ts - 6.hours).day > 25
-      ts.beginning_of_month + 24.days + 6.hours
+    if (ts - 6.hours).day >= 25
+      ts.beginning_of_month + 24.days + 6.hours # results in e.g. 25. May 06:00:00
     else
-      ts.prev_month.beginning_of_month + 24.days + 6.hours
+      ts.prev_month.beginning_of_month + 24.days + 6.hours # results in e.g. 25. Apr 06:00:00
     end
   end
 
