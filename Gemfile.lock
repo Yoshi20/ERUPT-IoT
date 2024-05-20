@@ -70,10 +70,9 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
-    bootstrap (4.3.1)
+    bootstrap (5.3.3)
       autoprefixer-rails (>= 9.1.0)
-      popper_js (>= 1.14.3, < 2)
-      sassc-rails (>= 2.0.0)
+      popper_js (>= 2.11.8, < 3)
     brakeman (6.1.2)
       racc
     builder (3.2.4)
@@ -198,14 +197,14 @@ GEM
       racc (~> 1.4)
     orm_adapter (0.5.0)
     pg (1.5.6)
-    popper_js (1.16.1)
+    popper_js (2.11.8)
     public_suffix (5.0.5)
     puma (6.4.2)
       nio4r (~> 2.0)
     pusher-push-notifications (2.0.2)
       jwt (~> 2.1, >= 2.1.0)
       rest-client (~> 2.0, >= 2.0.2)
-    racc (1.7.3)
+    racc (1.8.0)
     rack (2.2.9)
     rack-cors (2.0.2)
       rack (>= 2.0.0)
@@ -335,7 +334,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap (>= 1.4.4)
-  bootstrap (< 5.0)
+  bootstrap (< 6.0)
   brakeman
   byebug
   capybara (>= 3.26)
