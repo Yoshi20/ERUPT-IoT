@@ -155,6 +155,22 @@ class TimeStamp < ApplicationRecord
     end
   end
 
+  def self::beginning_of_work_day(ts)
+    if ts.hour >= 6
+      ts.beginning_of_day + 6.hours # results in e.g. 25. May 06:00:00
+    else
+      ts.prev_day.beginning_of_day + 6.hours # results in e.g. 24. May 06:00:00
+    end
+  end
+
+  def self::end_of_work_day(ts)
+    if ts.hour >= 6
+      ts.next_day.beginning_of_day + 6.hours - 1.second # results in e.g. 26. May 05:59:59
+    else
+      ts.beginning_of_day + 6.hours - 1.second # results in e.g. 25. May 05:59:59
+    end
+  end
+
   def self::break_time_to_remove(delta_time)
     if delta_time > TimeStamp::REMOVE_60MIN_AFTER.hours.to_i
       60.minutes.to_i

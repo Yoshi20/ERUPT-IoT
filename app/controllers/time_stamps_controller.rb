@@ -53,7 +53,7 @@ class TimeStampsController < ApplicationController
         return
       end
       @time_stamp = TimeStamp.new(
-        value: Time.new(time_stamp_params['value(1i)'], time_stamp_params['value(2i)'], time_stamp_params['value(3i)'],  time_stamp_params['value(4i)'],  time_stamp_params['value(5i)']),
+        value: Time.new(time_stamp_params['value(1i)'], time_stamp_params['value(2i)'], time_stamp_params['value(3i)'],  "6",  "0"),
         user_id: time_stamp_params[:user_id] || current_user.id,
         was_manually_edited: (params[:edit_time_stamp].present? && !current_user.is_admin),
       )
@@ -126,63 +126,92 @@ class TimeStampsController < ApplicationController
   require 'csv'
   def export
     @user_id = params[:user_filter]
-    @work_month_id = params[:work_month_filter]
+    @work_month_id = params[:work_month_filter] # can be nil
     @year_id = params[:year_filter] || 0
     @total_time_stamps = TimeStamp.all.includes(:user)
     @total_time_stamps = @total_time_stamps.where(user: {id: @user_id}) if @user_id.present?
-    if @work_month_id.present?
-      @total_time_stamps = @total_time_stamps.where("value >= ? AND value <= ?", beginning_of_work_month_from_id(@work_month_id, @year_id), end_of_work_month_from_id(@work_month_id, @year_id))
-    else
-      @total_time_stamps = @total_time_stamps.where("value >= ? AND value <= ?", beginning_of_year_from_id(@year_id), end_of_year_from_id(@year_id))
-    end
-    @time_stamps = @total_time_stamps.order(value: :desc)
+    beginning_of_work_month = beginning_of_work_month_from_id(@work_month_id, @year_id)
+    end_of_work_month = end_of_work_month_from_id(@work_month_id, @year_id)
     csv_data = CSV.generate do |csv|
       total_day_time_h = 0
       total_removed_time_h = 0
       total_added_time_h = 0
-      total_sick_time_h = 0
-      total_paid_leave_time_h = 0
+      total_sick_time_d = 0
+      total_paid_leave_time_d = 0
       total_extra_time_h = 0
       total_delta_time_h = 0
       max_monthly_time_h = 0
-      @time_stamps.each_with_index do |ts, i|
-        wd = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][ts.value.localtime.wday]
-        datetime = ts.value.localtime.to_s(:custom_datetime)
-        removed_time_h = (ts.removed_break_time.to_f/3600).round(2)
-        added_night_h = (ts.added_night_time.to_f/3600).round(2)
-        delta_time_h = ts.has_monthly_time? ? (ts.delta_time.to_f/3600).round(2) : nil
-        monthly_time_h = ts.has_monthly_time? ? (ts.monthly_time.to_f/3600).round(2) : nil
-        day_time_h = ((ts.delta_time.to_i + ts.removed_break_time.to_i - ts.added_night_time.to_i).to_f/3600).round(2)
-        day_sick_h = ts.is_sick ? delta_time_h : 0
-        day_paid_leave_h = ts.is_paid_leave ? delta_time_h : 0
-        day_extra_h = (ts.extra_time.to_f/3600).round(2)
-        time_stamp_hash = {
-          time_stamp: "#{wd}, #{datetime}",
-          type: ts.type,
-          username: ts.user.username,
-          hour_in: ts.is_in ? ts.value.localtime.to_s(:custom_datetime_hour) : nil,
-          hour_out: ts.is_out ? ts.value.localtime.to_s(:custom_datetime_hour) : nil,
-          day_time_h: day_time_h,
-          removed_time_h: removed_time_h,
-          added_night_h: added_night_h,
-          day_sick_h: day_sick_h,
-          day_paid_leave_h: day_paid_leave_h,
-          day_extra_h: day_extra_h, #blup: TODO
-          delta_time_h: delta_time_h,
-          monthly_time_h: monthly_time_h,
-        }
-        csv << time_stamp_hash.keys if i == 0
-        csv << time_stamp_hash.values
-        total_day_time_h = total_day_time_h + day_time_h.to_f
-        total_removed_time_h = total_removed_time_h + removed_time_h.to_f
-        total_added_time_h = total_added_time_h + added_night_h.to_f
-        total_sick_time_h = total_sick_time_h + day_sick_h.to_f
-        total_paid_leave_time_h = total_paid_leave_time_h + day_paid_leave_h.to_f
-        total_extra_time_h = total_extra_time_h + day_extra_h.to_f
-        total_delta_time_h = total_delta_time_h + delta_time_h.to_f
-        max_monthly_time_h = monthly_time_h.to_f if monthly_time_h.to_f > max_monthly_time_h
+      is_header = true
+      total_days = (end_of_work_month.to_date - beginning_of_work_month.to_date).to_i
+      # loop over all days of the work month
+      total_days.times do |i|
+        current_value = (beginning_of_work_month + i.days)
+        wd = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][current_value.localtime.wday]
+        current_time_stamps = @total_time_stamps.where("value >= ? AND value <= ?", TimeStamp::beginning_of_work_day(current_value), TimeStamp::end_of_work_day(current_value)).order(value: :asc)
+        if current_time_stamps.any?
+          # work day
+          current_time_stamps.each do |ts|
+            datetime = ts.value.localtime.to_s(:custom_datetime)
+            removed_time_h = (ts.removed_break_time.to_f/3600).round(2)
+            added_night_h = (ts.added_night_time.to_f/3600).round(2)
+            delta_time_h = ts.has_monthly_time? ? (ts.delta_time.to_f/3600).round(2) : nil
+            monthly_time_h = ts.has_monthly_time? ? (ts.monthly_time.to_f/3600).round(2) : nil
+            day_time_h = ((ts.delta_time.to_i + ts.removed_break_time.to_i - ts.added_night_time.to_i).to_f/3600).round(2)
+            day_sick_d = ts.is_sick ? (delta_time_h.to_f/8).round(2) : 0
+            day_paid_leave_d = ts.is_paid_leave ? (delta_time_h.to_f/8).round(2) : 0
+            day_extra_h = (ts.extra_time.to_f/3600).round(2)
+            time_stamp_hash = {
+              time_stamp: "#{wd}, #{datetime}",
+              type: ts.type,
+              username: ts.user.username,
+              hour_in: ts.is_in ? ts.value.localtime.to_s(:custom_datetime_hour) : nil,
+              hour_out: ts.is_out ? ts.value.localtime.to_s(:custom_datetime_hour) : nil,
+              day_time_h: day_time_h,
+              removed_time_h: removed_time_h,
+              added_night_h: added_night_h,
+              day_sick_d: day_sick_d,
+              day_paid_leave_d: day_paid_leave_d,
+              day_extra_h: day_extra_h, #blup: TODO
+              delta_time_h: delta_time_h,
+              monthly_time_h: monthly_time_h,
+            }
+            csv << time_stamp_hash.keys if is_header
+            csv << time_stamp_hash.values
+            is_header = false
+            total_day_time_h = total_day_time_h + day_time_h.to_f
+            total_removed_time_h = total_removed_time_h + removed_time_h.to_f
+            total_added_time_h = total_added_time_h + added_night_h.to_f
+            total_sick_time_d = total_sick_time_d + day_sick_d.to_f
+            total_paid_leave_time_d = total_paid_leave_time_d + day_paid_leave_d.to_f
+            total_extra_time_h = total_extra_time_h + day_extra_h.to_f
+            total_delta_time_h = total_delta_time_h + delta_time_h.to_f
+            max_monthly_time_h = monthly_time_h.to_f if monthly_time_h.to_f > max_monthly_time_h
+          end
+        else
+          # rest day
+          datetime = current_value.localtime.to_s(:custom_datetime)
+          time_stamp_hash = {
+            time_stamp: "#{wd}, #{datetime}",
+            type: "DAY OFF",
+            username: nil,
+            hour_in: nil,
+            hour_out: nil,
+            day_time_h: nil,
+            removed_time_h: nil,
+            added_night_h: nil,
+            day_sick_d: nil,
+            day_paid_leave_d: nil,
+            day_extra_h: nil,
+            delta_time_h: nil,
+            monthly_time_h: nil,
+          }
+          csv << time_stamp_hash.keys if is_header
+          csv << time_stamp_hash.values
+          is_header = false
+        end
       end
-      csv << ["Total", nil, nil, nil, nil, total_day_time_h, total_removed_time_h, total_added_time_h, total_sick_time_h, total_paid_leave_time_h, total_extra_time_h, total_delta_time_h, max_monthly_time_h].map{|v| v.is_a?(Numeric) ? v.round(2) : v}
+      # add row with the totals
+      csv << ["Total", nil, nil, nil, nil, total_day_time_h, total_removed_time_h, total_added_time_h, total_sick_time_d, total_paid_leave_time_d, total_extra_time_h, total_delta_time_h, max_monthly_time_h].map{|v| v.is_a?(Numeric) ? v.round(2) : v}
     end
     hourly_worker_name = @user_id.present? ? "#{User.find(@user_id).username}s" : "hourly_worker"
     send_data(csv_data.gsub('""', ''), type: 'text/csv', filename: "#{hourly_worker_name}_time_stamps_#{Time.now.to_i}.csv")
@@ -219,6 +248,7 @@ private
   end
 
   def end_of_work_month_from_id(work_month_id, year_id)
+    work_month_id = 11 unless work_month_id.present?
     beginning_of_selected_month = beginning_of_year_from_id(year_id) + work_month_id.to_i.months
     beginning_of_selected_month + 24.days + 6.hours - 1.second
   end
