@@ -107,15 +107,17 @@ class TimeStamp < ApplicationRecord
   def clock_out # Note: user_id & value must be set beforehand
     last_time_stamps = TimeStamp.where(user_id: self.user_id).where.not(id: self.id).where("value < ?", self.value)
     # calculate delta_time
-    last_time_stamp_in = last_time_stamps.where(is_in: true).order(:value).last # can be nil?
+    last_time_stamp_in = last_time_stamps.where(is_in: true).order(:value).last # can be nil
     last_value_in = last_time_stamp_in&.value
     delta_time = self.value.to_i - last_value_in.to_i
     # handle removed_break_time & update delta_time
     removed_break_time = TimeStamp::break_time_to_remove(delta_time)
     delta_time = delta_time - removed_break_time
     # handle added_night_time & update delta_time
-    added_night_time = TimeStamp::night_time_to_add(last_value_in, self.value)
-    delta_time = delta_time + added_night_time
+    if last_value_in.present?
+      added_night_time = TimeStamp::night_time_to_add(last_value_in, self.value)
+      delta_time = delta_time + added_night_time
+    end
     # set object params
     self.is_in = false
     self.is_out = true
@@ -194,7 +196,7 @@ class TimeStamp < ApplicationRecord
       start_time = value_in < start_of_night_time ? start_of_night_time : value_in
       relevant_delta = value_out.to_i - start_time.to_i
       time_to_add = relevant_delta * 10 / 100 # 10%
-    # also check if value_in is within the relevant night time (even through value_out aint)
+    # also check if value_in is within the relevant night time (even thought value_out aint)
     elsif value_in > start_of_night_time && value_in <= end_of_night_time
       relevant_delta = end_of_night_time.to_i - value_in.to_i
       time_to_add = relevant_delta * 10 / 100 # 10%
