@@ -39,7 +39,7 @@
               = 'Ganztag'
           .form-check
             = label_tag :absence_dur_week, class: 'form-check-label' do
-              = radio_button_tag :absence_dur, 'week', @time_stamp.delta_time == (7*TimeStamp::HOURS_PER_DAY).days.to_i, class: 'form-check-input'
+              = radio_button_tag :absence_dur, 'week', @time_stamp.delta_time == (7*TimeStamp::HOURS_PER_DAY).hours.to_i, class: 'form-check-input'
               = 'Woche'
 
   - else

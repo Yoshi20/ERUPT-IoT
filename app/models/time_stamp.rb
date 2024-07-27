@@ -210,7 +210,7 @@ class TimeStamp < ApplicationRecord
     case absence_dur
       when "half_day" then (TimeStamp::HOURS_PER_DAY/2).hours.to_i
       when "day" then TimeStamp::HOURS_PER_DAY.hours.to_i
-      when "week" then (7*TimeStamp::HOURS_PER_DAY).days.to_i
+      when "week" then (7*TimeStamp::HOURS_PER_DAY).hours.to_i
       else 0
     end
   end
