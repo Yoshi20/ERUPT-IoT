@@ -157,22 +157,22 @@ class TimeStampsController < ApplicationController
             delta_time_h = ts.has_monthly_time? ? (ts.delta_time.to_f/3600).round(2) : nil
             monthly_time_h = ts.has_monthly_time? ? (ts.monthly_time.to_f/3600).round(2) : nil
             day_time_h = ((ts.delta_time.to_i + ts.removed_break_time.to_i - ts.added_night_time.to_i).to_f/3600).round(2)
-            day_sick_d = ts.is_sick ? (delta_time_h.to_f/8).round(2) : 0
-            day_paid_leave_d = ts.is_paid_leave ? (delta_time_h.to_f/8).round(2) : 0
+            day_sick_d = ts.is_sick ? (delta_time_h.to_f/TimeStamp::HOURS_PER_DAY).round(2) : 0
+            day_paid_leave_d = ts.is_paid_leave ? (delta_time_h.to_f/TimeStamp::HOURS_PER_DAY).round(2) : 0
             day_extra_h = (ts.extra_time.to_f/3600).round(2)
             time_stamp_hash = {
+              username: ts.user.username,
               time_stamp: "#{wd}, #{datetime}",
               type: ts.type,
-              username: ts.user.username,
               hour_in: ts.is_in ? ts.value.localtime.to_s(:custom_datetime_hour) : nil,
               hour_out: ts.is_out ? ts.value.localtime.to_s(:custom_datetime_hour) : nil,
-              day_time_h: day_time_h,
+              day_time_h: (ts.is_sick || ts.is_paid_leave) ? 0.0 : day_time_h,
               removed_time_h: removed_time_h,
-              added_night_h: added_night_h,
-              day_sick_d: day_sick_d,
-              day_paid_leave_d: day_paid_leave_d,
+              day_sick_d: day_sick_d > 0 ? "#{as_int_when_int(day_sick_d)}T" : nil,
+              day_paid_leave_d: day_paid_leave_d > 0 ? "#{as_int_when_int(day_paid_leave_d)}T" : nil,
               day_extra_h: day_extra_h, #blup: TODO
-              delta_time_h: delta_time_h,
+              delta_time_h: (ts.is_sick || ts.is_paid_leave) ? "#{as_int_when_int(delta_time_h/TimeStamp::HOURS_PER_DAY)}T" : delta_time_h,
+              added_night_h: added_night_h,
               monthly_time_h: monthly_time_h,
             }
             csv << time_stamp_hash.keys if is_header
@@ -191,18 +191,18 @@ class TimeStampsController < ApplicationController
           # rest day
           datetime = current_value.localtime.to_s(:custom_datetime)
           time_stamp_hash = {
-            time_stamp: "#{wd}, #{datetime}",
-            type: "DAY OFF",
             username: nil,
+            time_stamp: "#{wd}, #{datetime}",
+            type: "Frei",
             hour_in: nil,
             hour_out: nil,
             day_time_h: nil,
             removed_time_h: nil,
-            added_night_h: nil,
             day_sick_d: nil,
             day_paid_leave_d: nil,
             day_extra_h: nil,
             delta_time_h: nil,
+            added_night_h: nil,
             monthly_time_h: nil,
           }
           csv << time_stamp_hash.keys if is_header
@@ -211,7 +211,7 @@ class TimeStampsController < ApplicationController
         end
       end
       # add row with the totals
-      csv << ["Total", nil, nil, nil, nil, total_day_time_h, total_removed_time_h, total_added_time_h, total_sick_time_d, total_paid_leave_time_d, total_extra_time_h, total_delta_time_h, max_monthly_time_h].map{|v| v.is_a?(Numeric) ? v.round(2) : v}
+      csv << ["Total", nil, nil, nil, nil, total_day_time_h, total_removed_time_h, total_sick_time_d, total_paid_leave_time_d, total_extra_time_h, total_delta_time_h, total_added_time_h, max_monthly_time_h].map{|v| v.is_a?(Numeric) ? v.round(2) : v}
     end
     hourly_worker_name = @user_id.present? ? "#{User.find(@user_id).username}s" : "hourly_worker"
     send_data(csv_data.gsub('""', ''), type: 'text/csv', filename: "#{hourly_worker_name}_time_stamps_#{Time.now.to_i}.csv")
@@ -251,6 +251,10 @@ private
     work_month_id = 11 unless work_month_id.present?
     beginning_of_selected_month = beginning_of_year_from_id(year_id) + work_month_id.to_i.months
     beginning_of_selected_month + 24.days + 6.hours - 1.second
+  end
+
+  def as_int_when_int(value)
+    (value%1 == 0) ? value.to_i : value
   end
 
 end

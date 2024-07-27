@@ -4,21 +4,23 @@ class TimeStamp < ApplicationRecord
 
   scope :with_monthly_time, -> { where('is_out IS true OR is_sick IS true OR is_paid_leave IS true') }
 
+  HOURS_PER_DAY = 8
+
   REMOVE_15MIN_AFTER = 5.5
   REMOVE_30MIN_AFTER = 7
   REMOVE_60MIN_AFTER = 9
 
   def type
     if self.is_sick
-      "SICK"
+      "Krank"
     elsif self.is_paid_leave
-      "HOLIDAY"
+      "Ferien"
     elsif self.was_automatically_clocked_out
-      "OUT (AUTO)"
+      "Aus (auto)"
     elsif self.is_out
-      "OUT"
+      "Aus"
     elsif self.is_in
-      "IN"
+      "Ein"
     else
       "?"
     end
@@ -206,9 +208,9 @@ class TimeStamp < ApplicationRecord
 
   def self.absence_time_for(absence_dur)
     case absence_dur
-      when "half_day" then 4.hours.to_i
-      when "day" then 8.hours.to_i
-      when "week" then 7.days.to_i
+      when "half_day" then (TimeStamp::HOURS_PER_DAY/2).hours.to_i
+      when "day" then TimeStamp::HOURS_PER_DAY.hours.to_i
+      when "week" then (7*TimeStamp::HOURS_PER_DAY).days.to_i
       else 0
     end
   end
