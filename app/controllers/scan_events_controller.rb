@@ -14,9 +14,9 @@ class ScanEventsController < ApplicationController
   # GET /scan_events.json
   def index
     @total_scan_events = ScanEvent.includes(:member).where.not(member_id: nil)
-    @scan_events = @total_scan_events.order(created_at: :desc).limit(10)
+    @scan_events = @total_scan_events.order(created_at: :desc).limit(params[:limit] || 10)
     @total_scan_events_no_member = ScanEvent.no_member
-    @scan_events_no_member = @total_scan_events_no_member.order(created_at: :desc).limit(10)
+    @scan_events_no_member = @total_scan_events_no_member.order(created_at: :desc).limit(5)
   end
 
   def show
