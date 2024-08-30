@@ -65,6 +65,7 @@ sudo service nginx start
 ## delayed_jobs
 
 ```
+cd /var/www/erupt-iot/current/
 bin/delayed_job start
 bin/delayed_job stop
 bin/delayed_job status
