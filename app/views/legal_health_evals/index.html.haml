@@ -1,0 +1,34 @@
+= render '/legal_health_scores/legal_health_scores_navigation'
+
+%h1 Listing legal_health_evals
+
+%table
+  %thead
+    %tr
+      %th Value
+      %th Legal health param
+      %th Legal health customer
+      %th
+      %th
+      %th
+
+  %tbody
+    - @legal_health_evals.each do |legal_health_eval|
+      %tr
+        %td= legal_health_eval.value
+        %td= legal_health_eval.legal_health_param_id
+        %td= legal_health_eval.legal_health_customer_id
+        -# %td= link_to 'Show', legal_health_eval
+        -# %td= link_to 'Edit', edit_legal_health_eval_path(legal_health_eval)
+        -# %td= link_to 'Destroy', legal_health_eval, method: :delete, data: { confirm: 'Are you sure?' }
+        %td
+          = link_to edit_legal_health_eval_path(legal_health_eval), class: 'btn btn-sstm btn-square' do
+            %span.material-icons.admin-actions__link__icon= 'edit'
+        %td
+          = form_for legal_health_eval, method: :delete, role: 'form', class:'form' do |f|
+            = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
+              %span.material-icons.admin-actions__link__icon= 'delete'
+
+%br
+
+= link_to 'New Legal health eval', new_legal_health_eval_path

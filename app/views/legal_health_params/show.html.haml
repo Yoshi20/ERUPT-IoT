@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Desciption:
+  = @legal_health_param.description
+%p
+  %b Legal health topic:
+  = @legal_health_param.legal_health_topic_id
+
+= link_to 'Edit', edit_legal_health_param_path(@legal_health_param)
+\|
+= link_to 'Back', legal_health_params_path

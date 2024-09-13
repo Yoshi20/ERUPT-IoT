@@ -1,0 +1,16 @@
+= form_for @legal_health_topic do |f|
+  - if @legal_health_topic.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@legal_health_topic.errors.count, "error")} prohibited this legal_health_topic from being saved:"
+      %ul
+        - @legal_health_topic.errors.full_messages.each do |message|
+          %li= message
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :weighting
+    = f.text_field :weighting
+  .actions
+    = f.submit 'Save'

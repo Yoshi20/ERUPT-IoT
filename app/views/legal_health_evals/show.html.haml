@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Value:
+  = @legal_health_eval.value
+%p
+  %b Legal health param:
+  = @legal_health_eval.legal_health_param_id
+%p
+  %b Legal health customer:
+  = @legal_health_eval.legal_health_customer_id
+
+= link_to 'Edit', edit_legal_health_eval_path(@legal_health_eval)
+\|
+= link_to 'Back', legal_health_evals_path

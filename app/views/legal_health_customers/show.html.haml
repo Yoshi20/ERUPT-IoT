@@ -1,0 +1,9 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @legal_health_customer.name
+
+= link_to 'Edit', edit_legal_health_customer_path(@legal_health_customer)
+\|
+= link_to 'Back', legal_health_customers_path

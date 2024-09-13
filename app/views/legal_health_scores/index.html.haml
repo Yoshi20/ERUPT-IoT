@@ -1,0 +1,10 @@
+= render '/legal_health_scores/legal_health_scores_navigation'
+
+%h1 Select customer:
+
+- @legal_health_customers.each do |customer|
+  = link_to customer.name, edit_legal_health_score_path(customer_id: customer.id)
+  - if customer.legal_health_evals.any?
+    %span= "->"
+    %span= link_to "Resultate", legal_health_score_path(customer_id: customer.id)
+  %br

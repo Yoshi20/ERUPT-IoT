@@ -1,0 +1,23 @@
+= form_for @legal_health_eval do |f|
+  - if @legal_health_eval.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@legal_health_eval.errors.count, "error")} prohibited this legal_health_eval from being saved:"
+      %ul
+        - @legal_health_eval.errors.full_messages.each do |message|
+          %li= message
+
+  .field
+    = f.label :value
+    = f.number_field :value, min: 0, max: 10
+  .field
+    - legal_health_params_for_select = LegalHealthParam.all.map{ |p| [p.description, p.id]}
+    = f.label :legal_health_param_id
+    = f.select :legal_health_param_id, options_for_select(legal_health_params_for_select, @legal_health_eval.legal_health_param_id), {include_blank: true}
+  .field
+    - legal_health_customers_for_select = LegalHealthCustomer.all.map{ |c| [c.name, c.id]}
+    = f.label :legal_health_customer_id
+    = f.select :legal_health_customer_id, options_for_select(legal_health_customers_for_select, @legal_health_eval.legal_health_customer_id), {include_blank: true}
+
+
+  .actions
+    = f.submit 'Save'

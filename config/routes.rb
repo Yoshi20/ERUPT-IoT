@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
 
+  resources :legal_health_evals
+  resources :legal_health_params
+  resources :legal_health_topics
+  resources :legal_health_customers
+  get 'legal_health_scores' => 'legal_health_scores#index'
+  get 'legal_health_scores/:customer_id/edit' => 'legal_health_scores#edit', as: 'edit_legal_health_score'
+  get 'legal_health_scores/:customer_id' => 'legal_health_scores#show', as: 'legal_health_score'
+
   mount ActionCable.server => '/cable'
 
   get 'games' => 'games#index'

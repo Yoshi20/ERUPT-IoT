@@ -126,3 +126,6 @@ gem "daemons"
 
 # See https://github.com/cyu/rack-cors
 gem 'rack-cors'
+
+# See https://chartkick.com/
+gem 'chartkick'
