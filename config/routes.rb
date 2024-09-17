@@ -10,6 +10,10 @@ Rails.application.routes.draw do
 
   mount ActionCable.server => '/cable'
 
+  get 'ggleap_products' => 'ggleap_products#index'
+  get 'ggleap_products_for_iframe' => 'ggleap_products#index_for_iframe'
+  get 'ggleap_products_refresh' => 'ggleap_products#refresh'
+
   get 'games' => 'games#index'
   get 'games_for_iframe' => 'games#index_for_iframe'
   get 'games_refresh' => 'games#refresh'

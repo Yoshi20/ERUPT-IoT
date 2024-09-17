@@ -85,6 +85,27 @@ module Request
     end
   end
 
+  def self.ggleap_products(jwt)
+    Rails.cache.fetch("ggleap_products", expires_in: 1.day) do
+      products = []
+      url = "https://api.ggleap.com/beta/pos/products/get-all"
+      puts "Requesting: GET #{url}"
+      begin
+        resp = HTTParty.get(url,
+          headers: {
+            'Authorization': "Bearer #{jwt}"
+          }
+        )
+        if resp.success?
+          products = resp.parsed_response["Products"]
+        end
+      rescue OpenURI::HTTPError => ex
+        puts ex
+      end
+      products
+    end
+  end
+
 end
 
 # Example:

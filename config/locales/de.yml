@@ -45,6 +45,7 @@ de:
       updating_member: "Mitglied konnte nicht aktualisiert werden!"
       deleting_member: "Mitglied konnte nicht gelöscht werden!"
       search_members: "Es wurden kein Mitglied gefunden mit dieser Suchanfrage"
+      search_ggleap_products: "Es wurden kein Produkt gefunden mit dieser Suchanfrage"
       creating_feedback: "Feedback konnte nicht erstellt werden!"
       updating_feedback: "Feedback konnte nicht aktualisiert werden!"
       deleting_feedback: "Feedback konnte nicht gelöscht werden!"
