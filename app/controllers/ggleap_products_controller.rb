@@ -19,6 +19,20 @@ class GgleapProductsController < ApplicationController
     redirect_to ggleap_products_path
   end
 
+  # POST /ggleap_products_order
+  def order
+    product_uuid = params[:product_uuid]
+    product_price = params[:product_price]
+    user_uuid = nil
+    jwt = Request::ggleap_auth
+    order = Request::ggleap_sell_product(jwt, product_uuid, product_price, user_uuid)
+    if order.present? && order['TransactionUuid'].present?
+      redirect_to ggleap_products_path, notice: 'blup: ordered!'#t('flash.notice.creating_feedback')#blup
+    else
+      redirect_to ggleap_products_path, alert: 'blup: NOT ordered!'#t('flash.notice.creating_feedback')#blup
+    end
+  end
+
 private
 
   def get_products
@@ -27,7 +41,7 @@ private
     @ggleap_products = []
     ggleap_products.each do |p|
       # filter some products
-      if !p['IsHiddenFromInventory'] && p['Price'] < 100 && !p['Name'].include?('Coins') && !p['Name'].include?('CHF')
+      if p['AvailableForClientsOrders'] && !p['IsHiddenFromInventory'] && p['Price'] < 100
         @ggleap_products << p
       end
     end
@@ -39,7 +53,7 @@ private
       end
     end
     # sort
-    @ggleap_products = @ggleap_products.sort_by { |product| product["Name"] }
+    @ggleap_products = @ggleap_products.sort_by { |p| [p["CategoryUuid"], p["Name"]] }
   end
 
 end
