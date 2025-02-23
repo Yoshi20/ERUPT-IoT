@@ -1,0 +1,39 @@
+= render '/legal_health_scores/legal_health_scores_navigation'
+
+%h1
+  Legal Health Score by
+  %br
+  EMBARK.LAW
+  %br
+  %br
+  = link_to @customer.name, edit_legal_health_score_path(customer_id: @customer.id)
+
+
+- topic_params = @legal_health_topics.map{ |lht| [lht.name, lht.legal_health_params.count] }
+- topic_evals = @legal_health_topics.map{ |lht| [lht.name, lht.legal_health_params.joins(:legal_health_evals).group_by{ |p| lht.id }.count] }
+- topic_evals_sum = topic_evals.map{ |p| p[1] }.sum
+- topic_params_sum = topic_params.map{ |p| p[1] }.sum
+- topic_evals << ["Not checked", topic_params_sum - topic_evals_sum]
+
+- topic_evals_value_sum = @legal_health_evals.map{ |lhe| lhe.weighted_value }.sum
+- topic_params_value_sum = @legal_health_evals.map{ |lhe| lhe.weighted_max_value }.sum
+- topic_params_value_total = LegalHealthTopic::max_value
+
+%p= "Your Current <strong>Score: #{topic_evals_value_sum}</strong> (out of #{topic_params_value_sum} checked)".html_safe
+
+%p= "Total possible Score: #{topic_params_value_total}"
+
+- topic_colors = {"Share Transfers": "red", "VR": "green", "GV": "blue", "Not checked": "lightgray"}
+- chart_colors = []
+- topic_evals.each do |ev|
+  - chart_colors << topic_colors[ev[0].to_sym]
+= pie_chart(topic_evals, colors: chart_colors)
+
+- @legal_health_topics.each do |lht|
+  %h2= lht.name
+  %br
+  - param_evals = lht.legal_health_params.map{ |lhp| [lhp.description, lhp.legal_health_evals.find_by(legal_health_customer_id: @customer.id)&.value] }
+  - param_evals = param_evals.prepend(["Max", 10])
+  = bar_chart(param_evals, colors: [topic_colors[lht.name.to_sym]])
+  %br
+  %br

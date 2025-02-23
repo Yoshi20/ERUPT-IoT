@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_18_073701) do
+ActiveRecord::Schema.define(version: 2024_09_13_144647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +85,37 @@ ActiveRecord::Schema.define(version: 2024_05_18_073701) do
     t.integer "offer_rating"
     t.string "offer_comment"
     t.boolean "read", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "legal_health_customers", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "legal_health_evals", force: :cascade do |t|
+    t.integer "value", null: false
+    t.bigint "legal_health_param_id"
+    t.bigint "legal_health_customer_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["legal_health_customer_id"], name: "index_legal_health_evals_on_legal_health_customer_id"
+    t.index ["legal_health_param_id"], name: "index_legal_health_evals_on_legal_health_param_id"
+  end
+
+  create_table "legal_health_params", force: :cascade do |t|
+    t.string "description", null: false
+    t.bigint "legal_health_topic_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["legal_health_topic_id"], name: "index_legal_health_params_on_legal_health_topic_id"
+  end
+
+  create_table "legal_health_topics", force: :cascade do |t|
+    t.string "name", null: false
+    t.float "weighting", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -194,6 +225,9 @@ ActiveRecord::Schema.define(version: 2024_05_18_073701) do
 
   add_foreign_key "devices", "device_types"
   add_foreign_key "devices", "users"
+  add_foreign_key "legal_health_evals", "legal_health_customers"
+  add_foreign_key "legal_health_evals", "legal_health_params"
+  add_foreign_key "legal_health_params", "legal_health_topics"
   add_foreign_key "orders", "devices"
   add_foreign_key "scan_events", "members"
   add_foreign_key "time_stamps", "scan_events"

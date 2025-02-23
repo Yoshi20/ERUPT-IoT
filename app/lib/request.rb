@@ -21,7 +21,7 @@ module Request
         if resp.success?
           jwt = resp.parsed_response["Jwt"]
         end
-      rescue OpenURI::HTTPError => ex
+      rescue HTTParty::Error => ex
         puts ex
       end
       jwt
@@ -41,7 +41,7 @@ module Request
       if resp.success?
         users = resp.parsed_response["Users"]
       end
-    rescue OpenURI::HTTPError => ex
+    rescue HTTParty::Error => ex
       puts ex
     end
   end
@@ -59,7 +59,7 @@ module Request
       if resp.success?
         user = resp.parsed_response["User"]
       end
-    rescue OpenURI::HTTPError => ex
+    rescue HTTParty::Error => ex
       puts ex
     end
   end
@@ -78,11 +78,66 @@ module Request
         if resp.success?
           apps = resp.parsed_response["Apps"]
         end
-      rescue OpenURI::HTTPError => ex
+      rescue HTTParty::Error => ex
         puts ex
       end
       apps
     end
+  end
+
+  def self.ggleap_products(jwt)
+    Rails.cache.fetch("ggleap_products", expires_in: 1.day) do
+      products = []
+      url = "https://api.ggleap.com/production/pos/products/get-all"
+      puts "Requesting: GET #{url}"
+      begin
+        resp = HTTParty.get(url,
+          headers: {
+            'Authorization': "Bearer #{jwt}"
+          }
+        )
+        if resp.success?
+          products = resp.parsed_response["Products"]
+        end
+      rescue HTTParty::Error => ex
+        puts ex
+      end
+      products
+    end
+  end
+
+  def self.ggleap_sell_product(jwt, product_uuid, product_price, user_uuid)
+    resp_body = nil
+    url = "https://api.ggleap.com/beta/pos/sales/create"
+    # url = "https://api.ggleap.com/production/pos/sales/create"
+    params = {
+      "Cart": {
+        product_uuid.to_sym => 1
+      },
+      "UserUuid": user_uuid,
+      "FromUserBalance": nil,
+      "Cash": product_price,
+      "Card": nil,
+      "AddChangeToUserAccount": false,
+      "QuickDiscountPercent": 0,
+      "CouponCode": nil
+    }
+    puts "Requesting: POST #{url}"
+    begin
+      resp = HTTParty.post(url,
+        body: params.to_json,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer #{jwt}"
+        }
+      )
+      if resp.success?
+        resp_body = resp.parsed_response
+      end
+    rescue HTTParty::Error => ex
+      puts ex
+    end
+    resp_body
   end
 
 end

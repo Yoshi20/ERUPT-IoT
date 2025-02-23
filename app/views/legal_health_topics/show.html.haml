@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @legal_health_topic.name
+%p
+  %b Weighting:
+  = @legal_health_topic.weighting
+
+= link_to 'Edit', edit_legal_health_topic_path(@legal_health_topic)
+\|
+= link_to 'Back', legal_health_topics_path

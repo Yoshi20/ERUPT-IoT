@@ -3,6 +3,7 @@ class TimeStamp < ApplicationRecord
   belongs_to :user
 
   scope :with_monthly_time, -> { where('is_out IS true OR is_sick IS true OR is_paid_leave IS true') }
+  scope :relevant_for_new_time_stamp, -> { where('is_in IS true OR is_out IS true') }
 
   HOURS_PER_DAY = 8
 

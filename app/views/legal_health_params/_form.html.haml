@@ -1,0 +1,19 @@
+= form_for @legal_health_param do |f|
+  - if @legal_health_param.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@legal_health_param.errors.count, "error")} prohibited this legal_health_param from being saved:"
+      %ul
+        - @legal_health_param.errors.full_messages.each do |message|
+          %li= message
+
+  .field
+    - legal_health_topics_for_select = LegalHealthTopic.all.map{ |t| [t.name, t.id]}
+    = f.label :legal_health_topic_id
+    = f.select :legal_health_topic_id, options_for_select(legal_health_topics_for_select, @legal_health_param.legal_health_topic_id), {include_blank: true}
+  .field
+    = f.label :description
+    = f.text_field :description
+
+
+  .actions
+    = f.submit 'Save'

@@ -47,7 +47,7 @@ class User < ApplicationRecord
 
   def handle_new_time_stamp!(scan_event_id)
     now = Time.now
-    last_time_stamp = self.time_stamps.order(:value).last if self.time_stamps.any?
+    last_time_stamp = self.time_stamps.relevant_for_new_time_stamp.order(:value).last if self.time_stamps.any?
     if last_time_stamp.present? && last_time_stamp.is_in
       # clock out --------------------------------------------------------------
       time_stamp = TimeStamp.new(value: now, scan_event_id: scan_event_id, user_id: self.id)

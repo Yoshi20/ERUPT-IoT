@@ -1,0 +1,32 @@
+= render '/legal_health_scores/legal_health_scores_navigation'
+
+%h1
+  Legal Health Scores ->
+  %span= @customer.name
+
+%table
+  %thead
+    %tr
+      %th Thema
+      %th Bewertungsparameter
+      %th Bewertung
+
+  %tbody
+    - @legal_health_topics.each do |topic|
+      - topic.legal_health_params.each_with_index do |param, i|
+        %tr
+          %td
+            %strong= topic.name if i == 0
+          %td= param.description
+          %td
+            - legal_health_eval = param.legal_health_evals.find_by(legal_health_customer_id: @customer.id) || LegalHealthEval.new
+            = form_for legal_health_eval do |f|
+              = f.hidden_field :legal_health_customer_id, value: @customer.id
+              = f.hidden_field :legal_health_param_id, value: param.id
+              = f.number_field :value, min: 0, max: 10, onchange: 'submit();'
+              .hidden
+                = f.submit 'Save'
+
+- if @customer.legal_health_evals.any?
+  %br
+  = link_to "Resultate", legal_health_score_path(customer_id: @customer.id)

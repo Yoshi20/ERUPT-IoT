@@ -18,6 +18,9 @@
 #= require_tree ./channels
 #= require_tree .
 
+#= require chartkick
+#= require Chart.bundle
+
 document.addEventListener 'turbolinks:load', ->
   # a click on a nav-link adds an anchor to the url and sets the page parameter to 1 if present
   $('.nav-link').on 'click', (e) ->

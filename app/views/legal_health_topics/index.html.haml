@@ -1,0 +1,32 @@
+= render '/legal_health_scores/legal_health_scores_navigation'
+
+%h1 Listing legal_health_topics
+
+%table
+  %thead
+    %tr
+      %th Name
+      %th Weighting
+      %th
+      %th
+      %th
+
+  %tbody
+    - @legal_health_topics.each do |legal_health_topic|
+      %tr
+        %td= legal_health_topic.name
+        %td= legal_health_topic.weighting
+        -# %td= link_to 'Show', legal_health_topic
+        -# %td= link_to 'Edit', edit_legal_health_topic_path(legal_health_topic)
+        -# %td= link_to 'Destroy', legal_health_topic, method: :delete, data: { confirm: 'Are you sure?' }
+        %td
+          = link_to edit_legal_health_topic_path(legal_health_topic), class: 'btn btn-sstm btn-square' do
+            %span.material-icons.admin-actions__link__icon= 'edit'
+        %td
+          = form_for legal_health_topic, method: :delete, role: 'form', class:'form' do |f|
+            = button_tag(type: "submit", onclick: "return confirm('Are you sure?')", class:'btn btn-sstm btn-square') do
+              %span.material-icons.admin-actions__link__icon= 'delete'
+
+%br
+
+= link_to 'New Legal health topic', new_legal_health_topic_path

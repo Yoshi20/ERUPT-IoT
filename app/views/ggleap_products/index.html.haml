@@ -1,0 +1,39 @@
+- if current_page?(action: 'index')
+
+  .row
+    .col
+      %p= "Total ggleap_products count = #{@ggleap_products.count}"
+
+  .admin-actions
+    .admin-actions__link
+      = link_to ggleap_products_for_iframe_path(), method: :get, class: 'btn btn-sstm' do
+        %span Fullscreen
+    .admin-actions__link
+      = link_to ggleap_products_refresh_path, class:'btn btn-ghost btn-square' do
+        %span.material-icons.admin-actions__link__icon= 'refresh'
+
+-# search form
+.row
+  .col
+    .search-form.form-group
+      - path = current_page?(action: 'index') ? ggleap_products_path : ggleap_products_for_iframe_path
+      = form_tag path, method: 'get', class: 'form-inline' do
+        = search_field_tag :search, params[:search], class: 'form-control', placeholder: t('members.search')
+        = button_tag type: 'submit', class: 'btn btn-default', name: nil do
+          %span.material-icons= 'search'
+
+.row.text-center
+  - if @ggleap_products.any?
+    - @ggleap_products.each do |ggleap_product|
+      .col
+        - path = ggleap_products_order_path(product_uuid: ggleap_product['ProductUuid'], product_price: ggleap_product['Price'], user_uuid: nil)
+        = button_to path, onclick: "return confirm('Are you sure to buy this product?')", data: { confirm: "Are you sure to buy this product?" }, method: :post, style: 'background: transparent; border: none;' do
+          .card{style: "width: 18rem; margin-left: auto; margin-right: auto; border: none; margin-bottom: 0.625rem;"}
+            %img.card-img-top{alt: ggleap_product['Name'], src: ggleap_product['IconUrl']}
+            %strong{style: 'color: black; position: absolute; top: 10px; left: 0; right: 0; margin-inline: auto; width: fit-content; text-align: center;'}
+              = ggleap_product['Name'].gsub("Ben & Jerry's", "Ben & Jerry's<br>").html_safe
+            %span{style: 'color: black; position: absolute; bottom: 10px; left: 0; right: 0; margin-inline: auto; width: fit-content; text-align: center;'}
+              = "#{ggleap_product['Price']} CHF"
+  - else
+    .col.text-center
+      = t('flash.alert.search_ggleap_products')

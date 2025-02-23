@@ -45,6 +45,7 @@ en:
       updating_member: "Member couldn't be updated!"
       deleting_member: "Member couldn't be deleted!"
       search_members: "There were no members found with this search query"
+      search_ggleap_products: "There were no products found with this search query"
       creating_feedback: "Feedback couldn't be created!"
       updating_feedback: "Feedback couldn't be updated!"
       deleting_feedback: "Feedback couldn't be deleted!"

@@ -1,6 +1,19 @@
 Rails.application.routes.draw do
 
+  resources :legal_health_evals
+  resources :legal_health_params
+  resources :legal_health_topics
+  resources :legal_health_customers
+  get 'legal_health_scores' => 'legal_health_scores#index'
+  get 'legal_health_scores/:customer_id/edit' => 'legal_health_scores#edit', as: 'edit_legal_health_score'
+  get 'legal_health_scores/:customer_id' => 'legal_health_scores#show', as: 'legal_health_score'
+
   mount ActionCable.server => '/cable'
+
+  get 'ggleap_products' => 'ggleap_products#index'
+  get 'ggleap_products_for_iframe' => 'ggleap_products#index_for_iframe'
+  get 'ggleap_products_refresh' => 'ggleap_products#refresh'
+  post 'ggleap_products_order' => 'ggleap_products#order'
 
   get 'games' => 'games#index'
   get 'games_for_iframe' => 'games#index_for_iframe'
