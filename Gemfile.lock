@@ -207,7 +207,7 @@ GEM
       jwt (~> 2.1, >= 2.1.0)
       rest-client (~> 2.0, >= 2.0.2)
     racc (1.8.1)
-    rack (2.2.11)
+    rack (2.2.13)
     rack-cors (2.0.2)
       rack (>= 2.0.0)
     rack-mini-profiler (3.3.1)
