@@ -129,3 +129,6 @@ gem 'rack-cors'
 
 # See https://chartkick.com/
 gem 'chartkick'
+
+gem 'base64', "= 0.2.0" # blup - workaround for the following error on production:
+# You have already activated base64 0.2.0, but your Gemfile requires base64 0.3.0. Since base64 is a default gem, you can either remove your dependency on it or try updating to a newer version of bundler that supports base64 as a default gem
