@@ -46,6 +46,7 @@ task :deploy do
   deploy do
     # Put things that will set up an empty directory into a fully set-up
     # instance of your project.
+    invoke 'remote_environment'
     invoke 'stop_delayed_job_worker'
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
