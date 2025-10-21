@@ -71,25 +71,17 @@ Rails.application.configure do
   # config.action_mailer.delivery_method = :smtp
   # config.action_mailer.default :charset => "utf-8"
   config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default_options = {from: 'ERUPT-IoT <admin@swisssmash.ch>'}
+  config.action_mailer.default_options = {from: 'ERUPT-IoT <jh@oxon.ch>'}
   ActionMailer::Base.delivery_method = :smtp
   ActionMailer::Base.smtp_settings = {
-    :port           => ENV['SMTP_PORT'].to_i,
-    :address        => ENV['SMTP_SERVER'],
-    :user_name      => ENV['SMTP_LOGIN'],
-    :password       => ENV['SMTP_PASSWORD'],
-    :domain         => 'erupt.ch',
-    :authentication => :login,
+    address: 'smtp.sendgrid.net',
+    port: 587, #or 25,
+    domain: 'erupt.ch',
+    user_name: 'apikey',
+    password: ENV['SENDGRID_API_KEY'],
+    authentication: 'plain',
+    enable_starttls_auto: true
   }
-  # ActionMailer::Base.smtp_settings = {
-  #   address: 'smtp.sendgrid.net',
-  #   port: 587, #or 25,
-  #   domain: 'erupt.ch',
-  #   user_name: 'apikey',
-  #   password: ENV['SENDGRID_API_KEY'],
-  #   authentication: 'plain',
-  #   enable_starttls_auto: true
-  # }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -119,11 +111,6 @@ Rails.application.configure do
     logger           = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
-  else
-    # Log to "log/production.log"
-    config.logger = ActiveSupport::Logger.new("log/production.log")
-      .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
-      .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
   end
 
   # Do not dump schema after migrations.
