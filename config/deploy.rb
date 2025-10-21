@@ -46,8 +46,8 @@ task :deploy do
   deploy do
     # Put things that will set up an empty directory into a fully set-up
     # instance of your project.
-    invoke 'remote_environment'
-    invoke 'stop_delayed_job_worker'
+    # invoke 'remote_environment'
+    # invoke 'stop_delayed_job_worker'
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
@@ -59,8 +59,8 @@ task :deploy do
       in_path(fetch(:current_path)) do
         command %{mkdir -p tmp/}
         command %{touch tmp/restart.txt}
-        invoke 'remote_environment'
-        invoke 'start_delayed_job_worker'
+        # invoke 'remote_environment'
+        # invoke 'start_delayed_job_worker'
       end
     end
   end
