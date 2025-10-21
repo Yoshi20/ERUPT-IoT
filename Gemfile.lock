@@ -333,6 +333,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  base64 (= 0.2.0)
   bootsnap (>= 1.4.4)
   bootstrap (< 5.0)
   brakeman
