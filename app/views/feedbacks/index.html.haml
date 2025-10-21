@@ -6,7 +6,7 @@
   .col
     %p= "Total feedbacks count = #{Feedback.all.count}"
   .col
-    %p= "Average location rating = #{@overall_rating_average}"
+    %p= "Average location rating = #{@overall_rating_average.round(2)}/5"
   .col
     %p
       = "External link:"

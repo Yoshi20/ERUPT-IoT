@@ -112,7 +112,7 @@ de:
     manual:
       title_short: "Anleitung"
       title: "So stellst du eine ERUPT-Mitgliedschaft aus:"
-    li_1: "Das neue Mitglied muss den QR-Code scannen und das Formular ausfüllen"
+    li_1: "Das neue Mitglied muss den QR-Code scannen oder auf %{link} klicken und das Formular ausfüllen"
     li_2: "Gehe zu %{link}, klicke auf den \"Sync ggLeap\"-Button und prüfe ob das korrekte E-Mail zuoberst auftaucht"
     li_3: "Klicke beim neuen Member auf Bearbeiten, füge die gewünschten Abo-Typen hinzu und klicke auf \"Mitglied aktualisieren\"."
     li_4: "Kassiere die Gebühr vom neuen Mitglied gemäss den ausgewählten Abo-Typen ein"

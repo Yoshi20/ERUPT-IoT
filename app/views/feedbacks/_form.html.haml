@@ -12,7 +12,8 @@
     .row
       .col
         = '1'
-      - 5.times do |i|
+      - 5.times do |n|
+        - i = n+1
         .col
           = f.radio_button :overall_rating, i, checked: params[:feedback].present? ? params[:feedback][:overall_rating] == i.to_s : @feedback.overall_rating == i
       .col
@@ -23,7 +24,8 @@
     .row
       .col
         = '1'
-      - 5.times do |i|
+      - 5.times do |n|
+        - i = n+1
         .col
           = f.radio_button :service_rating, i, checked: params[:feedback].present? ? params[:feedback][:service_rating] == i.to_s : @feedback.service_rating == i
       .col
@@ -34,7 +36,8 @@
     .row
       .col
         = '1'
-      - 5.times do |i|
+      - 5.times do |n|
+        - i = n+1
         .col
           = f.radio_button :ambient_rating, i, checked: params[:feedback].present? ? params[:feedback][:ambient_rating] == i.to_s : @feedback.ambient_rating == i
       .col
@@ -66,7 +69,8 @@
             .row
               .col
                 = '1'
-              - 5.times do |i|
+              - 5.times do |n|
+                - i = n+1
                 .col
                   = f.radio_button :console_rating, i, checked: params[:feedback].present? ? params[:feedback][:console_rating] == i.to_s : @feedback.console_rating == i
               .col
@@ -87,7 +91,8 @@
             .row
               .col
                 = '1'
-              - 5.times do |i|
+              - 5.times do |n|
+                - i = n+1
                 .col
                   = f.radio_button :pc_rating, i, checked: params[:feedback].present? ? params[:feedback][:pc_rating] == i.to_s : @feedback.pc_rating == i
               .col
@@ -108,7 +113,8 @@
             .row
               .col
                 = '1'
-              - 5.times do |i|
+              - 5.times do |n|
+                - i = n+1
                 .col
                   = f.radio_button :karaoke_rating, i, checked: params[:feedback].present? ? params[:feedback][:karaoke_rating] == i.to_s : @feedback.karaoke_rating == i
               .col
@@ -129,7 +135,8 @@
             .row
               .col
                 = '1'
-              - 5.times do |i|
+              - 5.times do |n|
+                - i = n+1
                 .col
                   = f.radio_button :board_game_rating, i, checked: params[:feedback].present? ? params[:feedback][:board_game_rating] == i.to_s : @feedback.board_game_rating == i
               .col
@@ -150,7 +157,8 @@
             .row
               .col
                 = '1'
-              - 5.times do |i|
+              - 5.times do |n|
+                - i = n+1
                 .col
                   = f.radio_button :offer_rating, i, checked: params[:feedback].present? ? params[:feedback][:offer_rating] == i.to_s : @feedback.offer_rating == i
               .col

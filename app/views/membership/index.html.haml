@@ -5,7 +5,7 @@
   .col
     %br
     %ol{style: 'font-size: 1.25rem;'}
-      %li= t('membership.li_1')
+      %li= t('membership.li_1', link: link_to(t('members.new'), new_member_path, {target: "_blank"})).html_safe
       %br
       %li= t('membership.li_2', link: link_to(t('members.title'), members_path, {target: "_blank"})).html_safe
       %br
