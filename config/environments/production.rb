@@ -74,14 +74,22 @@ Rails.application.configure do
   config.action_mailer.default_options = {from: 'ERUPT-IoT <admin@swisssmash.ch>'}
   ActionMailer::Base.delivery_method = :smtp
   ActionMailer::Base.smtp_settings = {
-    address: 'smtp.sendgrid.net',
-    port: 587, #or 25,
-    domain: 'erupt.ch',
-    user_name: 'apikey',
-    password: ENV['SENDGRID_API_KEY'],
-    authentication: 'plain',
-    enable_starttls_auto: true
+    :port           => ENV['SMTP_PORT'].to_i,
+    :address        => ENV['SMTP_SERVER'],
+    :user_name      => ENV['SMTP_LOGIN'],
+    :password       => ENV['SMTP_PASSWORD'],
+    :domain         => 'erupt.ch',
+    :authentication => :login,
   }
+  # ActionMailer::Base.smtp_settings = {
+  #   address: 'smtp.sendgrid.net',
+  #   port: 587, #or 25,
+  #   domain: 'erupt.ch',
+  #   user_name: 'apikey',
+  #   password: ENV['SENDGRID_API_KEY'],
+  #   authentication: 'plain',
+  #   enable_starttls_auto: true
+  # }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
